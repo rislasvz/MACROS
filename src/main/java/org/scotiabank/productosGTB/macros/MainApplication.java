@@ -15,7 +15,7 @@ public class MainApplication extends Application {
         //Scene scene = new Scene(fxmlLoader.load(), 320, 240);
        Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("PRODUCTO GTB SCOTIBANK MÉXICO");
-        Image icon = new Image(MainApplication.class.getResourceAsStream("/assets/scotiabank_icon_red.png"));
+        Image icon = new Image(MainApplication.class.getResourceAsStream("/assets/Scotiabank_icon_red.png"));
         stage.getIcons().add(icon);
         stage.setScene(scene);
         stage.setMaximized(true);
