@@ -8,7 +8,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #4A4A4A;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.scotiabank.productosGTB.macros.controllers.MainController">
    <children>
-      <Button layoutX="335.0" layoutY="132.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="170.0" style="-fx-background-color: E31414;" text="Instrucciones Previas" textFill="WHITE" onAction="#abrirVentanaNueva">
+      <Button layoutX="335.0" layoutY="132.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="170.0" style="-fx-background-color: E31414;" text="Instrucciones Previas" textFill="WHITE" >
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Button>
@@ -16,7 +16,7 @@
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Button>
-      <Button layoutX="335.0" layoutY="245.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="170.0" style="-fx-background-color: E31414;" text="Lectura de Reportes" textFill="WHITE">
+      <Button layoutX="335.0" layoutY="245.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="170.0" style="-fx-background-color: E31414;" text="Lectura de Reportes" textFill="WHITE" onAction="#abrirVentanaNueva">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Button>

@@ -39,14 +39,14 @@ public class MainController implements Initializable {
     private void abrirVentanaNueva(ActionEvent event) {
         try {
             // 1. Cargar el FXML de la nueva pantalla
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views-fxml/instrucciones-previas.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views-fxml/sistema-dispersion-fondos.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
 
             // 2. Crear un nuevo Stage (ventana)
             Stage stage = new Stage();
 
             // 3. Configurar la nueva ventana
-            stage.setTitle("Nueva Ventana");
+            stage.setTitle("Sistema Dispersión de Fondos");
             stage.setScene(scene);
 
             // Opcional: Si quieres que la ventana actual se cierre
