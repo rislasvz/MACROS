@@ -18,7 +18,8 @@ public class MainApplication extends Application {
         Image icon = new Image(MainApplication.class.getResourceAsStream("/assets/Scotiabank_icon_red.png"));
         stage.getIcons().add(icon);
         stage.setScene(scene);
-        stage.setMaximized(true);
+        stage.setMaximized(false);
+        stage.setResizable(false);
         stage.show();
     }
 
