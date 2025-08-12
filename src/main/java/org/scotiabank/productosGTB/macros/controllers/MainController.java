@@ -41,7 +41,7 @@ public class MainController implements Initializable {
             // 1. Cargar el FXML de la nueva pantalla
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views-fxml/sistema-dispersion-fondos.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
-
+            scene.getStylesheets().add("io/github/palexdev/materialfx/css/mfx-base.css");
             // 2. Crear un nuevo Stage (ventana)
             Stage stage = new Stage();
 
