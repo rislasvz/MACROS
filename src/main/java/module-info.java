@@ -1,7 +1,8 @@
 module org.scotiabank.productosGTB.macros {
-    requires javafx.controls;
     requires javafx.fxml;
-    requires MaterialFX;
+    requires org.kordamp.bootstrapfx.core;
+    requires javafx.controls;
+    //requires MaterialFX;
                             
     opens org.scotiabank.productosGTB.macros to javafx.fxml;
     exports org.scotiabank.productosGTB.macros;
