@@ -8,4 +8,5 @@ module org.scotiabank.productosGTB.macros {
     exports org.scotiabank.productosGTB.macros;
     exports org.scotiabank.productosGTB.macros.controllers;
     opens org.scotiabank.productosGTB.macros.controllers to javafx.fxml;
+    opens org.scotiabank.productosGTB.macros.model to javafx.base;
 }

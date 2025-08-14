@@ -4,30 +4,62 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import org.scotiabank.productosGTB.macros.model.SistemaDispersionData;
 
 public class SistemaDispercionFondosController {
 
     @FXML
     private TextField textFieldClientNumber;
-
     @FXML
     private TextField textFieldFileNumberOfTheDay;
-
     @FXML
     private TextField textFieldChargeAccount;
-
     @FXML
     private TextField textFieldCompanyReference;
-
     @FXML
     private ComboBox<String> comboBoxFileType;
-
     @FXML
     private ComboBox<String> comboBoxPaymentConcept;
-
     @FXML
     private ComboBox<String> comboBoxPaymentCurrency;
+    @FXML
+    private TableView<SistemaDispersionData> tableViewDispersionFondos;
+    @FXML
+    private TableColumn<SistemaDispersionData, String> formaPago;
+    @FXML
+    private TableColumn<SistemaDispersionData, String> tipoCuenta;
+    @FXML
+    private TableColumn<SistemaDispersionData, String> bancoReceptor;
+    @FXML
+    private TableColumn<SistemaDispersionData, String> cuenta;
+    @FXML
+    private TableColumn<SistemaDispersionData, String> importePago;
+    @FXML
+    private TableColumn<SistemaDispersionData, String> claveBeneficiario;
+    @FXML
+    private TableColumn<SistemaDispersionData, String> rfcBeneficiario;
+    @FXML
+    private TableColumn<SistemaDispersionData, String> nombreBeneficiario;
+    @FXML
+    private TableColumn<SistemaDispersionData, String> referenciaPago;
+    @FXML
+    private TableColumn<SistemaDispersionData, String> conceptoPago;
+    @FXML
+    private TableColumn<SistemaDispersionData, String> diasVigencia;
+    @FXML
+    private TableColumn<SistemaDispersionData, String> infoAgruparPagos;
+    @FXML
+    private TableColumn<SistemaDispersionData, String> detalleMail;
+    @FXML
+    private TableColumn<SistemaDispersionData, String> referenciaAbonoBanxico;
+    @FXML
+    private TableColumn<SistemaDispersionData, String> tipoOperación;
+
 
     @FXML
     public void initialize() {
@@ -36,7 +68,7 @@ public class SistemaDispercionFondosController {
         validaNumeros(textFieldCompanyReference);
         validaNumeros(textFieldChargeAccount);
         fillAllComboBox();
-
+        fillTable();
 
     }
 
@@ -87,6 +119,54 @@ public class SistemaDispercionFondosController {
         comboBoxPaymentCurrency.setItems(paymentCurrencies);
         comboBoxPaymentCurrency.getSelectionModel().selectFirst();
 
+    }
+
+    public void fillTable(){
+        formaPago.setCellValueFactory(new PropertyValueFactory<>("formaPago"));
+        tipoCuenta.setCellValueFactory(new PropertyValueFactory<>("tipoCuenta"));
+        bancoReceptor.setCellValueFactory(new PropertyValueFactory<>("bancoReceptor"));
+        cuenta.setCellValueFactory(new PropertyValueFactory<>("cuenta"));
+        tipoCuenta.setCellValueFactory(new PropertyValueFactory<>("tipoCuenta"));
+        importePago.setCellValueFactory(new PropertyValueFactory<>("importePago"));
+        claveBeneficiario.setCellValueFactory(new PropertyValueFactory<>("claveBeneficiario"));
+        rfcBeneficiario.setCellValueFactory(new PropertyValueFactory<>("rfcBeneficiario"));
+        nombreBeneficiario.setCellValueFactory(new PropertyValueFactory<>("nombreBeneficiario"));
+        referenciaPago.setCellValueFactory(new PropertyValueFactory<>("referenciaPago"));
+        conceptoPago.setCellValueFactory(new PropertyValueFactory<>("conceptoPago"));
+        diasVigencia.setCellValueFactory(new PropertyValueFactory<>("diasVigencia"));
+        infoAgruparPagos.setCellValueFactory(new PropertyValueFactory<>("infoAgruparPagos"));
+        detalleMail.setCellValueFactory(new PropertyValueFactory<>("detalleMail"));
+        referenciaAbonoBanxico.setCellValueFactory(new PropertyValueFactory<>("referenciaAbonoBanxico"));
+        tipoOperación.setCellValueFactory(new PropertyValueFactory<>("tipoOperación"));
+
+        tableViewDispersionFondos.setEditable(true);
+
+        formaPago.setCellFactory(TextFieldTableCell.forTableColumn());
+        tipoCuenta.setCellFactory(TextFieldTableCell.forTableColumn());
+        bancoReceptor.setCellFactory(TextFieldTableCell.forTableColumn());
+
+        formaPago.setOnEditCommit(event -> {
+            SistemaDispersionData rowData = event.getRowValue();
+            rowData.setFormaPago(event.getNewValue());
+        });
+
+        tipoCuenta.setOnEditCommit(event -> {
+            SistemaDispersionData rowData = event.getRowValue();
+            rowData.setTipoCuenta(event.getNewValue());
+        });
+
+        bancoReceptor.setOnEditCommit(event -> {
+            SistemaDispersionData rowData = event.getRowValue();
+            rowData.setBancoReceptor(event.getNewValue());
+        });
+
+        ObservableList<SistemaDispersionData> data = FXCollections.observableArrayList(
+                new SistemaDispersionData("Fila 1, Col 1", "Fila 1, Col 2", "Fila 1, Col 3", "Fila 1, Col 4", "Fila 1, Col 5", "Fila 1, Col 6", "Fila 1, Col 7", "Fila 1, Col 8", "Fila 1, Col 9", "Fila 1, Col 10", "Fila 1, Col 11", "Fila 1, Col 12", "Fila 1, Col 13", "Fila 1, Col 14", "Fila 1, Col 15"),
+                new SistemaDispersionData("Fila 2, Col 1", "Fila 2, Col 2", "Fila 2, Col 3", "Fila 2, Col 4", "Fila 2, Col 5", "Fila 2, Col 6", "Fila 2, Col 7", "Fila 2, Col 8", "Fila 2, Col 9", "Fila 2, Col 10", "Fila 2, Col 11", "Fila 2, Col 12", "Fila 2, Col 13", "Fila 2, Col 14", "Fila 2, Col 15"),
+                new SistemaDispersionData("Fila 3, Col 1", "Fila 3, Col 2", "Fila 3, Col 3", "Fila 3, Col 4", "Fila 3, Col 5", "Fila 3, Col 6", "Fila 3, Col 7", "Fila 3, Col 8", "Fila 3, Col 9", "Fila 3, Col 10", "Fila 3, Col 11", "Fila 3, Col 12", "Fila 3, Col 13", "Fila 3, Col 14", "Fila 3, Col 15")
+        );
+
+        tableViewDispersionFondos.setItems(data);
     }
 
 
