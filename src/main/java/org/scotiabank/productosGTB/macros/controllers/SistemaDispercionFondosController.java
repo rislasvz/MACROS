@@ -2,6 +2,7 @@ package org.scotiabank.productosGTB.macros.controllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
@@ -29,6 +30,7 @@ public class SistemaDispercionFondosController {
     private ComboBox<String> comboBoxPaymentCurrency;
     @FXML
     private TableView<SistemaDispersionData> tableViewDispersionFondos;
+    private ObservableList<SistemaDispersionData> dataList;
     @FXML
     private TableColumn<SistemaDispersionData, String> formaPago;
     @FXML
@@ -68,8 +70,19 @@ public class SistemaDispercionFondosController {
         validaNumeros(textFieldCompanyReference);
         validaNumeros(textFieldChargeAccount);
         fillAllComboBox();
-        fillTable();
 
+        // Inicializa la lista de datos aquí, una sola vez.
+        dataList = FXCollections.observableArrayList(
+                new SistemaDispersionData("Fila 1, Col 1", "Fila 1, Col 2", "Fila 1, Col 3", "Fila 1, Col 4", "Fila 1, Col 5", "Fila 1, Col 6", "Fila 1, Col 7", "Fila 1, Col 8", "Fila 1, Col 9", "Fila 1, Col 10", "Fila 1, Col 11", "Fila 1, Col 12", "Fila 1, Col 13", "Fila 1, Col 14", "Fila 1, Col 15"),
+                new SistemaDispersionData("Fila 2, Col 1", "Fila 2, Col 2", "Fila 2, Col 3", "Fila 2, Col 4", "Fila 2, Col 5", "Fila 2, Col 6", "Fila 2, Col 7", "Fila 2, Col 8", "Fila 2, Col 9", "Fila 2, Col 10", "Fila 2, Col 11", "Fila 2, Col 12", "Fila 2, Col 13", "Fila 2, Col 14", "Fila 2, Col 15"),
+                new SistemaDispersionData("Fila 3, Col 1", "Fila 3, Col 2", "Fila 3, Col 3", "Fila 3, Col 4", "Fila 3, Col 5", "Fila 3, Col 6", "Fila 3, Col 7", "Fila 3, Col 8", "Fila 3, Col 9", "Fila 3, Col 10", "Fila 3, Col 11", "Fila 3, Col 12", "Fila 3, Col 13", "Fila 3, Col 14", "Fila 3, Col 15")
+        );
+
+        // Vincula la lista de datos a la tabla.
+        tableViewDispersionFondos.setItems(dataList);
+
+        // Llama a fillTable() para configurar las columnas, pero no para crear datos.
+        fillTable();
     }
 
     public void validaNumeros(TextField textField){
@@ -82,15 +95,12 @@ public class SistemaDispercionFondosController {
     }
 
     public void fillAllComboBox(){
-
         ObservableList<String> fileTyoes = FXCollections.observableArrayList(
                 "Altas",
                 "Bajas"
         );
-
         comboBoxFileType.setItems(fileTyoes);
         comboBoxFileType.getSelectionModel().selectFirst();
-
         ObservableList<String> paymentConcepts = FXCollections.observableArrayList(
                 "Nomina",
                 "Pago de Alquiler",
@@ -100,10 +110,8 @@ public class SistemaDispercionFondosController {
                 "Transferencia a familiar",
                 "Pago de suscripción mensual"
         );
-
         comboBoxPaymentConcept.setItems(paymentConcepts);
         comboBoxPaymentConcept.getSelectionModel().selectFirst();
-
         ObservableList<String> paymentCurrencies = FXCollections.observableArrayList(
                 "Dolares Americanos",
                 "Euro",
@@ -115,18 +123,17 @@ public class SistemaDispercionFondosController {
                 "Yuan Chino",
                 "Real Brasileño"
         );
-
         comboBoxPaymentCurrency.setItems(paymentCurrencies);
         comboBoxPaymentCurrency.getSelectionModel().selectFirst();
-
     }
 
     public void fillTable(){
+        // Configura las columnas de la tabla. Esta parte es correcta.
         formaPago.setCellValueFactory(new PropertyValueFactory<>("formaPago"));
         tipoCuenta.setCellValueFactory(new PropertyValueFactory<>("tipoCuenta"));
         bancoReceptor.setCellValueFactory(new PropertyValueFactory<>("bancoReceptor"));
         cuenta.setCellValueFactory(new PropertyValueFactory<>("cuenta"));
-        tipoCuenta.setCellValueFactory(new PropertyValueFactory<>("tipoCuenta"));
+        // ... el resto de las columnas
         importePago.setCellValueFactory(new PropertyValueFactory<>("importePago"));
         claveBeneficiario.setCellValueFactory(new PropertyValueFactory<>("claveBeneficiario"));
         rfcBeneficiario.setCellValueFactory(new PropertyValueFactory<>("rfcBeneficiario"));
@@ -138,7 +145,6 @@ public class SistemaDispercionFondosController {
         detalleMail.setCellValueFactory(new PropertyValueFactory<>("detalleMail"));
         referenciaAbonoBanxico.setCellValueFactory(new PropertyValueFactory<>("referenciaAbonoBanxico"));
         tipoOperación.setCellValueFactory(new PropertyValueFactory<>("tipoOperación"));
-
         tableViewDispersionFondos.setEditable(true);
 
         formaPago.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -160,15 +166,15 @@ public class SistemaDispercionFondosController {
             rowData.setBancoReceptor(event.getNewValue());
         });
 
-        ObservableList<SistemaDispersionData> data = FXCollections.observableArrayList(
-                new SistemaDispersionData("Fila 1, Col 1", "Fila 1, Col 2", "Fila 1, Col 3", "Fila 1, Col 4", "Fila 1, Col 5", "Fila 1, Col 6", "Fila 1, Col 7", "Fila 1, Col 8", "Fila 1, Col 9", "Fila 1, Col 10", "Fila 1, Col 11", "Fila 1, Col 12", "Fila 1, Col 13", "Fila 1, Col 14", "Fila 1, Col 15"),
-                new SistemaDispersionData("Fila 2, Col 1", "Fila 2, Col 2", "Fila 2, Col 3", "Fila 2, Col 4", "Fila 2, Col 5", "Fila 2, Col 6", "Fila 2, Col 7", "Fila 2, Col 8", "Fila 2, Col 9", "Fila 2, Col 10", "Fila 2, Col 11", "Fila 2, Col 12", "Fila 2, Col 13", "Fila 2, Col 14", "Fila 2, Col 15"),
-                new SistemaDispersionData("Fila 3, Col 1", "Fila 3, Col 2", "Fila 3, Col 3", "Fila 3, Col 4", "Fila 3, Col 5", "Fila 3, Col 6", "Fila 3, Col 7", "Fila 3, Col 8", "Fila 3, Col 9", "Fila 3, Col 10", "Fila 3, Col 11", "Fila 3, Col 12", "Fila 3, Col 13", "Fila 3, Col 14", "Fila 3, Col 15")
-        );
-
-        tableViewDispersionFondos.setItems(data);
+        // Se eliminó la inicialización de los datos de esta función.
     }
 
+    @FXML
+    private void agregarFila(ActionEvent event) {
+        // Crea una nueva fila con valores predeterminados (vacíos)
+        SistemaDispersionData nuevaFila = new SistemaDispersionData();
 
-
+        // Agrega la nueva fila a la lista observable de la tabla
+        dataList.add(nuevaFila);
+    }
 }

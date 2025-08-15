@@ -39,6 +39,24 @@ public class SistemaDispersionData {
         this.tipoOperación = new SimpleStringProperty(tipoOperación);
     }
 
+    public SistemaDispersionData() {
+        this.formaPago = new SimpleStringProperty("");
+        this.tipoCuenta = new SimpleStringProperty("");
+        this.bancoReceptor = new SimpleStringProperty("");
+        this.cuenta = new SimpleStringProperty("");
+        this.importePago = new SimpleStringProperty("");
+        this.claveBeneficiario = new SimpleStringProperty("");
+        this.rfcBeneficiario = new SimpleStringProperty("");
+        this.nombreBeneficiario = new SimpleStringProperty("");
+        this.referenciaPago = new SimpleStringProperty("");
+        this.conceptoPago = new SimpleStringProperty("");
+        this.diasVigencia = new SimpleStringProperty("");
+        this.infoAgruparPagos = new SimpleStringProperty("");
+        this.detalleMail = new SimpleStringProperty("");
+        this.referenciaAbonoBanxico = new SimpleStringProperty("");
+        this.tipoOperación = new SimpleStringProperty("");
+    }
+
     public String getFormaPago() {
         return formaPago.get();
     }
