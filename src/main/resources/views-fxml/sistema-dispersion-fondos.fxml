@@ -177,21 +177,33 @@
                         </AnchorPane>
                         <TableView fx:id="tableViewDispersionFondos" layoutX="42.0" layoutY="434.0" prefHeight="200.0" prefWidth="976.0" editable="true">
                            <columns>
-                              <TableColumn fx:id="formaPago" prefWidth="75.0" text="Forma Pago" />
-                              <TableColumn fx:id="tipoCuenta" prefWidth="75.0" text="Tipo Cuenta" />
-                              <TableColumn fx:id="bancoReceptor" prefWidth="75.0" text="Banco Receptor" />
-                              <TableColumn fx:id="cuenta" prefWidth="75.0" text="Cuenta" />
-                              <TableColumn fx:id="importePago" prefWidth="75.0" text="Importe Pago" />
-                              <TableColumn fx:id="claveBeneficiario" prefWidth="75.0" text="Clave Beneficiario" />
-                              <TableColumn fx:id="rfcBeneficiario" prefWidth="75.0" text="RFC Beneficiario" />
-                              <TableColumn fx:id="nombreBeneficiario" prefWidth="75.0" text="Nombre Beneficiario" />
-                              <TableColumn fx:id="referenciaPago" prefWidth="75.0" text="Referencia Pago" />
-                              <TableColumn fx:id="conceptoPago" prefWidth="75.0" text="Concepto de Pago (Opcional)" />
-                              <TableColumn fx:id="diasVigencia" prefWidth="75.0" text="Dias Vigencia" />
-                              <TableColumn fx:id="infoAgruparPagos" prefWidth="75.0" text="Campo de Información para Agrupar Pagos (Opcional)" />
-                              <TableColumn fx:id="detalleMail" prefWidth="75.0" text="Detalle Mail (Obligatorio)" />
-                              <TableColumn fx:id="referenciaAbonoBanxico" prefWidth="75.0" text="Referencia Abono Banxico" />
-                              <TableColumn fx:id="tipoOperación" prefWidth="75.0" text="Tipo de Operación" />
+                              <TableColumn fx:id="formaPago" prefWidth="80.0" text="Forma Pago" style="-fx-text-alignment: center; -fx-alignment: center;"/>
+                              <TableColumn fx:id="tipoCuenta" prefWidth="80.0" text="Tipo Cuenta" style="-fx-text-alignment: center; -fx-alignment: center;"/>
+                              <TableColumn fx:id="bancoReceptor" prefWidth="95.0" text="Banco Receptor" style="-fx-text-alignment: center; -fx-alignment: center;"/>
+                              <TableColumn fx:id="cuenta" prefWidth="95.0" text="Cuenta" style="-fx-text-alignment: center; -fx-alignment: center;"/>
+                              <TableColumn fx:id="importePago" prefWidth="85.0" text="Importe Pago" style="-fx-text-alignment: center; -fx-alignment: center;"/>
+                              <TableColumn fx:id="claveBeneficiario" prefWidth="110.0" text="Clave Beneficiario" style="-fx-text-alignment: center; -fx-alignment: center;"/>
+                              <TableColumn fx:id="rfcBeneficiario" prefWidth="105.0" text="RFC Beneficiario" style="-fx-text-alignment: center; -fx-alignment: center;" />
+                              <TableColumn fx:id="nombreBeneficiario" prefWidth="125.0" text="Nombre Beneficiario" style="-fx-text-alignment: center; -fx-alignment: center;"/>
+                              <TableColumn fx:id="referenciaPago" prefWidth="105.0" text="Referencia Pago" style="-fx-text-alignment: center; -fx-alignment: center;" />
+                              <TableColumn fx:id="conceptoPago" prefWidth="170.0" text="Concepto de Pago (Opcional)" style="-fx-text-alignment: center; -fx-alignment: center;" />
+                              <TableColumn fx:id="diasVigencia" prefWidth="90.0" text="Dias Vigencia" style="-fx-text-alignment: center; -fx-alignment: center;" />
+                              <TableColumn fx:id="infoAgruparPagos" prefWidth="200.0">
+                                 <graphic>
+                                    <Label text="Campo de Información&#10;para Agrupar Pagos&#10;(Opcional)"
+                                           wrapText="true"
+                                           style="-fx-text-alignment: center; -fx-alignment: center;" />
+                                 </graphic>
+                              </TableColumn>
+                              <TableColumn fx:id="detalleMail" prefWidth="200.0">
+                                 <graphic>
+                                    <Label text="Detalle Mail&#10;(Obligatorio)"
+                                           wrapText="true"
+                                           style="-fx-text-alignment: center; -fx-alignment: center;" />
+                                 </graphic>
+                              </TableColumn>
+                              <TableColumn fx:id="referenciaAbonoBanxico" prefWidth="125.0" text="Referencia Abono Banxico" style="-fx-text-alignment: center; -fx-alignment: center;" />
+                              <TableColumn fx:id="tipoOperación" prefWidth="80.0" text="Tipo de Operación" style="-fx-text-alignment: center; -fx-alignment: center;" />
                            </columns>
                         </TableView>
                      </children>

@@ -9,7 +9,6 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import org.kordamp.bootstrapfx.BootstrapFX;
 
 import java.io.IOException;
 import java.net.URL;
@@ -41,7 +40,7 @@ public class MainController implements Initializable {
     private void abrirVentanaNueva(ActionEvent event) {
         try {
             // 1. Cargar el FXML de la nueva pantalla
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views-fxml/sistema-dispersion-fondos.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views-fxml/captura-informacion-previa.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
             // 2. Crear un nuevo Stage (ventana)
             Stage stage = new Stage();
