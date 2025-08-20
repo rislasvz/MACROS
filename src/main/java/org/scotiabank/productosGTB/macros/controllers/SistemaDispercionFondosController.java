@@ -8,6 +8,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import org.scotiabank.productosGTB.macros.model.SistemaDispersionData;
@@ -35,8 +36,8 @@ public class SistemaDispercionFondosController {
     private TableColumn<SistemaDispersionData, String> formaPago;
     @FXML
     private TableColumn<SistemaDispersionData, String> tipoCuenta;
-    @FXML
-    private TableColumn<SistemaDispersionData, String> bancoReceptor;
+    //@FXML
+    //private TableColumn<SistemaDispersionData, String> bancoReceptor;
     @FXML
     private TableColumn<SistemaDispersionData, String> cuenta;
     @FXML
@@ -61,6 +62,12 @@ public class SistemaDispercionFondosController {
     private TableColumn<SistemaDispersionData, String> referenciaAbonoBanxico;
     @FXML
     private TableColumn<SistemaDispersionData, String> tipoOperación;
+    @FXML
+    private TableColumn<SistemaDispersionData, String> bancoReceptor;
+
+    private ObservableList<String> bancos = FXCollections.observableArrayList(
+            "Scotiabank", "Banamex", "BBVA", "Banorte", "HSBC"
+    );
 
 
     @FXML
@@ -73,9 +80,9 @@ public class SistemaDispercionFondosController {
 
         // Inicializa la lista de datos aquí, una sola vez.
         dataList = FXCollections.observableArrayList(
-                new SistemaDispersionData("Fila 1, Col 1", "Fila 1, Col 2", "Fila 1, Col 3", "Fila 1, Col 4", "Fila 1, Col 5", "Fila 1, Col 6", "Fila 1, Col 7", "Fila 1, Col 8", "Fila 1, Col 9", "Fila 1, Col 10", "Fila 1, Col 11", "Fila 1, Col 12", "Fila 1, Col 13", "Fila 1, Col 14", "Fila 1, Col 15"),
-                new SistemaDispersionData("Fila 2, Col 1", "Fila 2, Col 2", "Fila 2, Col 3", "Fila 2, Col 4", "Fila 2, Col 5", "Fila 2, Col 6", "Fila 2, Col 7", "Fila 2, Col 8", "Fila 2, Col 9", "Fila 2, Col 10", "Fila 2, Col 11", "Fila 2, Col 12", "Fila 2, Col 13", "Fila 2, Col 14", "Fila 2, Col 15"),
-                new SistemaDispersionData("Fila 3, Col 1", "Fila 3, Col 2", "Fila 3, Col 3", "Fila 3, Col 4", "Fila 3, Col 5", "Fila 3, Col 6", "Fila 3, Col 7", "Fila 3, Col 8", "Fila 3, Col 9", "Fila 3, Col 10", "Fila 3, Col 11", "Fila 3, Col 12", "Fila 3, Col 13", "Fila 3, Col 14", "Fila 3, Col 15")
+                new SistemaDispersionData("Fila 1, Col 1", "Fila 1, Col 2", "Scotiabank", "Fila 1, Col 4", "Fila 1, Col 5", "Fila 1, Col 6", "Fila 1, Col 7", "Fila 1, Col 8", "Fila 1, Col 9", "Fila 1, Col 10", "Fila 1, Col 11", "Fila 1, Col 12", "Fila 1, Col 13", "Fila 1, Col 14", "Fila 1, Col 15"),
+                new SistemaDispersionData("Fila 2, Col 1", "Fila 2, Col 2", "HSBC", "Fila 2, Col 4", "Fila 2, Col 5", "Fila 2, Col 6", "Fila 2, Col 7", "Fila 2, Col 8", "Fila 2, Col 9", "Fila 2, Col 10", "Fila 2, Col 11", "Fila 2, Col 12", "Fila 2, Col 13", "Fila 2, Col 14", "Fila 2, Col 15"),
+                new SistemaDispersionData("Fila 3, Col 1", "Fila 3, Col 2", "Banamex", "Fila 3, Col 4", "Fila 3, Col 5", "Fila 3, Col 6", "Fila 3, Col 7", "Fila 3, Col 8", "Fila 3, Col 9", "Fila 3, Col 10", "Fila 3, Col 11", "Fila 3, Col 12", "Fila 3, Col 13", "Fila 3, Col 14", "Fila 3, Col 15")
         );
 
         // Vincula la lista de datos a la tabla.
@@ -149,7 +156,7 @@ public class SistemaDispercionFondosController {
 
         formaPago.setCellFactory(TextFieldTableCell.forTableColumn());
         tipoCuenta.setCellFactory(TextFieldTableCell.forTableColumn());
-        bancoReceptor.setCellFactory(TextFieldTableCell.forTableColumn());
+        bancoReceptor.setCellFactory(ComboBoxTableCell.forTableColumn(bancos));
 
         formaPago.setOnEditCommit(event -> {
             SistemaDispersionData rowData = event.getRowValue();
