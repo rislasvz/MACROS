@@ -1,4 +1,4 @@
-package org.scotiabank.productosGTB.macros.controllers;
+package org.scotiabank.productosGTB.controllers;
 
 //import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import org.scotiabank.productosGTB.business.Service;
 
 import java.io.IOException;
 import java.net.URL;
@@ -37,35 +38,18 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private void abrirVentanaNueva(ActionEvent event) {
-        try {
-            // 1. Cargar el FXML de la nueva pantalla
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views-fxml/captura-informacion-previa.fxml"));
-            Scene scene = new Scene(fxmlLoader.load());
-            // 2. Crear un nuevo Stage (ventana)
-            Stage stage = new Stage();
-
-            // 3. Configurar la nueva ventana
-            stage.setTitle("Sistema Dispersión de Fondos");
-            stage.setScene(scene);
-
-            // Opcional: Si quieres que la ventana actual se cierre
-            ((Node) event.getSource()).getScene().getWindow().hide();
-
-            // 4. Mostrar la nueva ventana
-            stage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Error al cargar la nueva ventana.");
-        }
+    private void capturaInformacion(ActionEvent event) {
+        String url ="/fxml/captura-informacion-previa.fxml";
+        String title = "Sistema Dispersión de Fondos";
+        Service service = new Service();
+        service.navegacion(url,title, event);
     }
 
     @FXML
     private void abrirVentanaNuevaInstruccionesPrevias(ActionEvent event) {
         try {
             // 1. Cargar el FXML de la nueva pantalla
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views-fxml/instrucciones-previas.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/instrucciones-previas.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
             // 2. Crear un nuevo Stage (ventana)
             Stage stage = new Stage();

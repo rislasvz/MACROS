@@ -1,4 +1,4 @@
-package org.scotiabank.productosGTB.macros.controllers;
+package org.scotiabank.productosGTB.controllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,7 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import org.scotiabank.productosGTB.macros.model.SistemaDispersionData;
+import org.scotiabank.productosGTB.model.SistemaDispersionData;
 
 public class SistemaDispercionFondosController {
 
