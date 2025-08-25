@@ -79,7 +79,7 @@
             <font>
                <Font size="24.0" />
             </font></Button>
-         <Button layoutX="70.0" layoutY="235.0" text="&gt; Lectura de Reportes" style="-fx-background-color: transparent;">
+         <Button layoutX="70.0" layoutY="235.0" text="&gt; Lectura de Reportes" style="-fx-background-color: transparent;" onAction="#abrirResultados">
             <font>
                <Font size="24.0" />
             </font>

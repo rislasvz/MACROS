@@ -20,10 +20,20 @@ public class CapturaInformacion {
         service.navegacion(url,title, event);
     }
 
+
+
     @FXML
     private void abrirOpcionesDispercionFondos(ActionEvent event){
         String url ="/fxml/preview.fxml";
         String title = "Sistema Dispersión de Fondos";
+        Service service = new Service();
+        service.navegacion(url,title, event);
+    }
+
+    @FXML
+    private void abrirResultados(ActionEvent event) {
+        String url ="/fxml/dispersionFondosRespuesta.fxml";
+        String title = "Dispersion Fondos Respuesta";
         Service service = new Service();
         service.navegacion(url,title, event);
     }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="455.0" prefWidth="671.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/24.0.1">
+  <content>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="483.0" prefWidth="668.0">
+         <children>
+            <TableView layoutX="34.0" layoutY="23.0" prefWidth="600.0">
+               <columns>
+                  <TableColumn prefWidth="100.0" text="Tipo Instrucción" />
+                  <TableColumn prefWidth="100.0" text="Codigo Clave" />
+                  <TableColumn prefWidth="100.0" text="Status Pago" />
+                  <TableColumn prefWidth="100.0" text="Fecha Aplicacion/Pago" />
+                  <TableColumn prefWidth="100.0" text="Plaza Pago" />
+                  <TableColumn prefWidth="100.0" text="Sucursal Pago" />
+               </columns>
+            </TableView>
+         </children></AnchorPane>
+  </content>
+</ScrollPane>
