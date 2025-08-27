@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="629.0" prefWidth="1066.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane layoutX="25.0" layoutY="25.0" prefHeight="528.0" prefWidth="849.0" style="-fx-border-color: #D40000; -fx-border-radius: 10;" AnchorPane.bottomAnchor="76.33333333333337" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="26.333333333333258" AnchorPane.topAnchor="25.0">
+         <children>
+            <Label layoutX="18.0" layoutY="29.0" text="Movimientos Aceptados: " />
+            <Label layoutX="53.0" layoutY="68.0" text="Número de Altas: " />
+            <Label layoutX="54.0" layoutY="104.0" text="Importe de Altas: " />
+            <Label layoutX="53.0" layoutY="141.0" text="Número de Bajas: " />
+            <Label layoutX="53.0" layoutY="182.0" text="Importe de Bajas: " />
+            <TextField layoutX="156.0" layoutY="64.0" />
+            <TextField layoutX="156.0" layoutY="100.0" prefHeight="25.0" prefWidth="225.0" />
+            <TextField layoutX="156.0" layoutY="137.0" />
+            <TextField layoutX="156.0" layoutY="178.0" prefHeight="25.0" prefWidth="225.0" />
+            <Label layoutX="18.0" layoutY="256.0" text="Movimientos Pagados: " />
+            <Label layoutX="50.0" layoutY="294.0" text="Número de Pagos: " />
+            <Label layoutX="46.0" layoutY="337.0" text="Importe de Pagos: " />
+            <Label layoutX="21.0" layoutY="402.0" text="Movimientos Deveultos:" />
+            <TextField layoutX="168.0" layoutY="290.0" />
+            <TextField layoutX="168.0" layoutY="333.0" prefHeight="25.0" prefWidth="225.0" />
+            <TextField layoutX="168.0" layoutY="432.0" />
+            <Label layoutX="35.0" layoutY="436.0" text="Número de Devueltos: " />
+            <Label layoutX="39.0" layoutY="469.0" text="Importe de Devueltos:" />
+            <TextField layoutX="168.0" layoutY="465.0" prefHeight="25.0" prefWidth="225.0" />
+            <Label layoutX="514.0" layoutY="29.0" text="Movimientos Rechazados en Validación: " />
+            <Label layoutX="529.0" layoutY="71.0" text="Número de Altas: " />
+            <Label layoutX="530.0" layoutY="107.0" text="Importe de Altas: " />
+            <Label layoutX="530.0" layoutY="144.0" text="Número de bajas: " />
+            <Label layoutX="530.0" layoutY="185.0" text="Importe de bajas: " />
+            <Label layoutX="530.0" layoutY="294.0" text="Número de Bajas: " />
+            <Label layoutX="532.0" layoutY="337.0" text="Importe de Bajas: " />
+            <Label layoutX="519.0" layoutY="402.0" text="Movimientos Rechazados en Aplicación: " />
+            <Label layoutX="529.0" layoutY="436.0" text="Número de Rechazos: " />
+            <Label layoutX="529.0" layoutY="469.0" text="Importe de Rechazos: " />
+            <TextField layoutX="634.0" layoutY="67.0" />
+            <TextField layoutX="634.0" layoutY="103.0" />
+            <TextField layoutX="634.0" layoutY="140.0" />
+            <TextField layoutX="634.0" layoutY="181.0" />
+            <TextField layoutX="634.0" layoutY="290.0" />
+            <TextField layoutX="634.0" layoutY="333.0" />
+            <TextField layoutX="655.0" layoutY="432.0" />
+            <TextField layoutX="655.0" layoutY="465.0" />
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

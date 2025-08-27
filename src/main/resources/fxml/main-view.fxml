@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #4A4A4A;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.scotiabank.productosGTB.controllers.MainController">
+   <children>
+      <Button layoutX="335.0" layoutY="132.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="170.0" style="-fx-background-color: E31414;" text="Instrucciones Previas" textFill="WHITE" onAction="#abrirVentanaNuevaInstruccionesPrevias">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
+      <Button layoutX="335.0" layoutY="188.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="170.0" style="-fx-background-color: E31414;" text="Captura de Información" textFill="WHITE" onAction="#capturaInformacion">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
+      <Button layoutX="335.0" layoutY="245.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="170.0" style="-fx-background-color: E31414;" text="Lectura de Reportes" textFill="WHITE" >
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
+      <Label fx:id="labelFecha" layoutX="379.0" layoutY="33.0" prefHeight="25.0" prefWidth="188.0" text="Fecha no disponible" textFill="WHITE">
+         <font>
+            <Font size="13.0" />
+         </font></Label>
+      <ImageView fitHeight="243.0" fitWidth="244.0" layoutX="49.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../assets/Scotiabank_icon_red.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="37.0" layoutY="23.0" text="Productos GTB" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="455.0" layoutY="369.0" text="Scotiabank Inverlat" textFill="WHITE" />
+      <Button layoutX="479.0" layoutY="340.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="62.0" style="-fx-background-color: E31414;" text="SALIR" textFill="WHITE">
+         <font>
+            <Font size="10.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+   </children>
+</AnchorPane>

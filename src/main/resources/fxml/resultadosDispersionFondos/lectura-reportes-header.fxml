@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="135.0" prefWidth="1117.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane layoutX="27.0" layoutY="14.0" prefHeight="105.0" prefWidth="1073.0">
+         <children>
+            <Label layoutX="14.0" layoutY="23.0" text="Tipo Archivo" />
+            <Label layoutX="14.0" layoutY="70.0" text="Código Rechazo" />
+            <TextField layoutX="114.0" layoutY="19.0" />
+            <TextField layoutX="114.0" layoutY="66.0" />
+            <Label layoutX="293.0" layoutY="23.0" text="Referencia Empresa:" />
+            <TextField layoutX="407.0" layoutY="19.0" />
+            <Label layoutX="293.0" layoutY="70.0" text="Cuenta de cargo:" />
+            <TextField layoutX="407.0" layoutY="66.0" />
+            <Label layoutX="607.0" layoutY="23.0" text="Nombre Empresa:" />
+            <Label layoutX="607.0" layoutY="70.0" text="Secuencia Archivo: " />
+            <TextField layoutX="712.0" layoutY="19.0" prefHeight="25.0" prefWidth="318.0" />
+            <TextField layoutX="712.0" layoutY="66.0" prefHeight="25.0" prefWidth="255.0" />
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

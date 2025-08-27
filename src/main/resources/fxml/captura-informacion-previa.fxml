@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="671.0" prefWidth="1325.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.scotiabank.productosGTB.controllers.CapturaInformacion">
+    <left>
+        <fx:include source="menu-left.fxml" />
+    </left>
+   <center>
+       <VBox alignment="TOP_LEFT" spacing="40">
+           <padding>
+               <Insets left="60" top="150" />
+           </padding>
+           <Button text="&gt; Captura Información" onAction="#abrirCapturaInformacion" style="-fx-background-color: transparent;">
+            <font>
+               <Font size="24.0" />
+            </font></Button>
+           <cursor>
+               <Cursor fx:constant="HAND" />
+           </cursor>
+           <Button text="&gt; Importar Archivo - Excel" style="-fx-background-color: transparent;">
+            <font>
+               <Font size="24.0" />
+            </font></Button>
+         <Button layoutX="70.0" layoutY="235.0" text="&gt; Lectura de Reportes" style="-fx-background-color: transparent;" onAction="#abrirResultados">
+            <font>
+               <Font size="24.0" />
+            </font>
+         </Button>
+       </VBox>
+   </center>
+</BorderPane>
