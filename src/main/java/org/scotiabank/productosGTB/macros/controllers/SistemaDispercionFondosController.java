@@ -4,14 +4,17 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.cell.ComboBoxTableCell;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import org.scotiabank.productosGTB.macros.data.TooltipMessages;
 import org.scotiabank.productosGTB.macros.model.SistemaDispersionData;
+import org.scotiabank.productosGTB.macros.util.Constants;
+import org.scotiabank.productosGTB.macros.util.TooltipManager;
+import org.scotiabank.productosGTB.macros.util.Util;
+
+import java.io.*;
 
 public class SistemaDispercionFondosController {
 
@@ -24,20 +27,20 @@ public class SistemaDispercionFondosController {
     @FXML
     private TextField textFieldCompanyReference;
     @FXML
-    private ComboBox<String> comboBoxFileType;
+    private TextField textFieldFileType;
     @FXML
-    private ComboBox<String> comboBoxPaymentConcept;
+    private TextField textFieldPaymentConcept;
     @FXML
-    private ComboBox<String> comboBoxPaymentCurrency;
+    private TextField textFieldPaymentCurrency;
     @FXML
     private TableView<SistemaDispersionData> tableViewDispersionFondos;
     private ObservableList<SistemaDispersionData> dataList;
     @FXML
+    private TableColumn<SistemaDispersionData, Integer> num;
+    @FXML
     private TableColumn<SistemaDispersionData, String> formaPago;
     @FXML
     private TableColumn<SistemaDispersionData, String> tipoCuenta;
-    //@FXML
-    //private TableColumn<SistemaDispersionData, String> bancoReceptor;
     @FXML
     private TableColumn<SistemaDispersionData, String> cuenta;
     @FXML
@@ -61,127 +64,117 @@ public class SistemaDispercionFondosController {
     @FXML
     private TableColumn<SistemaDispersionData, String> referenciaAbonoBanxico;
     @FXML
-    private TableColumn<SistemaDispersionData, String> tipoOperación;
+    private TableColumn<SistemaDispersionData, String> tipoOperacion;
     @FXML
     private TableColumn<SistemaDispersionData, String> bancoReceptor;
 
-    private ObservableList<String> bancos = FXCollections.observableArrayList(
-            "Scotiabank", "Banamex", "BBVA", "Banorte", "HSBC"
-    );
-
-
     @FXML
     public void initialize() {
-        validaNumeros(textFieldClientNumber);
-        validaNumeros(textFieldFileNumberOfTheDay);
-        validaNumeros(textFieldCompanyReference);
-        validaNumeros(textFieldChargeAccount);
-        fillAllComboBox();
+        Util.validaNumeros(textFieldClientNumber);
+        Util.validaNumeros(textFieldFileNumberOfTheDay);
+        Util.validaNumeros(textFieldCompanyReference);
+        Util.validaNumeros(textFieldChargeAccount);
+        agregaTooltips();
 
-        // Inicializa la lista de datos aquí, una sola vez.
         dataList = FXCollections.observableArrayList(
-                new SistemaDispersionData("Fila 1, Col 1", "Fila 1, Col 2", "Scotiabank", "Fila 1, Col 4", "Fila 1, Col 5", "Fila 1, Col 6", "Fila 1, Col 7", "Fila 1, Col 8", "Fila 1, Col 9", "Fila 1, Col 10", "Fila 1, Col 11", "Fila 1, Col 12", "Fila 1, Col 13", "Fila 1, Col 14", "Fila 1, Col 15"),
-                new SistemaDispersionData("Fila 2, Col 1", "Fila 2, Col 2", "HSBC", "Fila 2, Col 4", "Fila 2, Col 5", "Fila 2, Col 6", "Fila 2, Col 7", "Fila 2, Col 8", "Fila 2, Col 9", "Fila 2, Col 10", "Fila 2, Col 11", "Fila 2, Col 12", "Fila 2, Col 13", "Fila 2, Col 14", "Fila 2, Col 15"),
-                new SistemaDispersionData("Fila 3, Col 1", "Fila 3, Col 2", "Banamex", "Fila 3, Col 4", "Fila 3, Col 5", "Fila 3, Col 6", "Fila 3, Col 7", "Fila 3, Col 8", "Fila 3, Col 9", "Fila 3, Col 10", "Fila 3, Col 11", "Fila 3, Col 12", "Fila 3, Col 13", "Fila 3, Col 14", "Fila 3, Col 15")
+                new SistemaDispersionData(1, "", "", "", "", "", "", "", "", "", "", "", "", "", "", "")
         );
-
-        // Vincula la lista de datos a la tabla.
         tableViewDispersionFondos.setItems(dataList);
-
-        // Llama a fillTable() para configurar las columnas, pero no para crear datos.
         fillTable();
     }
 
-    public void validaNumeros(TextField textField){
-        textField.textProperty().addListener((observable, oldValue, newValue) -> {
-            // Reemplaza cualquier caracter que no sea un dígito.
-            if (!newValue.matches("\\d*")) {
-                textField.setText(newValue.replaceAll("[^\\d]", ""));
-            }
-        });
-    }
-
-    public void fillAllComboBox(){
-        ObservableList<String> fileTyoes = FXCollections.observableArrayList(
-                "Altas",
-                "Bajas"
-        );
-        comboBoxFileType.setItems(fileTyoes);
-        comboBoxFileType.getSelectionModel().selectFirst();
-        ObservableList<String> paymentConcepts = FXCollections.observableArrayList(
-                "Nomina",
-                "Pago de Alquiler",
-                "Compra de alimentos",
-                "Pago de servicios médicos",
-                "Matrícula escolar",
-                "Transferencia a familiar",
-                "Pago de suscripción mensual"
-        );
-        comboBoxPaymentConcept.setItems(paymentConcepts);
-        comboBoxPaymentConcept.getSelectionModel().selectFirst();
-        ObservableList<String> paymentCurrencies = FXCollections.observableArrayList(
-                "Dolares Americanos",
-                "Euro",
-                "Libra esterlina",
-                "Pesos Mexicanos",
-                "Pesos Argentinos",
-                "Franco suizo",
-                "Dólar canadiense",
-                "Yuan Chino",
-                "Real Brasileño"
-        );
-        comboBoxPaymentCurrency.setItems(paymentCurrencies);
-        comboBoxPaymentCurrency.getSelectionModel().selectFirst();
-    }
-
     public void fillTable(){
-        // Configura las columnas de la tabla. Esta parte es correcta.
-        formaPago.setCellValueFactory(new PropertyValueFactory<>("formaPago"));
-        tipoCuenta.setCellValueFactory(new PropertyValueFactory<>("tipoCuenta"));
-        bancoReceptor.setCellValueFactory(new PropertyValueFactory<>("bancoReceptor"));
-        cuenta.setCellValueFactory(new PropertyValueFactory<>("cuenta"));
-        // ... el resto de las columnas
-        importePago.setCellValueFactory(new PropertyValueFactory<>("importePago"));
-        claveBeneficiario.setCellValueFactory(new PropertyValueFactory<>("claveBeneficiario"));
-        rfcBeneficiario.setCellValueFactory(new PropertyValueFactory<>("rfcBeneficiario"));
-        nombreBeneficiario.setCellValueFactory(new PropertyValueFactory<>("nombreBeneficiario"));
-        referenciaPago.setCellValueFactory(new PropertyValueFactory<>("referenciaPago"));
-        conceptoPago.setCellValueFactory(new PropertyValueFactory<>("conceptoPago"));
-        diasVigencia.setCellValueFactory(new PropertyValueFactory<>("diasVigencia"));
-        infoAgruparPagos.setCellValueFactory(new PropertyValueFactory<>("infoAgruparPagos"));
-        detalleMail.setCellValueFactory(new PropertyValueFactory<>("detalleMail"));
-        referenciaAbonoBanxico.setCellValueFactory(new PropertyValueFactory<>("referenciaAbonoBanxico"));
-        tipoOperación.setCellValueFactory(new PropertyValueFactory<>("tipoOperación"));
+        num.setCellValueFactory(new PropertyValueFactory<>("num"));
+        formaPago.setCellFactory(Util.createNumericCellFactory(2, 2));
+        tipoCuenta.setCellFactory(Util.createNumericCellFactory(1, 1));
+        bancoReceptor.setCellFactory(Util.createNumericCellFactory(3, 3));
+        cuenta.setCellFactory(Util.createNumericCellFactory(11, 20));
+        importePago.setCellFactory(Util.createDecimalCellFactory(3, 15));
+        claveBeneficiario.setCellFactory(Util.createStringWithoutSymbolsCellFactory(1, 20));
+        rfcBeneficiario.setCellFactory(Util.createStringWithoutSymbolsCellFactory(12, 13));
+        nombreBeneficiario.setCellFactory(Util.createStringWithoutSymbolsCellFactory(1, 40));
+        referenciaPago.setCellFactory(Util.createNumericCellFactory(1, 16));
+        conceptoPago.setCellFactory(Util.createStringWithoutSymbolsCellFactory(1, 40));
+        diasVigencia.setCellFactory(Util.createNumericCellFactory(1, 2));
+        infoAgruparPagos.setCellFactory(Util.createStringWithoutSymbolsCellFactory(1, 60));
+        detalleMail.setCellFactory(Util.createStringEmailCellFactory(1, 60));
+        referenciaAbonoBanxico.setCellFactory(Util.createNumericCellFactory(1, 20));
+        tipoOperacion.setCellFactory(Util.createNumericCellFactory(2, 2));
         tableViewDispersionFondos.setEditable(true);
-
-        formaPago.setCellFactory(TextFieldTableCell.forTableColumn());
-        tipoCuenta.setCellFactory(TextFieldTableCell.forTableColumn());
-        bancoReceptor.setCellFactory(ComboBoxTableCell.forTableColumn(bancos));
-
-        formaPago.setOnEditCommit(event -> {
-            SistemaDispersionData rowData = event.getRowValue();
-            rowData.setFormaPago(event.getNewValue());
-        });
-
-        tipoCuenta.setOnEditCommit(event -> {
-            SistemaDispersionData rowData = event.getRowValue();
-            rowData.setTipoCuenta(event.getNewValue());
-        });
-
-        bancoReceptor.setOnEditCommit(event -> {
-            SistemaDispersionData rowData = event.getRowValue();
-            rowData.setBancoReceptor(event.getNewValue());
-        });
-
-        // Se eliminó la inicialización de los datos de esta función.
     }
 
     @FXML
     private void agregarFila(ActionEvent event) {
-        // Crea una nueva fila con valores predeterminados (vacíos)
-        SistemaDispersionData nuevaFila = new SistemaDispersionData();
-
-        // Agrega la nueva fila a la lista observable de la tabla
+        Integer nuevoNumero = dataList.size() + 1;
+        SistemaDispersionData nuevaFila = new SistemaDispersionData(
+                nuevoNumero, "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""
+        );
         dataList.add(nuevaFila);
     }
+
+    public void agregaTooltips(){
+        TooltipManager.applyTooltip(textFieldClientNumber, TooltipMessages.CLIENT_NUMBER_TOOLTIP);
+        TooltipManager.applyTooltip(textFieldFileNumberOfTheDay, TooltipMessages.FILE_NUMBRER_OF_THE_DAY_TOOLTIP);
+        TooltipManager.applyTooltip(textFieldChargeAccount, TooltipMessages.CHARGE_ACCOUNT_TOOLTIP);
+        TooltipManager.applyTooltip(textFieldCompanyReference, TooltipMessages.COMPANY_REFERENCE_TOOLTIP);
+        TooltipManager.applyTooltip(textFieldFileType, TooltipMessages.FILE_TYPE_TOOLTIP);
+        TooltipManager.applyTooltip(textFieldPaymentConcept, TooltipMessages.PAYMENT_CONCEPT_TOOLTIP);
+        TooltipManager.applyTooltip(textFieldPaymentCurrency, TooltipMessages.PAYMENT_CURRENCY_TOOLTIP);
+    }
+
+    public void exportarDatosAArchivoOptimizada() {
+        // 1. Crear un FileChooser para que el usuario elija la ubicación y el nombre del archivo.
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Guardar Archivo de Datos");
+
+        // Configurar la extensión del archivo
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Archivos de texto (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        // Mostrar el cuadro de diálogo para guardar el archivo
+        File file = fileChooser.showSaveDialog(new Stage());
+
+        if (file != null) {
+            try (
+                    FileWriter fw = new FileWriter(file);
+                    BufferedWriter bw = new BufferedWriter(fw);
+                    PrintWriter writer = new PrintWriter(bw)
+            ) {
+                writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA
+                        + Constants.TIPO_REGISTRO_HA
+                        + Util.rellenarConCeros(textFieldClientNumber.getText(), 5)
+                        + Util.rellenarConCeros(textFieldFileNumberOfTheDay.getText(), 2)
+                        +"000000000000000000000000000");
+                writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA
+                        + Constants.TIPO_REGISTRO_HB
+                        + Util.rellenarConCeros(textFieldPaymentCurrency.getText(), 2)
+                        + "0000" + textFieldChargeAccount.getText()
+                        + textFieldCompanyReference.getText() + "000");
+
+
+                // 2. Obtener los datos de la tabla
+                for (SistemaDispersionData data : dataList) {
+                    // 3. Formatear la información de cada fila y escribirla en el archivo
+                    writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA
+                        + Constants.TIPO_REGISTRO_DA + data.getFormaPago() + Util.rellenarConCeros(textFieldPaymentCurrency.getText(), 2));
+                }
+                // 4. Mostrar una alerta de éxito
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Exportación Exitosa");
+                alert.setHeaderText(null);
+                alert.setContentText("Los datos se han guardado en el archivo: " + file.getAbsolutePath());
+                alert.showAndWait();
+            } catch (IOException e) {
+                // 5. Manejar posibles errores
+                e.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error de Exportación");
+                alert.setHeaderText("No se pudo guardar el archivo.");
+                alert.setContentText("Ocurrió un error al intentar escribir los datos. Por favor, inténtelo de nuevo.");
+                alert.showAndWait();
+            }
+        }
+    }
+
+
 }

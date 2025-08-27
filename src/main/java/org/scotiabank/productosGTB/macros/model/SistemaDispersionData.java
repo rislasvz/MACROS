@@ -1,10 +1,13 @@
 package org.scotiabank.productosGTB.macros.model;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class SistemaDispersionData {
 
+    private IntegerProperty num;
     private StringProperty formaPago;
     private StringProperty tipoCuenta;
     private StringProperty bancoReceptor;
@@ -19,9 +22,10 @@ public class SistemaDispersionData {
     private StringProperty infoAgruparPagos;
     private StringProperty detalleMail;
     private StringProperty referenciaAbonoBanxico;
-    private StringProperty tipoOperación;
+    private StringProperty tipoOperacion;
 
-    public SistemaDispersionData(String formaPago, String tipoCuenta, String bancoReceptor, String cuenta, String importePago, String claveBeneficiario, String rfcBeneficiario, String nombreBeneficiario, String referenciaPago, String conceptoPago, String diasVigencia, String infoAgruparPagos, String detalleMail, String referenciaAbonoBanxico, String tipoOperación) {
+    public SistemaDispersionData(Integer num, String formaPago, String tipoCuenta, String bancoReceptor, String cuenta, String importePago, String claveBeneficiario, String rfcBeneficiario, String nombreBeneficiario, String referenciaPago, String conceptoPago, String diasVigencia, String infoAgruparPagos, String detalleMail, String referenciaAbonoBanxico, String tipoOperacion) {
+        this.num = new SimpleIntegerProperty(num);
         this.formaPago = new SimpleStringProperty(formaPago);
         this.tipoCuenta = new SimpleStringProperty(tipoCuenta);
         this.bancoReceptor = new SimpleStringProperty(bancoReceptor);
@@ -36,10 +40,11 @@ public class SistemaDispersionData {
         this.infoAgruparPagos = new SimpleStringProperty(infoAgruparPagos);
         this.detalleMail = new SimpleStringProperty(detalleMail);
         this.referenciaAbonoBanxico = new SimpleStringProperty(referenciaAbonoBanxico);
-        this.tipoOperación = new SimpleStringProperty(tipoOperación);
+        this.tipoOperacion = new SimpleStringProperty(tipoOperacion);
     }
 
     public SistemaDispersionData() {
+        this.num = new SimpleIntegerProperty();
         this.formaPago = new SimpleStringProperty("");
         this.tipoCuenta = new SimpleStringProperty("");
         this.bancoReceptor = new SimpleStringProperty("");
@@ -54,7 +59,19 @@ public class SistemaDispersionData {
         this.infoAgruparPagos = new SimpleStringProperty("");
         this.detalleMail = new SimpleStringProperty("");
         this.referenciaAbonoBanxico = new SimpleStringProperty("");
-        this.tipoOperación = new SimpleStringProperty("");
+        this.tipoOperacion = new SimpleStringProperty("");
+    }
+
+    public int getNum() {
+        return num.get();
+    }
+
+    public IntegerProperty numProperty() {
+        return num;
+    }
+
+    public void setNum(int num) {
+        this.num.set(num);
     }
 
     public String getFormaPago() {
@@ -225,15 +242,15 @@ public class SistemaDispersionData {
         this.detalleMail.set(detalleMail);
     }
 
-    public String getTipoOperación() {
-        return tipoOperación.get();
+    public String getTipoOperacion() {
+        return tipoOperacion.get();
     }
 
-    public StringProperty tipoOperaciónProperty() {
-        return tipoOperación;
+    public StringProperty tipoOperacionProperty() {
+        return tipoOperacion;
     }
 
-    public void setTipoOperación(String tipoOperación) {
-        this.tipoOperación.set(tipoOperación);
+    public void setTipoOperacion(String tipoOperacion) {
+        this.tipoOperacion.set(tipoOperacion);
     }
 }
