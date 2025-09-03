@@ -5,6 +5,7 @@ module org.scotiabank.productosGTB.macros {
     requires static lombok;
     requires javafx.base;
     requires org.slf4j;
+    requires javafx.web;
     //requires MaterialFX;
 
     opens org.scotiabank.productosGTB to javafx.fxml;
