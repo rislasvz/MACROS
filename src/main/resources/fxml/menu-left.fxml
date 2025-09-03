@@ -20,7 +20,7 @@
                 <Font size="24.0" />
             </font>
         </Label>
-        <Button layoutX="59.0" layoutY="93.0" mnemonicParsing="false" style="-fx-background-color: transparent;" text="DISPERSION DE FONDOS" textFill="WHITE" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="80.0">
+        <Button layoutX="59.0" layoutY="93.0" mnemonicParsing="false" style="-fx-background-color: transparent;" text="DISPERCION DE FONDOS" textFill="WHITE" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="80.0">
             <font>
                 <Font size="14.0" />
             </font>

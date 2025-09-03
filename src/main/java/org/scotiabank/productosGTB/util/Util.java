@@ -76,10 +76,14 @@ public class Util {
             @Override
             public void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty) {
+                if (empty || item == null || item.trim().isEmpty()) {
                     setText(null);
                     setGraphic(null);
+                    if (!getStyleClass().contains("error-cell")) {
+                        getStyleClass().add("error-cell");
+                    }
                 } else {
+                    getStyleClass().remove("error-cell");
                     if (isEditing()) {
                         if (textField != null) {
                             textField.setText(getString());
@@ -177,10 +181,14 @@ public class Util {
             @Override
             public void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty) {
+                if (empty || item == null || item.trim().isEmpty()) {
                     setText(null);
                     setGraphic(null);
+                    if (!getStyleClass().contains("error-cell")) {
+                        getStyleClass().add("error-cell");
+                    }
                 } else {
+                    getStyleClass().remove("error-cell");
                     if (isEditing()) {
                         if (textField != null) {
                             textField.setText(getString());
@@ -202,7 +210,6 @@ public class Util {
 
                     // Validar la longitud
                     if (newText.length() > maxLength) {
-                        // Mostrar una alerta si se excede la longitud máxima
                         Platform.runLater(() -> {
                             Alert alert = new Alert(Alert.AlertType.WARNING);
                             alert.setTitle("Advertencia de Longitud");
@@ -210,7 +217,7 @@ public class Util {
                             alert.setContentText("La longitud máxima permitida es de " + maxLength + " d\u00edgitos.");
                             alert.show();
                         });
-                        return null; // Denegar el cambio
+                        return null;
                     }
 
                     // Validar el formato numérico y decimal
@@ -218,7 +225,7 @@ public class Util {
                         return change;
                     }
 
-                    return null; // Denegar el cambio
+                    return null;
                 };
 
                 textField.setTextFormatter(new TextFormatter<>(filter));
@@ -279,6 +286,9 @@ public class Util {
             public void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty) {
+                    if (!getStyleClass().contains("error-cell")) {
+                        getStyleClass().add("error-cell");
+                    }
                     setText(null);
                     setGraphic(null);
                 } else {
@@ -315,7 +325,7 @@ public class Util {
                     }
 
                     // Validar el formato numérico y decimal
-                    if (newText.matches("\\w*") && newText.length() <= maxLength) {
+                    if (newText.matches("[\\w\\s]*") && newText.length() <= maxLength) {
                         return change;
                     }
 
@@ -416,7 +426,7 @@ public class Util {
                     }
 
                     // Validar el formato numérico y decimal
-                    if (newText.matches("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}")) {
+                    if (newText.matches("^[\\w\\.@+-]*$") && newText.length() <= maxLength) {
                         return change;
                     }
 
@@ -451,7 +461,7 @@ public class Util {
         };
     }
 
-    public static String rellenarConCeros(String cadena, int longitudTotal) {
+    public static String rellenarConCerosIzquierda(String cadena, int longitudTotal) {
         if (cadena.length() >= longitudTotal) {
             return cadena;
         }
@@ -461,6 +471,18 @@ public class Util {
             ceros.append("0");
         }
         return ceros.toString() + cadena;
+    }
+
+    public static String rellenarConEspaciosDerecha(String cadena, int longitudTotal) {
+        if (cadena.length() >= longitudTotal) {
+            return cadena;
+        }
+        int cantidadDeEspacios = longitudTotal - cadena.length();
+        StringBuilder espacios = new StringBuilder();
+        for (int i = 0; i < cantidadDeEspacios; i++) {
+            espacios.append(" ");
+        }
+        return cadena + espacios.toString(); // Espacios a la derecha
     }
 
 }

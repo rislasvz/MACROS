@@ -5,3 +5,19 @@
 .welcome-label {
     -fx-text-fill: #2E8B57;
 }
+
+.error-field {
+    -fx-border-color: red;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+}
+
+.error-cell {
+    -fx-border-color: red;
+    -fx-border-width: 2px;
+}
+
+/* También puedes cambiar el color del texto si lo deseas */
+.error-cell .text {
+    -fx-fill: red;
+}

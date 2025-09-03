@@ -15,7 +15,7 @@
          <children>
             <HBox alignment="CENTER_LEFT" prefHeight="70.0" spacing="10.0">
                <children>
-                  <Label text="Productos GTB" HBox.hgrow="NEVER">
+                  <Label prefHeight="35.0" prefWidth="171.0" text="Productos GTB" HBox.hgrow="NEVER">
                      <font>
                         <Font size="24.0" />
                      </font>
@@ -24,7 +24,7 @@
                      </HBox.margin>
                   </Label>
                   <Pane prefHeight="35.0" prefWidth="468.0" />
-                  <Label prefHeight="35.0" prefWidth="360.0" text="Sistema de Dispersión de Fondos" HBox.hgrow="NEVER">
+                  <Label prefHeight="35.0" prefWidth="364.0" text="Sistema de Dispersión de Fondos">
                      <font>
                         <Font size="24.0" />
                      </font>
@@ -88,13 +88,17 @@
                                  </font>
                               </Label>
                               <TextField fx:id="textFieldClientNumber" layoutX="88.0" layoutY="101.0" prefHeight="35.0" prefWidth="232.0" />
+                              <Label fx:id="errorLabelClientNumber" layoutX="88.0" layoutY="136.0" textFill="RED" visible="false" />
                               <TextField fx:id="textFieldChargeAccount" layoutX="88.0" layoutY="180.0" prefHeight="35.0" prefWidth="233.0" />
+                              <Label fx:id="errorLabelChargeAccount" layoutX="88.0" layoutY="215.0" textFill="RED" visible="false" />
                               <TextField fx:id="textFieldFileNumberOfTheDay" layoutX="653.0" layoutY="101.0" prefHeight="35.0" prefWidth="216.0" />
+                              <Label fx:id="errorLabelFileNumberOfTheDay" layoutX="653.0" layoutY="136.0" textFill="RED" visible="false" />
                               <TextField fx:id="textFieldCompanyReference" layoutX="384.0" layoutY="180.0" prefHeight="35.0" prefWidth="225.0" />
-                              <TextField fx:id="textFieldFileType" layoutX="379.0" layoutY="101.0" prefHeight="35.0" prefWidth="227.0" />
-                              <TextField fx:id="textFieldPaymentConcept" layoutX="88.0" layoutY="253.0" prefHeight="35.0" prefWidth="232.0" />
-                              <TextField fx:id="textFieldPaymentCurrency" layoutX="381.0" layoutY="253.0" prefHeight="35.0" prefWidth="232.0" />
-                              <DatePicker layoutX="653.0" layoutY="180.0" prefHeight="35.0" prefWidth="224.0" />
+                              <Label fx:id="errorLabelCompanyReference" layoutX="384.0" layoutY="215.0" textFill="RED" visible="false" />
+                              <ComboBox fx:id="comboBoxFileType" layoutX="379.0" layoutY="101.0" prefHeight="35.0" prefWidth="227.0" />
+                              <ComboBox fx:id="comboBoxPaymentConcept" layoutX="88.0" layoutY="253.0" prefHeight="35.0" prefWidth="232.0" />
+                              <ComboBox fx:id="comboBoxPaymentCurrency" layoutX="381.0" layoutY="253.0" prefHeight="35.0" prefWidth="232.0" />
+                              <DatePicker fx:id="datePicketFechaAplicacion" layoutX="653.0" layoutY="180.0" prefHeight="35.0" prefWidth="224.0" />
                               <Separator layoutX="32.0" layoutY="308.0" prefHeight="1.0" prefWidth="904.0" style="-fx-background-color: black;" />
                               <Button layoutX="153.0" layoutY="330.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="125.0" style="-fx-background-color: transparent; -fx-border-radius: 7px; -fx-border-color: ff0000; -fx-border-width: 2px;" text="Eliminar" textFill="RED">
                                  <font>
@@ -104,7 +108,7 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </Button>
-                              <Button layoutX="454.0" layoutY="332.0" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Imprimir" textFill="#40d3ff">
+                              <Button layoutX="454.0" layoutY="332.0" mnemonicParsing="false" onAction="#imprimeValores" style="-fx-background-color: transparent;" text="Imprimir" textFill="#40d3ff">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -112,7 +116,7 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </Button>
-                              <Button layoutX="707.0" layoutY="330.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="125.0" onAction="#exportarDatosAArchivoOptimizada" style="-fx-background-color: transparent; -fx-border-radius: 7px; -fx-border-color: #0049ff; -fx-border-width: 2px;" text="Archivo" textFill="#0049ff">
+                              <Button layoutX="707.0" layoutY="330.0" mnemonicParsing="false" onAction="#exportarDatosAArchivoOptimizada" prefHeight="35.0" prefWidth="125.0" style="-fx-background-color: transparent; -fx-border-radius: 7px; -fx-border-color: #0049ff; -fx-border-width: 2px;" text="Archivo" textFill="#0049ff">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
