@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class SistemaDispercionFondosController {
 
@@ -155,6 +156,21 @@ public class SistemaDispercionFondosController {
         dataList.add(nuevaFila);
     }
 
+    @FXML
+    private void eliminarFila(ActionEvent event) {
+        // Solo elimina la fila si hay más de una
+        if (dataList.size() > 1) {
+            dataList.remove(dataList.size() - 1);
+        } else {
+            // Opcional: mostrar una alerta o mensaje al usuario
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Error de Eliminación");
+            alert.setHeaderText(null);
+            alert.setContentText("No puedes eliminar la última fila de la tabla.");
+            alert.showAndWait();
+        }
+    }
+
     public void agregaTooltips(){
         TooltipManager.applyTooltip(textFieldClientNumber, TooltipMessages.CLIENT_NUMBER_TOOLTIP);
         TooltipManager.applyTooltip(textFieldFileNumberOfTheDay, TooltipMessages.FILE_NUMBRER_OF_THE_DAY_TOOLTIP);
@@ -186,7 +202,7 @@ public class SistemaDispercionFondosController {
                         BufferedWriter bw = new BufferedWriter(fw);
                         PrintWriter writer = new PrintWriter(bw)
                 ) {
-                    Integer contadorAltas = 0;
+                    Integer contadorAltasOBajas = 0;
                     Double contadorImportes = 0.0;
                     //Escribimos las dos primeras lineas del txt
                     writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA
@@ -202,7 +218,7 @@ public class SistemaDispercionFondosController {
 
                     for (SistemaDispersionData data : dataList) {
                         //Sumamos uno al contador de registors que se han hecho
-                        contadorAltas++;
+                        contadorAltasOBajas++;
                         contadorImportes = Double.valueOf(contadorImportes + data.getImportePago());
                         //PRIMERA LINEA QUE SE REPITE POR CADA REGISTRO DE LA TABLA
                         writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA
@@ -233,12 +249,39 @@ public class SistemaDispercionFondosController {
                         //SEGUNDA LINEA DEL TXT
                         writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA + Constants.TIPO_REGISTRO_DM + data.getDetalleMail());
                     }
+                    if(Objects.equals(comboBoxFileType.getValue().getId(), "1")){
+                        writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA + Constants.TIPO_REGISTRO_TB
+                                        + Util.rellenarConCerosIzquierda(contadorAltasOBajas.toString(), 7)
+                                        + Util.rellenarConCerosIzquierda(contadorImportes.toString().replaceAll("\\.", ""), 17)
+                                        + Util.rellenarConCerosIzquierda("", 7)
+                                        + Util.rellenarConCerosIzquierda("", 17)
+                                        + Util.rellenarConCerosIzquierda("", 195)
+                                        + Util.rellenarConEspaciosDerecha("", 123));
+                        writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA + Constants.TIPO_REGISTRO_TA
+                                + Util.rellenarConCerosIzquierda(contadorAltasOBajas.toString(), 7)
+                                + Util.rellenarConCerosIzquierda(contadorImportes.toString().replaceAll("\\.", ""), 17)
+                                + Util.rellenarConCerosIzquierda("", 7)
+                                + Util.rellenarConCerosIzquierda("", 17)
+                                + Util.rellenarConCerosIzquierda("", 195)
+                                + Util.rellenarConEspaciosDerecha("", 123));
+                    }else{
+                        writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA + Constants.TIPO_REGISTRO_TB
+                                + Util.rellenarConCerosIzquierda("", 7)
+                                + Util.rellenarConCerosIzquierda("", 17)
+                                + Util.rellenarConCerosIzquierda(contadorAltasOBajas.toString(), 7)
+                                + Util.rellenarConCerosIzquierda(contadorImportes.toString().replaceAll("\\.", ""), 17)
+                                + Util.rellenarConCerosIzquierda("", 195)
+                                + Util.rellenarConEspaciosDerecha("", 123));
+                        writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA + Constants.TIPO_REGISTRO_TA
+                                + Util.rellenarConCerosIzquierda("", 7)
+                                + Util.rellenarConCerosIzquierda("", 17)
+                                + Util.rellenarConCerosIzquierda(contadorAltasOBajas.toString(), 7)
+                                + Util.rellenarConCerosIzquierda(contadorImportes.toString().replaceAll("\\.", ""), 17)
+                                + Util.rellenarConCerosIzquierda("", 195)
+                                + Util.rellenarConEspaciosDerecha("", 123));
+                    }
 
-                    writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA + Constants.TIPO_REGISTRO_TB
-                                    + Util.rellenarConCerosIzquierda(contadorAltas.toString(), 7)
-                                    + Util.rellenarConCerosIzquierda(contadorImportes.toString().replaceAll("\\.", ""), 17)
-                            //+
-                    );
+
                     writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA + Constants.TIPO_REGISTRO_TA );
 
 
@@ -258,11 +301,7 @@ public class SistemaDispercionFondosController {
                 }
             }
         }else{
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Campos Faltantes");
-            alert.setHeaderText(null);
-            alert.setContentText("Por favor, complete todos los campos obligatorios antes de exportar.");
-            alert.showAndWait();
+            System.out.println("Se omitió exportación por falta de información");
         }
     }
 
@@ -402,11 +441,36 @@ public class SistemaDispercionFondosController {
                 allFieldsAreValid = false;
                 hasTableErrors = true;
             }
+            // Concepto de Pago
+            if (data.getConceptoPago() == null || data.getConceptoPago().trim().isEmpty()) {
+                errorMessage.append("• Columna 'Concepto de Pago' del registro ").append(rowIndex).append("\n");
+                allFieldsAreValid = false;
+                hasTableErrors = true;
+            }
+            // Dias Vigencia
+            if (data.getDiasVigencia() == null || data.getDiasVigencia().trim().isEmpty()) {
+                errorMessage.append("• Columna 'Dias Vigencia' del registro ").append(rowIndex).append("\n");
+                allFieldsAreValid = false;
+                hasTableErrors = true;
+            }
             // Detalle Mail
             if (data.getDetalleMail() == null || data.getDetalleMail().trim().isEmpty()) {
                 errorMessage.append("• Columna 'Detalle Mail' del registro ").append(rowIndex).append("\n");
                 allFieldsAreValid = false;
                 hasTableErrors = true;
+            }
+            // Referencia abono banxico y tipo operación
+            if (comboBoxPaymentCurrency.getValue().getId() == "01") {
+                if(data.getReferenciaAbonoBanxico() == null || data.getReferenciaAbonoBanxico().trim().isEmpty()){
+                    errorMessage.append("• Columna 'Referencia abono banxico' del registro ").append(rowIndex).append("\n");
+                    allFieldsAreValid = false;
+                    hasTableErrors = true;
+                }
+                if(data.getTipoOperacion() == null || data.getTipoOperacion().trim().isEmpty()){
+                    errorMessage.append("• Columna 'Tipo operación' del registro ").append(rowIndex).append("\n");
+                    allFieldsAreValid = false;
+                    hasTableErrors = true;
+                }
             }
         }
 

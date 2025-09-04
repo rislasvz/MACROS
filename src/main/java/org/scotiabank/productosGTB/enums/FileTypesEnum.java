@@ -1,5 +1,8 @@
 package org.scotiabank.productosGTB.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum FileTypesEnum {
 
         ALTA("Alta", "1"),

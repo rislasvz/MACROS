@@ -162,14 +162,20 @@
                   </AnchorPane>
                </content>
             </ScrollPane>
-            <Button layoutX="42.0" layoutY="650.0" mnemonicParsing="false" onAction="#agregarFila" prefHeight="35.0" prefWidth="125.0" style="-fx-background-color: #008000; -fx-border-radius: 7px;" text="Agregar Fila" textFill="WHITE">
-               <font>
-                  <Font size="14.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+               <children>
+                  <Button onAction="#agregarFila" prefHeight="35.0" prefWidth="125.0" style="-fx-background-color: #008000; -fx-border-radius: 7px;" text="Agregar Fila" textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+                  <Button onAction="#eliminarFila" prefHeight="35.0" prefWidth="125.0" style="-fx-background-color: #ff0000; -fx-border-radius: 7px;" text="Eliminar Fila" textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
          </children>
       </VBox>
    </center>

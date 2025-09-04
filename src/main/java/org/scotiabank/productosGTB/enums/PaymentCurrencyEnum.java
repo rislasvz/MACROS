@@ -2,13 +2,14 @@ package org.scotiabank.productosGTB.enums;
 
 import lombok.Getter;
 
+@Getter
 public enum PaymentCurrencyEnum {
 
     MONEDA_NACIONAL("Moneda Nacional", "00"),
     DOLARES_AMERICANOS("Dolares Americanos", "01");
 
     private final String name;
-    @Getter
+
     private final String id;
 
     PaymentCurrencyEnum(String name, String id) {
