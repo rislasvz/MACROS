@@ -36,6 +36,7 @@ public class LecturaReporteTEFDetalle {
     private String campoUsoEmpresa2;
     private String campoUsoEmpresa3;
     private String codigoStatusRegistro;
+    private String CVECambioInst;
     private String codigoCambioInst;
     private String fechaDePago;
     private String plazaDePago;
