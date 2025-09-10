@@ -6,6 +6,7 @@ module org.scotiabank.productosGTB.macros {
     requires javafx.base;
     requires org.slf4j;
     requires javafx.web;
+    requires org.apache.poi.poi;
     //requires MaterialFX;
 
     opens org.scotiabank.productosGTB to javafx.fxml;
