@@ -7,6 +7,7 @@ import javafx.util.Callback;
 import javafx.util.converter.IntegerStringConverter;
 import javafx.scene.control.TextField;
 
+import java.time.LocalDate;
 import java.util.function.UnaryOperator;
 
 import java.util.function.BiConsumer;
@@ -325,7 +326,7 @@ public class Util {
                     }
 
                     // Validar el formato numérico y decimal
-                    if (newText.matches("[\\w\\s]*") && newText.length() <= maxLength) {
+                    if (newText.matches("[\\w\\sáéíóúÁÉÍÓÚñÑ]*") && newText.length() <= maxLength) {
                         return change;
                     }
 
@@ -483,6 +484,20 @@ public class Util {
             espacios.append(" ");
         }
         return cadena + espacios.toString(); // Espacios a la derecha
+    }
+
+    public static void limitarFechas(DatePicker miDatePicker) {
+        final LocalDate hoy = LocalDate.now();
+        miDatePicker.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item.isBefore(hoy)) {
+                    setDisable(true);
+                    setStyle("-fx-background-color: #A39E9E;"); // Opcional: para visualmente indicar que están deshabilitadas
+                }
+            }
+        });
     }
 
 }

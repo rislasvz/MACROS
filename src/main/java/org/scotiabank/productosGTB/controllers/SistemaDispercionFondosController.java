@@ -6,6 +6,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.KeyCode;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.scotiabank.productosGTB.data.TooltipMessages;
@@ -85,13 +87,24 @@ public class SistemaDispercionFondosController {
     private Label errorLabelFileNumberOfTheDay;
     @FXML
     private Label errorLabelCompanyReference;
+    @FXML
+    private Label errorLabelFechaAplicacion;
 
     @FXML
     public void initialize() {
+
+        tableViewDispersionFondos.setOnKeyPressed(event -> {
+            // Verifica si se presionó la combinación de teclas Ctrl + V
+            if (event.isControlDown() && event.getCode() == KeyCode.V) {
+                pasteFromClipboard();
+            }
+        });
+
         Util.validaNumeros(textFieldClientNumber);
         Util.validaNumeros(textFieldFileNumberOfTheDay);
         Util.validaNumeros(textFieldCompanyReference);
         Util.validaNumeros(textFieldChargeAccount);
+        Util.limitarFechas(datePicketFechaAplicacion);
         fillAllComboBox();
         agregaTooltips();
 
@@ -212,7 +225,7 @@ public class SistemaDispercionFondosController {
                             +"000000000000000000000000000");
                     writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA
                             + Constants.TIPO_REGISTRO_HB
-                            + Util.rellenarConCerosIzquierda(comboBoxPaymentCurrency.toString(), 2)
+                            + Util.rellenarConCerosIzquierda(comboBoxPaymentCurrency.getValue().getId(), 2)
                             + "0000" + Util.rellenarConCerosIzquierda(textFieldChargeAccount.getText(), 11)
                             + Util.rellenarConCerosIzquierda(textFieldCompanyReference.getText(), 10) + "000");
 
@@ -280,11 +293,7 @@ public class SistemaDispercionFondosController {
                                 + Util.rellenarConCerosIzquierda("", 195)
                                 + Util.rellenarConEspaciosDerecha("", 123));
                     }
-
-
                     writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA + Constants.TIPO_REGISTRO_TA );
-
-
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Exportación Exitosa");
                     alert.setHeaderText(null);
@@ -346,11 +355,13 @@ public class SistemaDispercionFondosController {
         textFieldFileNumberOfTheDay.getStyleClass().remove("error-field");
         textFieldChargeAccount.getStyleClass().remove("error-field");
         textFieldCompanyReference.getStyleClass().remove("error-field");
+        datePicketFechaAplicacion.getStyleClass().remove("error-field");
 
         errorLabelClientNumber.setVisible(false);
         errorLabelFileNumberOfTheDay.setVisible(false);
         errorLabelChargeAccount.setVisible(false);
         errorLabelCompanyReference.setVisible(false);
+        errorLabelFechaAplicacion.setVisible(false);
 
         // Validar TextFields
         if (textFieldClientNumber.getText().trim().isEmpty()) {
@@ -375,6 +386,12 @@ public class SistemaDispercionFondosController {
             textFieldCompanyReference.getStyleClass().add("error-field");
             errorLabelCompanyReference.setText("Este campo es requerido.");
             errorLabelCompanyReference.setVisible(true);
+            allFieldsAreValid = false;
+        }
+        if (datePicketFechaAplicacion.getValue() == null) {
+            datePicketFechaAplicacion.getStyleClass().add("error-field");
+            errorLabelFechaAplicacion.setText("Este campo es requerido.");
+            errorLabelFechaAplicacion.setVisible(true);
             allFieldsAreValid = false;
         }
 
@@ -485,6 +502,57 @@ public class SistemaDispercionFondosController {
         return allFieldsAreValid;
     }
 
+    private void pasteFromClipboard() {
+        // 1. Obtiene el contenido del portapapeles como una cadena de texto
+        Clipboard clipboard = Clipboard.getSystemClipboard();
+        String clipboardContent = clipboard.getString();
 
+        // Si el portapapeles está vacío, no hace nada
+        if (clipboardContent == null || clipboardContent.trim().isEmpty()) {
+            return;
+        }
+
+        // 2. Divide el contenido en filas (cada fila es una línea en el texto)
+        String[] rows = clipboardContent.split("\n");
+
+        for (int i = 0; i < rows.length; i++) {
+            // 3. Divide cada fila en columnas (valores separados por tabulaciones)
+            String[] columns = rows[i].split("\t");
+
+            // 4. Obtiene el objeto de datos para la fila actual o crea uno nuevo si es necesario
+            SistemaDispersionData rowData;
+            if (tableViewDispersionFondos.getItems().size() > i) {
+                rowData = tableViewDispersionFondos.getItems().get(i);
+            } else {
+                // Crea una nueva fila con valores predeterminados
+                rowData = new SistemaDispersionData(
+                        tableViewDispersionFondos.getItems().size() + 1, "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""
+                );
+                // Agrega la nueva fila a tu lista de datos
+                tableViewDispersionFondos.getItems().add(rowData);
+            }
+
+            // 5. Asigna los valores de las columnas a las propiedades del objeto 'rowData'
+            // Esto es un ejemplo. Debes asegurarte de que el orden de las columnas sea correcto.
+            if (columns.length > 0) rowData.setFormaPago(columns[0]);
+            if (columns.length > 1) rowData.setTipoCuenta(columns[1]);
+            if (columns.length > 2) rowData.setBancoReceptor(columns[2]);
+            if (columns.length > 3) rowData.setCuenta(columns[3]);
+            if (columns.length > 4) rowData.setImportePago(columns[4]);
+            if (columns.length > 5) rowData.setClaveBeneficiario(columns[5]);
+            if (columns.length > 6) rowData.setRfcBeneficiario(columns[6]);
+            if (columns.length > 7) rowData.setNombreBeneficiario(columns[7]);
+            if (columns.length > 8) rowData.setReferenciaPago(columns[8]);
+            if (columns.length > 9) rowData.setConceptoPago(columns[9]);
+            if (columns.length > 10) rowData.setDiasVigencia(columns[10]);
+            if (columns.length > 11) rowData.setInfoAgruparPagos(columns[11]);
+            if (columns.length > 12) rowData.setDetalleMail(columns[12]);
+            if (columns.length > 13) rowData.setReferenciaAbonoBanxico(columns[13]);
+            if (columns.length > 14) rowData.setTipoOperacion(columns[14]);
+        }
+
+        // Asegura que la tabla se actualice visualmente con los nuevos datos
+        tableViewDispersionFondos.refresh();
+    }
 
 }

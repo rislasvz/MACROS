@@ -99,6 +99,7 @@
                               <ComboBox fx:id="comboBoxPaymentConcept" layoutX="88.0" layoutY="253.0" prefHeight="35.0" prefWidth="232.0" />
                               <ComboBox fx:id="comboBoxPaymentCurrency" layoutX="381.0" layoutY="253.0" prefHeight="35.0" prefWidth="232.0" />
                               <DatePicker fx:id="datePicketFechaAplicacion" layoutX="653.0" layoutY="180.0" prefHeight="35.0" prefWidth="224.0" />
+                              <Label fx:id="errorLabelFechaAplicacion" layoutX="653.0" layoutY="225.0" textFill="RED" visible="false" />
                               <Separator layoutX="32.0" layoutY="308.0" prefHeight="1.0" prefWidth="904.0" style="-fx-background-color: black;" />
                               <Button layoutX="153.0" layoutY="330.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="125.0" style="-fx-background-color: transparent; -fx-border-radius: 7px; -fx-border-color: ff0000; -fx-border-width: 2px;" text="Eliminar" textFill="RED">
                                  <font>
