@@ -22,7 +22,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.ParseException;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.Objects;
 
 public class SistemaDispercionFondosController {
@@ -198,15 +202,10 @@ public class SistemaDispercionFondosController {
         tableViewDispersionFondos.refresh();
         if (validateForm()) {
             DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyyMMdd");
-
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Guardar Archivo de Datos");
-
-            // Configurar la extensión del archivo
             FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Archivos de texto (*.txt)", "*.txt");
             fileChooser.getExtensionFilters().add(extFilter);
-
-            // Mostrar el cuadro de diálogo para guardar el archivo
             File file = fileChooser.showSaveDialog(new Stage());
 
             if (file != null) {
@@ -232,7 +231,21 @@ public class SistemaDispercionFondosController {
                     for (SistemaDispersionData data : dataList) {
                         //Sumamos uno al contador de registors que se han hecho
                         contadorAltasOBajas++;
-                        contadorImportes = Double.valueOf(contadorImportes + data.getImportePago());
+
+                        //Logica para los importes
+                        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
+                        symbols.setDecimalSeparator('.');
+                        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00", symbols);
+                        decimalFormat.setParseBigDecimal(true);
+                        try {
+                            String cleanedString = data.getImportePago().replaceAll(",", "");
+                            Number parsedNumber = decimalFormat.parse(cleanedString);
+                            contadorImportes = contadorImportes + parsedNumber.doubleValue();
+                        } catch (ParseException e) {
+                            System.err.println("Error al parsear el importe");
+                        }
+
+                        //contadorImportes = Double.valueOf(contadorImportes + data.getImportePago());
                         //PRIMERA LINEA QUE SE REPITE POR CADA REGISTRO DE LA TABLA
                         writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA
                                 + Constants.TIPO_REGISTRO_DA

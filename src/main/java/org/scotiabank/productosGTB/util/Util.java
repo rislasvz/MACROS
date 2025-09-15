@@ -7,6 +7,9 @@ import javafx.util.Callback;
 import javafx.util.converter.IntegerStringConverter;
 import javafx.scene.control.TextField;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.function.UnaryOperator;
 
@@ -231,7 +234,7 @@ public class Util {
 
                 textField.setTextFormatter(new TextFormatter<>(filter));
 
-                textField.setOnAction(event -> commitEdit(textField.getText()));
+                textField.setOnAction(event -> commitEdit(formatDecimal(textField.getText())));
                 textField.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
                     if (!isNowFocused) {
                         // Validar la longitud mínima al perder el foco
@@ -244,7 +247,7 @@ public class Util {
                                 alert.showAndWait();
                                 cancelEdit();
                             } else {
-                                commitEdit(textField.getText());
+                                commitEdit(formatDecimal(formatDecimal(textField.getText())));
                             }
                         });
                     }
@@ -255,6 +258,22 @@ public class Util {
                 return getItem() == null ? "" : getItem().toString();
             }
         };
+    }
+
+    private static String formatDecimal(String value) {
+        if (value == null || value.trim().isEmpty()) {
+            return "0.00"; // o el valor por defecto que prefieras
+        }
+
+        try {
+            NumberFormat format = NumberFormat.getInstance();
+            Number number = format.parse(value);
+            DecimalFormat decimalFormat = new DecimalFormat("0.00");
+            return decimalFormat.format(number.doubleValue());
+        } catch (ParseException e) {
+            // Manejar la excepción, en caso de que el valor no sea un número válido
+            return "0.00";
+        }
     }
 
     public static <S> Callback<TableColumn<S, String>, TableCell<S, String>> createStringWithoutSymbolsCellFactory(int minLength, int maxLength) {

@@ -7,9 +7,7 @@
 <?import javafx.scene.text.*?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="671.0" prefWidth="1325.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.scotiabank.productosGTB.controllers.SistemaDispercionFondosController">
-   <left>
-      <fx:include source="menu-left.fxml" />
-   </left>
+
    <center>
       <VBox>
          <children>
@@ -24,7 +22,7 @@
                      </HBox.margin>
                   </Label>
                   <Pane prefHeight="35.0" prefWidth="468.0" />
-                  <Label prefHeight="35.0" prefWidth="364.0" text="Sistema de Dispersión de Fondos">
+                  <Label prefHeight="35.0" prefWidth="380.0" text="Sistema de Dispersión de Fondos">
                      <font>
                         <Font size="24.0" />
                      </font>
@@ -52,12 +50,12 @@
                                     <Font size="14.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="384.0" layoutY="81.0" text="TIPO DE ARCHIVO: *">
+                              <Label layoutX="449.0" layoutY="81.0" text="TIPO DE ARCHIVO: *">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="653.0" layoutY="81.0" text="NO.ARCHIVO DEL DÍA: *">
+                              <Label layoutX="796.0" layoutY="78.0" text="NO.ARCHIVO DEL DÍA: *">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -67,12 +65,12 @@
                                     <Font size="14.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="384.0" layoutY="160.0" text="REFERENCIA EMPRESA: *">
+                              <Label layoutX="449.0" layoutY="160.0" text="REFERENCIA EMPRESA: *">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="653.0" layoutY="160.0" text="FECHA DE APLICACIÓN: *">
+                              <Label layoutX="796.0" layoutY="157.0" text="FECHA DE APLICACIÓN: *">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -82,25 +80,25 @@
                                     <Font size="14.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="384.0" layoutY="233.0" text="CVE MONEDA DE PAGO: *">
+                              <Label layoutX="449.0" layoutY="233.0" text="CVE MONEDA DE PAGO: *">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="textFieldClientNumber" layoutX="88.0" layoutY="101.0" prefHeight="35.0" prefWidth="232.0" />
+                              <TextField fx:id="textFieldClientNumber" layoutX="88.0" layoutY="101.0" prefHeight="35.0" prefWidth="307.0" />
                               <Label fx:id="errorLabelClientNumber" layoutX="88.0" layoutY="136.0" textFill="RED" visible="false" />
-                              <TextField fx:id="textFieldChargeAccount" layoutX="88.0" layoutY="180.0" prefHeight="35.0" prefWidth="233.0" />
+                              <TextField fx:id="textFieldChargeAccount" layoutX="88.0" layoutY="180.0" prefHeight="35.0" prefWidth="310.0" />
                               <Label fx:id="errorLabelChargeAccount" layoutX="88.0" layoutY="215.0" textFill="RED" visible="false" />
-                              <TextField fx:id="textFieldFileNumberOfTheDay" layoutX="653.0" layoutY="101.0" prefHeight="35.0" prefWidth="216.0" />
-                              <Label fx:id="errorLabelFileNumberOfTheDay" layoutX="653.0" layoutY="136.0" textFill="RED" visible="false" />
-                              <TextField fx:id="textFieldCompanyReference" layoutX="384.0" layoutY="180.0" prefHeight="35.0" prefWidth="225.0" />
-                              <Label fx:id="errorLabelCompanyReference" layoutX="384.0" layoutY="215.0" textFill="RED" visible="false" />
-                              <ComboBox fx:id="comboBoxFileType" layoutX="379.0" layoutY="101.0" prefHeight="35.0" prefWidth="227.0" />
-                              <ComboBox fx:id="comboBoxPaymentConcept" layoutX="88.0" layoutY="253.0" prefHeight="35.0" prefWidth="232.0" />
-                              <ComboBox fx:id="comboBoxPaymentCurrency" layoutX="381.0" layoutY="253.0" prefHeight="35.0" prefWidth="232.0" />
-                              <DatePicker fx:id="datePicketFechaAplicacion" layoutX="653.0" layoutY="180.0" prefHeight="35.0" prefWidth="224.0" />
-                              <Label fx:id="errorLabelFechaAplicacion" layoutX="653.0" layoutY="225.0" textFill="RED" visible="false" />
-                              <Separator layoutX="32.0" layoutY="308.0" prefHeight="1.0" prefWidth="904.0" style="-fx-background-color: black;" />
+                              <TextField fx:id="textFieldFileNumberOfTheDay" layoutX="796.0" layoutY="98.0" prefHeight="35.0" prefWidth="338.0" />
+                              <Label fx:id="errorLabelFileNumberOfTheDay" layoutX="800.0" layoutY="136.0" textFill="RED" visible="false" />
+                              <TextField fx:id="textFieldCompanyReference" layoutX="449.0" layoutY="180.0" prefHeight="35.0" prefWidth="306.0" />
+                              <Label fx:id="errorLabelCompanyReference" layoutX="450.0" layoutY="215.0" textFill="RED" visible="false" />
+                              <ComboBox fx:id="comboBoxFileType" layoutX="444.0" layoutY="101.0" prefHeight="35.0" prefWidth="309.0" />
+                              <ComboBox fx:id="comboBoxPaymentConcept" layoutX="88.0" layoutY="253.0" prefHeight="35.0" prefWidth="313.0" />
+                              <ComboBox fx:id="comboBoxPaymentCurrency" layoutX="446.0" layoutY="253.0" prefHeight="35.0" prefWidth="311.0" />
+                              <DatePicker fx:id="datePicketFechaAplicacion" layoutX="796.0" layoutY="177.0" prefHeight="35.0" prefWidth="340.0" />
+                              <Label fx:id="errorLabelFechaAplicacion" layoutX="800.0" layoutY="215.0" textFill="RED" visible="false" />
+                              <Separator layoutX="32.0" layoutY="308.0" prefHeight="1.0" prefWidth="1195.0" style="-fx-background-color: black;" />
                               <Button layoutX="153.0" layoutY="330.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="125.0" style="-fx-background-color: transparent; -fx-border-radius: 7px; -fx-border-color: ff0000; -fx-border-width: 2px;" text="Eliminar" textFill="RED">
                                  <font>
                                     <Font size="18.0" />
@@ -109,7 +107,7 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </Button>
-                              <Button layoutX="454.0" layoutY="332.0" mnemonicParsing="false" onAction="#imprimeValores" style="-fx-background-color: transparent;" text="Imprimir" textFill="#40d3ff">
+                              <Button layoutX="575.0" layoutY="332.0" mnemonicParsing="false" onAction="#imprimeValores" style="-fx-background-color: transparent;" text="Imprimir" textFill="#40d3ff">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -117,7 +115,7 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </Button>
-                              <Button layoutX="707.0" layoutY="330.0" mnemonicParsing="false" onAction="#exportarDatosAArchivoOptimizada" prefHeight="35.0" prefWidth="125.0" style="-fx-background-color: transparent; -fx-border-radius: 7px; -fx-border-color: #0049ff; -fx-border-width: 2px;" text="Archivo" textFill="#0049ff">
+                              <Button layoutX="999.0" layoutY="330.0" mnemonicParsing="false" onAction="#exportarDatosAArchivoOptimizada" prefHeight="35.0" prefWidth="125.0" style="-fx-background-color: transparent; -fx-border-radius: 7px; -fx-border-color: #0049ff; -fx-border-width: 2px;" text="Archivo" textFill="#0049ff">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -127,7 +125,7 @@
                               </Button>
                            </children>
                         </AnchorPane>
-                        <TableView fx:id="tableViewDispersionFondos" editable="true" layoutX="42.0" layoutY="427.0" prefHeight="450.0" prefWidth="1000.0">
+                        <TableView fx:id="tableViewDispersionFondos" editable="true" layoutX="42.0" layoutY="427.0" prefHeight="450.0" prefWidth="1242.0">
                            <columns>
                               <TableColumn fx:id="num" prefWidth="80.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Num." />
                               <TableColumn fx:id="formaPago" prefWidth="80.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Forma Pago" />
@@ -163,7 +161,7 @@
                   </AnchorPane>
                </content>
             </ScrollPane>
-            <HBox spacing="10" alignment="CENTER_LEFT">
+            <HBox alignment="CENTER_LEFT" spacing="10">
                <children>
                   <Button onAction="#agregarFila" prefHeight="35.0" prefWidth="125.0" style="-fx-background-color: #008000; -fx-border-radius: 7px;" text="Agregar Fila" textFill="WHITE">
                      <font>
