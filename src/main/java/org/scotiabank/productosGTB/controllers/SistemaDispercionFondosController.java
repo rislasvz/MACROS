@@ -152,7 +152,7 @@ public class SistemaDispercionFondosController {
         cuenta.setCellFactory(Util.createNumericCellFactory(11, 20));
         importePago.setCellFactory(Util.createDecimalCellFactory(3, 15));
         claveBeneficiario.setCellFactory(Util.createStringWithoutSymbolsCellFactory(1, 20));
-        rfcBeneficiario.setCellFactory(Util.createStringWithoutSymbolsCellFactory(12, 13));
+        rfcBeneficiario.setCellFactory(Util.createStringWithoutSymbolsCellFactory(13, 13));
         nombreBeneficiario.setCellFactory(Util.createStringWithoutSymbolsCellFactory(1, 40));
         referenciaPago.setCellFactory(Util.createNumericCellFactory(1, 16));
         conceptoPago.setCellFactory(Util.createStringWithoutSymbolsCellFactory(1, 40));
@@ -200,6 +200,7 @@ public class SistemaDispercionFondosController {
 
     public void exportarDatosAArchivoOptimizada() {
         tableViewDispersionFondos.refresh();
+        //if (true) {
         if (validateForm()) {
             DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyyMMdd");
             FileChooser fileChooser = new FileChooser();
@@ -266,7 +267,7 @@ public class SistemaDispercionFondosController {
                                 + Util.rellenarConEspaciosDerecha("", 1)
                                 + Util.rellenarConCerosIzquierda("", 5)
                                 + Constants.CLAVE_BANCO_EMISOR
-                                + Util.rellenarConCerosIzquierda(data.getBancoReceptor(), 5)
+                                + Util.rellenarConCerosIzquierda(data.getBancoReceptor(), 3)
                                 + Util.rellenarConCerosIzquierda(data.getDiasVigencia(), 3)
                                 + Util.rellenarConEspaciosDerecha(data.getConceptoPago(), 50)
                                 + Util.rellenarConEspaciosDerecha(data.getInfoAgruparPagos(), 60)
@@ -276,7 +277,8 @@ public class SistemaDispercionFondosController {
                         writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA + Constants.TIPO_REGISTRO_DM + data.getDetalleMail());
                     }
                     if(Objects.equals(comboBoxFileType.getValue().getId(), "1")){
-                        writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA + Constants.TIPO_REGISTRO_TB
+                        writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA
+                                        + Constants.TIPO_REGISTRO_TB
                                         + Util.rellenarConCerosIzquierda(contadorAltasOBajas.toString(), 7)
                                         + Util.rellenarConCerosIzquierda(contadorImportes.toString().replaceAll("\\.", ""), 17)
                                         + Util.rellenarConCerosIzquierda("", 7)
@@ -306,7 +308,6 @@ public class SistemaDispercionFondosController {
                                 + Util.rellenarConCerosIzquierda("", 195)
                                 + Util.rellenarConEspaciosDerecha("", 123));
                     }
-                    writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA + Constants.TIPO_REGISTRO_TA );
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Exportación Exitosa");
                     alert.setHeaderText(null);
