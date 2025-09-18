@@ -11,6 +11,9 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.UnaryOperator;
 
 import java.util.function.BiConsumer;
@@ -473,6 +476,77 @@ public class Util {
                         });
                     }
                 });
+            }
+
+            private String getString() {
+                return getItem() == null ? "" : getItem().toString();
+            }
+        };
+    }
+
+    public static <S> Callback<TableColumn<S, String>, TableCell<S, String>> createFormaPagoCellFactory() {
+        return column -> new TableCell<S, String>() {
+            private TextField textField;
+            private final List<String> allowedValues = Arrays.asList("1", "2", "3", "4", "10");
+
+            @Override
+            public void startEdit() {
+                if (!isEmpty()) {
+                    super.startEdit();
+                    if (textField == null) {
+                        createTextField();
+                    }
+                    textField.setText(getString());
+                    setGraphic(textField);
+                    setText(null);
+                    Platform.runLater(() -> textField.requestFocus());
+                }
+            }
+
+            @Override
+            public void cancelEdit() {
+                super.cancelEdit();
+                setText(getString());
+                setGraphic(null);
+            }
+
+            @Override
+            public void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    setText(item);
+                    setGraphic(null);
+                }
+            }
+
+            private void createTextField() {
+                textField = new TextField(getString());
+                textField.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+                    if (!isNowFocused) {
+                        if (validate(textField.getText())) {
+                            commitEdit(textField.getText());
+                        } else {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Error de Validaci\u00f3n");
+                            alert.setHeaderText(null);
+                            alert.setContentText("El valor para 'Forma de pago' solo puede ser 1, 2, 3, 4 o 10.");
+                            alert.showAndWait();
+                            cancelEdit();
+                        }
+                    }
+                });
+                textField.textProperty().addListener((observable, oldValue, newValue) -> {
+                    if (newValue != null && !newValue.isEmpty() && !allowedValues.contains(newValue)) {
+                        textField.setText(oldValue);
+                    }
+                });
+            }
+
+            private boolean validate(String value) {
+                return allowedValues.contains(value);
             }
 
             private String getString() {

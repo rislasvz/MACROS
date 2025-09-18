@@ -146,7 +146,7 @@ public class SistemaDispercionFondosController {
         tipoOperacion.setCellValueFactory(new PropertyValueFactory<>("tipoOperacion"));
 
         num.setCellValueFactory(new PropertyValueFactory<>("num"));
-        formaPago.setCellFactory(Util.createNumericCellFactory(2, 2));
+        formaPago.setCellFactory(Util.createFormaPagoCellFactory());
         tipoCuenta.setCellFactory(Util.createNumericCellFactory(1, 1));
         bancoReceptor.setCellFactory(Util.createNumericCellFactory(3, 3));
         cuenta.setCellFactory(Util.createNumericCellFactory(11, 20));
