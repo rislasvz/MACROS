@@ -10,12 +10,19 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.KeyCode;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.scotiabank.productosGTB.data.TooltipMessages;
 import org.scotiabank.productosGTB.enums.FileTypesEnum;
 import org.scotiabank.productosGTB.enums.PaymentConceptEnum;
 import org.scotiabank.productosGTB.enums.PaymentCurrencyEnum;
 import org.scotiabank.productosGTB.model.SistemaDispersionData;
 import org.scotiabank.productosGTB.util.Constants;
+import org.scotiabank.productosGTB.util.TextFieldValidator;
 import org.scotiabank.productosGTB.util.TooltipManager;
 import org.scotiabank.productosGTB.util.Util;
 import org.slf4j.Logger;
@@ -26,6 +33,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -93,6 +101,11 @@ public class SistemaDispercionFondosController {
     private Label errorLabelCompanyReference;
     @FXML
     private Label errorLabelFechaAplicacion;
+    @FXML
+    private Button btnCargar;
+    private final ObservableList<SistemaDispersionData> datos = FXCollections.observableArrayList();
+
+
 
     @FXML
     public void initialize() {
@@ -104,10 +117,7 @@ public class SistemaDispercionFondosController {
             }
         });
 
-        Util.validaNumeros(textFieldClientNumber);
-        Util.validaNumeros(textFieldFileNumberOfTheDay);
-        Util.validaNumeros(textFieldCompanyReference);
-        Util.validaNumeros(textFieldChargeAccount);
+        restringeTextField();
         Util.limitarFechas(datePicketFechaAplicacion);
         fillAllComboBox();
         agregaTooltips();
@@ -116,6 +126,10 @@ public class SistemaDispercionFondosController {
                 new SistemaDispersionData(1, "", "", "", "", "", "", "", "", "", "", "", "", "", "", "")
         );
         tableViewDispersionFondos.setItems(dataList);
+
+        tableViewDispersionFondos.setItems(datos);
+        btnCargar.setOnAction(e -> importarExcel());
+
         fillTable();
     }
 
@@ -146,11 +160,11 @@ public class SistemaDispercionFondosController {
         tipoOperacion.setCellValueFactory(new PropertyValueFactory<>("tipoOperacion"));
 
         num.setCellValueFactory(new PropertyValueFactory<>("num"));
-        formaPago.setCellFactory(Util.createFormaPagoCellFactory());
+        formaPago.setCellFactory(Util.createPersonalizedCellFactory(Arrays.asList("1", "2", "3", "4", "10")));
         tipoCuenta.setCellFactory(Util.createNumericCellFactory(1, 1));
         bancoReceptor.setCellFactory(Util.createNumericCellFactory(3, 3));
         cuenta.setCellFactory(Util.createNumericCellFactory(11, 20));
-        importePago.setCellFactory(Util.createDecimalCellFactory(3, 15));
+        importePago.setCellFactory(Util.createDecimalCellFactory(1, 13));
         claveBeneficiario.setCellFactory(Util.createStringWithoutSymbolsCellFactory(1, 20));
         rfcBeneficiario.setCellFactory(Util.createStringWithoutSymbolsCellFactory(13, 13));
         nombreBeneficiario.setCellFactory(Util.createStringWithoutSymbolsCellFactory(1, 40));
@@ -177,7 +191,7 @@ public class SistemaDispercionFondosController {
     private void eliminarFila(ActionEvent event) {
         // Solo elimina la fila si hay más de una
         if (dataList.size() > 1) {
-            dataList.remove(dataList.size() - 1);
+            dataList.removeLast();
         } else {
             // Opcional: mostrar una alerta o mensaje al usuario
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -215,19 +229,29 @@ public class SistemaDispercionFondosController {
                         BufferedWriter bw = new BufferedWriter(fw);
                         PrintWriter writer = new PrintWriter(bw)
                 ) {
-                    Integer contadorAltasOBajas = 0;
-                    Double contadorImportes = 0.0;
+                    int contadorAltasOBajas = 0;
+                    double contadorImportes = 0.0;
+                    String numClienteCompleto;
+                    String fillerLinea1;
+                    if(textFieldClientNumber.getText().length() >= 6 ){
+                        numClienteCompleto = Util.rellenarConCerosIzquierda(textFieldClientNumber.getText(), 12);
+                        fillerLinea1 = Util.rellenarConCerosIzquierda("", 332);
+                    }else{
+                        numClienteCompleto = Util.rellenarConCerosIzquierda(textFieldClientNumber.getText(), 5);
+                        fillerLinea1 = Util.rellenarConCerosIzquierda("", 325);
+                    }
                     //Escribimos las dos primeras lineas del txt
                     writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA
                             + Constants.TIPO_REGISTRO_HA
-                            + Util.rellenarConCerosIzquierda(textFieldClientNumber.getText(), 5)
+                            + numClienteCompleto
                             + Util.rellenarConCerosIzquierda(textFieldFileNumberOfTheDay.getText(), 2)
-                            +"000000000000000000000000000");
+                            +"000000000000000000000000000" + fillerLinea1);
                     writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA
                             + Constants.TIPO_REGISTRO_HB
                             + Util.rellenarConCerosIzquierda(comboBoxPaymentCurrency.getValue().getId(), 2)
                             + "0000" + Util.rellenarConCerosIzquierda(textFieldChargeAccount.getText(), 11)
-                            + Util.rellenarConCerosIzquierda(textFieldCompanyReference.getText(), 10) + "000");
+                            + Util.rellenarConCerosIzquierda(textFieldCompanyReference.getText(), 10) + "000"
+                            + Util.rellenarConEspaciosDerecha("", 336));
 
                     for (SistemaDispersionData data : dataList) {
                         //Sumamos uno al contador de registors que se han hecho
@@ -250,13 +274,13 @@ public class SistemaDispercionFondosController {
                         //PRIMERA LINEA QUE SE REPITE POR CADA REGISTRO DE LA TABLA
                         writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA
                                 + Constants.TIPO_REGISTRO_DA
-                                + data.getFormaPago()
+                                + Util.rellenarConCerosIzquierda(data.getFormaPago(), 2)
                                 + Util.rellenarConCerosIzquierda(comboBoxPaymentCurrency.getValue().getId(), 2)
                                 + Util.rellenarConCerosIzquierda(data.getImportePago().replaceAll("\\.", ""), 15)
                                 + datePicketFechaAplicacion.getValue().format(formato)
                                 + Util.rellenarConCerosIzquierda(comboBoxPaymentConcept.getValue().getId(), 2)
                                 + Util.rellenarConEspaciosDerecha(data.getClaveBeneficiario(), 20)
-                                + data.getRfcBeneficiario()
+                                + Util.rellenarConCerosIzquierda(data.getRfcBeneficiario(), 13)
                                 + Util.rellenarConEspaciosDerecha(data.getNombreBeneficiario(), 40)
                                 + Util.rellenarConCerosIzquierda(data.getReferenciaPago(), 16)
                                 + Util.rellenarConCerosIzquierda("", 10)
@@ -272,22 +296,24 @@ public class SistemaDispercionFondosController {
                                 + Util.rellenarConEspaciosDerecha(data.getConceptoPago(), 50)
                                 + Util.rellenarConEspaciosDerecha(data.getInfoAgruparPagos(), 60)
                                 + Util.rellenarConCerosIzquierda("", 25)
-                                + Util.rellenarConEspaciosDerecha(data.getInfoAgruparPagos(), 16));
+                                + Util.rellenarConEspaciosDerecha("", 16)
+                                //Filler
+                                + Util.rellenarConEspaciosDerecha("", 6));
                         //SEGUNDA LINEA DEL TXT
                         writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA + Constants.TIPO_REGISTRO_DM + data.getDetalleMail());
                     }
                     if(Objects.equals(comboBoxFileType.getValue().getId(), "1")){
                         writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA
                                         + Constants.TIPO_REGISTRO_TB
-                                        + Util.rellenarConCerosIzquierda(contadorAltasOBajas.toString(), 7)
-                                        + Util.rellenarConCerosIzquierda(contadorImportes.toString().replaceAll("\\.", ""), 17)
+                                        + Util.rellenarConCerosIzquierda(Integer.toString(contadorAltasOBajas), 7)
+                                        + Util.rellenarConCerosIzquierda(Double.toString(contadorImportes).replaceAll("\\.", ""), 17)
                                         + Util.rellenarConCerosIzquierda("", 7)
                                         + Util.rellenarConCerosIzquierda("", 17)
                                         + Util.rellenarConCerosIzquierda("", 195)
                                         + Util.rellenarConEspaciosDerecha("", 123));
                         writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA + Constants.TIPO_REGISTRO_TA
-                                + Util.rellenarConCerosIzquierda(contadorAltasOBajas.toString(), 7)
-                                + Util.rellenarConCerosIzquierda(contadorImportes.toString().replaceAll("\\.", ""), 17)
+                                + Util.rellenarConCerosIzquierda(Integer.toString(contadorAltasOBajas), 7)
+                                + Util.rellenarConCerosIzquierda(Double.toString(contadorImportes).replaceAll("\\.", ""), 17)
                                 + Util.rellenarConCerosIzquierda("", 7)
                                 + Util.rellenarConCerosIzquierda("", 17)
                                 + Util.rellenarConCerosIzquierda("", 195)
@@ -296,15 +322,15 @@ public class SistemaDispercionFondosController {
                         writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA + Constants.TIPO_REGISTRO_TB
                                 + Util.rellenarConCerosIzquierda("", 7)
                                 + Util.rellenarConCerosIzquierda("", 17)
-                                + Util.rellenarConCerosIzquierda(contadorAltasOBajas.toString(), 7)
-                                + Util.rellenarConCerosIzquierda(contadorImportes.toString().replaceAll("\\.", ""), 17)
+                                + Util.rellenarConCerosIzquierda(Integer.toString(contadorAltasOBajas), 7)
+                                + Util.rellenarConCerosIzquierda(Double.toString(contadorImportes).replaceAll("\\.", ""), 17)
                                 + Util.rellenarConCerosIzquierda("", 195)
                                 + Util.rellenarConEspaciosDerecha("", 123));
                         writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA + Constants.TIPO_REGISTRO_TA
                                 + Util.rellenarConCerosIzquierda("", 7)
                                 + Util.rellenarConCerosIzquierda("", 17)
-                                + Util.rellenarConCerosIzquierda(contadorAltasOBajas.toString(), 7)
-                                + Util.rellenarConCerosIzquierda(contadorImportes.toString().replaceAll("\\.", ""), 17)
+                                + Util.rellenarConCerosIzquierda(Integer.toString(contadorAltasOBajas), 7)
+                                + Util.rellenarConCerosIzquierda(Double.toString(contadorImportes).replaceAll("\\.", ""), 17)
                                 + Util.rellenarConCerosIzquierda("", 195)
                                 + Util.rellenarConEspaciosDerecha("", 123));
                     }
@@ -491,7 +517,7 @@ public class SistemaDispercionFondosController {
                 hasTableErrors = true;
             }
             // Referencia abono banxico y tipo operación
-            if (comboBoxPaymentCurrency.getValue().getId() == "01") {
+            if (Objects.equals(comboBoxPaymentCurrency.getValue().getId(), "01")) {
                 if(data.getReferenciaAbonoBanxico() == null || data.getReferenciaAbonoBanxico().trim().isEmpty()){
                     errorMessage.append("• Columna 'Referencia abono banxico' del registro ").append(rowIndex).append("\n");
                     allFieldsAreValid = false;
@@ -568,5 +594,107 @@ public class SistemaDispercionFondosController {
         // Asegura que la tabla se actualice visualmente con los nuevos datos
         tableViewDispersionFondos.refresh();
     }
+
+    public void restringeTextField(){
+        //Validaciones de textfield
+        //Validacion solo numeros y maximo de caracteres
+        textFieldClientNumber.textProperty().addListener((obs, oldValue, newValue) -> {
+            TextFieldValidator.validarNumerosYMaxLength(textFieldClientNumber, 12);
+        });
+
+        // Validación al perder el foco: longitud mínima
+        textFieldClientNumber.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+            if (!isNowFocused) {
+                TextFieldValidator.validarMinLength(textFieldClientNumber, 1);
+            }
+        });
+
+        //Validacion solo numeros y maximo de caracteres
+        textFieldFileNumberOfTheDay.textProperty().addListener((obs, oldValue, newValue) -> {
+            TextFieldValidator.validarNumerosYMaxLength(textFieldFileNumberOfTheDay, 2);
+        });
+
+        // Validación al perder el foco: longitud mínima
+        textFieldFileNumberOfTheDay.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+            if (!isNowFocused) {
+                TextFieldValidator.validarMinLength(textFieldFileNumberOfTheDay, 1);
+            }
+        });
+
+        //Validacion solo numeros y maximo de caracteres
+        textFieldCompanyReference.textProperty().addListener((obs, oldValue, newValue) -> {
+            TextFieldValidator.validarNumerosYMaxLength(textFieldCompanyReference, 10);
+        });
+
+        // Validación al perder el foco: longitud mínima
+        textFieldCompanyReference.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+            if (!isNowFocused) {
+                TextFieldValidator.validarMinLength(textFieldCompanyReference, 10);
+            }
+        });
+
+        //Validacion solo numeros y maximo de caracteres
+        textFieldChargeAccount.textProperty().addListener((obs, oldValue, newValue) -> {
+            TextFieldValidator.validarNumerosYMaxLength(textFieldChargeAccount, 11);
+        });
+
+        // Validación al perder el foco: longitud mínima
+        textFieldChargeAccount.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+            if (!isNowFocused) {
+                TextFieldValidator.validarMinLength(textFieldChargeAccount, 11);
+            }
+        });
+    }
+    @FXML
+    private void importarExcel() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Selecciona archivo Excel");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
+        File archivo = fileChooser.showOpenDialog(btnCargar.getScene().getWindow());
+
+        if (archivo != null) {
+            try (FileInputStream fis = new FileInputStream(archivo);
+                 Workbook workbook = WorkbookFactory.create(fis)) {
+
+                Sheet hoja = workbook.getSheetAt(0);
+                datos.clear();
+
+                for (int i = 1; i <= hoja.getLastRowNum(); i++) { // omite la fila 0
+                    Row fila = hoja.getRow(i);
+                    if (fila != null) {
+                        String formaPago = getCellValue(fila.getCell(0));
+                        String tipoCuenta = getCellValue(fila.getCell(1));
+                        String bancoReceptor = getCellValue(fila.getCell(2));
+                        String cuenta = getCellValue(fila.getCell(3));
+                        String importePago = getCellValue(fila.getCell(4));
+                        String claveBeneficiario = getCellValue(fila.getCell(5));
+                        String rfcBeneficiario = getCellValue(fila.getCell(6));
+                        String nombreBeneficiario = getCellValue(fila.getCell(7));
+                        String referenciaPago = getCellValue(fila.getCell(8));
+                        String conceptoPago = getCellValue(fila.getCell(9));
+                        String diasVigencia = getCellValue(fila.getCell(10));
+                        String infoAgruparPagos = getCellValue(fila.getCell(11));
+                        String detalleMail = getCellValue(fila.getCell(12));
+                        String referenciaAbonoBanxico = getCellValue(fila.getCell(13));
+                        String tipoOperacion = getCellValue(fila.getCell(14));
+                        datos.add(new SistemaDispersionData(i, formaPago, tipoCuenta, bancoReceptor, cuenta, importePago, claveBeneficiario, rfcBeneficiario, nombreBeneficiario, referenciaPago, conceptoPago, diasVigencia, infoAgruparPagos, detalleMail, referenciaAbonoBanxico, tipoOperacion));
+                    }
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    private String getCellValue(Cell cell) {
+        if (cell == null) return "";
+        return switch (cell.getCellType()) {
+            case STRING -> cell.getStringCellValue();
+            case NUMERIC -> String.valueOf((int) cell.getNumericCellValue());
+            case BOOLEAN -> String.valueOf(cell.getBooleanCellValue());
+            default -> "";
+        };
+    }
+
 
 }

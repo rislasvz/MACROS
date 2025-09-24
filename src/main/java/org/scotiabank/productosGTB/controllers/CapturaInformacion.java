@@ -20,6 +20,14 @@ public class CapturaInformacion {
         service.navegacion(url,title, event);
     }
 
+    @FXML
+    private void abrirCapturaInformacionPreRegistro(ActionEvent event) {
+        String url ="/fxml/PreRegistroCuentas/PreRegistroCuentas.fxml";
+        String title = "Pre-Registro Cuentas";
+        Service service = new Service();
+        service.navegacion(url,title, event);
+    }
+
 
 
     @FXML

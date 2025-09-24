@@ -107,7 +107,7 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </Button>
-                              <Button layoutX="575.0" layoutY="332.0" mnemonicParsing="false" onAction="#imprimeValores" style="-fx-background-color: transparent;" text="Imprimir" textFill="#40d3ff">
+                              <Button fx:id="btnCargar" layoutX="575.0" layoutY="332.0" mnemonicParsing="false" onAction="#importarExcel" style="-fx-background-color: transparent;" text="Importar" textFill="#40d3ff">
                                  <font>
                                     <Font size="18.0" />
                                  </font>

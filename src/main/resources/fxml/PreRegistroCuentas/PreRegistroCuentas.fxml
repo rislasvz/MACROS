@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="671.0" prefWidth="1325.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.scotiabank.productosGTB.controllers.PreRegistroCuentasController">
+
+    <center>
+        <VBox>
+            <children>
+                <HBox alignment="CENTER_LEFT" prefHeight="70.0" spacing="10.0">
+                    <children>
+                        <Label prefHeight="35.0" prefWidth="171.0" text="Productos GTB" HBox.hgrow="NEVER">
+                            <font>
+                                <Font size="24.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets left="30.0" />
+                            </HBox.margin>
+                        </Label>
+                        <Pane prefHeight="35.0" prefWidth="468.0" />
+                        <Label prefHeight="35.0" prefWidth="380.0" text="Sistema de Dispersión de Fondos">
+                            <font>
+                                <Font size="24.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </HBox>
+                <Separator prefHeight="3.0" style="-fx-background-color: black;">
+                    <VBox.margin>
+                        <Insets left="30.0" right="30.0" />
+                    </VBox.margin>
+                </Separator>
+                <ScrollPane fx:id="scrollPaneDispersionFondos" fitToWidth="true" VBox.vgrow="ALWAYS">
+                    <content>
+                        <AnchorPane prefHeight="953.0" prefWidth="948.0">
+                            <children>
+                                <AnchorPane layoutX="30.0" layoutY="14.0" prefHeight="403.0" prefWidth="989.0" style="-fx-border-color: D6D6D6; -fx-border-radius: 10px;" AnchorPane.bottomAnchor="536.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="14.0">
+                                    <children>
+                                        <Label layoutX="77.0" layoutY="14.0" text="Captura de Información">
+                                            <font>
+                                                <Font name="System Bold" size="24.0" />
+                                            </font>
+                                        </Label>
+                                        <Label layoutX="325.0" layoutY="78.0" text="NÚMERO DE CONTRATO: *">
+                                            <font>
+                                                <Font size="14.0" />
+                                            </font>
+                                        </Label>
+                                        <Label layoutX="667.0" layoutY="78.0" text="MANTENIMIENTO O CONSULTA: *">
+                                            <font>
+                                                <Font size="14.0" />
+                                            </font>
+                                        </Label>
+                                        <Label layoutX="325.0" layoutY="157.0" text="FECHA DE SOLICITUD: *">
+                                            <font>
+                                                <Font size="14.0" />
+                                            </font>
+                                        </Label>
+                                        <Label layoutX="667.0" layoutY="157.0" text="NO. ARCHIVO DE DÍA: *">
+                                            <font>
+                                                <Font size="14.0" />
+                                            </font>
+                                        </Label>
+                                        <TextField fx:id="textFieldContractNumber" layoutX="325.0" layoutY="98.0" prefHeight="35.0" prefWidth="307.0" />
+                                        <Label fx:id="errorLabelContractNumber" layoutX="327.0" layoutY="136.0" prefHeight="17.0" prefWidth="305.0" textFill="RED" visible="true" />
+                                        <TextField fx:id="textFieldMaintOrConsultation" layoutX="667.0" layoutY="98.0" prefHeight="35.0" prefWidth="337.0" />
+                                        <Label fx:id="errorLabelMaintOrConsultation" layoutX="667.0" layoutY="136.0" prefHeight="17.0" prefWidth="336.0" textFill="RED" visible="true" />
+                                        <TextField fx:id="textFieldFileNumberOfTheDay" layoutX="667.0" layoutY="184.0" prefHeight="35.0" prefWidth="338.0" />
+                                        <Label fx:id="errorLabelFileNumberOfTheDay" layoutX="667.0" layoutY="224.0" prefHeight="17.0" prefWidth="335.0" textFill="RED" visible="true" />
+                                        <DatePicker fx:id="datePicketFechaDeSolicitud" layoutX="325.0" layoutY="184.0" prefHeight="35.0" prefWidth="309.0" />
+                                        <Label fx:id="errorLabelFechaDeSolicitud" layoutX="327.0" layoutY="224.0" prefHeight="17.0" prefWidth="307.0" textFill="RED" visible="true" />
+                                        <Separator layoutX="32.0" layoutY="308.0" prefHeight="1.0" prefWidth="1195.0" style="-fx-background-color: black;" />
+                                        <Button layoutX="153.0" layoutY="330.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="125.0" style="-fx-background-color: transparent; -fx-border-radius: 7px; -fx-border-color: ff0000; -fx-border-width: 2px;" text="Eliminar" textFill="RED">
+                                            <font>
+                                                <Font size="18.0" />
+                                            </font>
+                                            <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                            </cursor>
+                                        </Button>
+                                        <Button layoutX="575.0" layoutY="332.0" mnemonicParsing="false" onAction="#imprimeValores" style="-fx-background-color: transparent;" text="Imprimir" textFill="#40d3ff">
+                                            <font>
+                                                <Font size="18.0" />
+                                            </font>
+                                            <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                            </cursor>
+                                        </Button>
+                                        <Button layoutX="999.0" layoutY="330.0" mnemonicParsing="false" onAction="#validateForm" prefHeight="35.0" prefWidth="125.0" style="-fx-background-color: transparent; -fx-border-radius: 7px; -fx-border-color: #0049ff; -fx-border-width: 2px;" text="Archivo" textFill="#0049ff">
+                                            <font>
+                                                <Font size="18.0" />
+                                            </font>
+                                            <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                            </cursor>
+                                        </Button>
+                                    </children>
+                                </AnchorPane>
+                                <TableView fx:id="tableViewPreRegistroCuentas" editable="true" layoutX="42.0" layoutY="427.0" prefHeight="450.0" prefWidth="1242.0">
+                                    <columns>
+                                        <TableColumn fx:id="num" prefWidth="80.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Num." />
+                                        <TableColumn fx:id="tipoRegistro" prefWidth="80.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Tipo Registro" />
+                                        <TableColumn fx:id="tipoPago" prefWidth="80.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Tipo Pago" />
+                                        <TableColumn fx:id="tipoCuenta" prefWidth="95.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Tipo Cuenta" />
+                                        <TableColumn fx:id="monedaCuenta" prefWidth="125.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Moneda Cuenta" />
+                                        <TableColumn fx:id="claveBanco" prefWidth="135.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Clave Banco" />
+                                        <TableColumn fx:id="cuentaAbono" prefWidth="161.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Cuenta Abono" />
+                                        <TableColumn fx:id="limiteTransaccion" prefWidth="136.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Límite Transacción" />
+                                        <TableColumn fx:id="fechaEliminacion" prefWidth="137.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Fecha Eliminación" />
+                                        <TableColumn fx:id="descripcion" prefWidth="212.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Descripción (Opcional)" />
+                                    </columns>
+                                </TableView>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </ScrollPane>
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <children>
+                        <Button onAction="#agregarFila" prefHeight="35.0" prefWidth="125.0" style="-fx-background-color: #008000; -fx-border-radius: 7px;" text="Agregar Fila" textFill="WHITE">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </Button>
+                        <Button onAction="#eliminarFila" prefHeight="35.0" prefWidth="125.0" style="-fx-background-color: #ff0000; -fx-border-radius: 7px;" text="Eliminar Fila" textFill="WHITE">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </Button>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </center>
+</BorderPane>

@@ -16,14 +16,14 @@
            <padding>
                <Insets left="60" top="150" />
            </padding>
-           <Button text="&gt; Captura Información" onAction="#abrirCapturaInformacion" style="-fx-background-color: transparent;">
+           <Button text="&gt; Captura Información Dispersion" onAction="#abrirCapturaInformacion" style="-fx-background-color: transparent;">
             <font>
                <Font size="24.0" />
             </font></Button>
            <cursor>
                <Cursor fx:constant="HAND" />
            </cursor>
-           <Button text="&gt; Importar Archivo - Excel" style="-fx-background-color: transparent;">
+           <Button text="&gt; Captura Información PreRegistro" onAction="#abrirCapturaInformacionPreRegistro" style="-fx-background-color: transparent;">
             <font>
                <Font size="24.0" />
             </font></Button>

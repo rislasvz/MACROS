@@ -2,57 +2,14 @@ package org.scotiabank.productosGTB.util;
 
 import javafx.application.Platform;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.Callback;
-import javafx.util.converter.IntegerStringConverter;
-import javafx.scene.control.TextField;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
-import java.util.function.BiConsumer;
-
 public class Util {
-
-    public static void validaNumeros(TextField textField){
-        textField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                textField.setText(newValue.replaceAll("[^\\d]", ""));
-            }
-        });
-    }
-
-    public static <S> void configurarEdicionColumnaString(TableColumn<S, String> columna, BiConsumer<S, String> setter) {
-        columna.setCellFactory(TextFieldTableCell.forTableColumn());
-        columna.setOnEditCommit(event -> {
-            S rowData = event.getRowValue();
-            String newValue = event.getNewValue();
-            setter.accept(rowData, newValue);
-        });
-    }
-
-    public static <S> void configurarEdicionColumnaInteger(TableColumn<S, Integer> columna, BiConsumer<S, Integer> setter) {
-        columna.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
-        columna.setOnEditCommit(event -> {
-            S rowData = event.getRowValue();
-            Integer newValue = event.getNewValue();
-            setter.accept(rowData, newValue);
-        });
-    }
-
-    public static <S> void configurarEdicionColumnaLlenaString(TableColumn<S, String> columna, BiConsumer<S, String> setter) {
-        columna.setOnEditCommit(event -> {
-            S rowData = event.getRowValue();
-            String newValue = event.getNewValue();
-            setter.accept(rowData, newValue);
-        });
-    }
 
     public static <S> Callback<TableColumn<S, String>, TableCell<S, String>> createNumericCellFactory(int minLength, int maxLength) {
         return column -> new TableCell<S, String>() {
@@ -110,25 +67,26 @@ public class Util {
                 UnaryOperator<TextFormatter.Change> filter = change -> {
                     String newText = change.getControlNewText();
 
-                    // Validar la longitud
-                    if (newText.length() > maxLength) {
-                        // Mostrar una alerta si se excede la longitud máxima
+                    // Validar solo números enteros
+                    if (!newText.matches("\\d*")) {
                         Platform.runLater(() -> {
-                            Alert alert = new Alert(Alert.AlertType.WARNING);
-                            alert.setTitle("Advertencia de Longitud");
-                            alert.setHeaderText(null);
-                            alert.setContentText("La longitud máxima permitida es de " + maxLength + " d\u00edgitos.");
-                            alert.show();
+                            mostrarAlerta("Solo se permiten números enteros.");
+                            textField.clear(); // Borrar contenido
                         });
-                        return null; // Denegar el cambio
+                        return null;
                     }
 
-                    // Validar el formato numérico y decimal
-                    if (newText.matches("\\d*\\.?\\d*")) {
-                        return change;
+                    // Validar longitud máxima
+                    if (newText.length() > maxLength) {
+                        Platform.runLater(() -> {
+                            mostrarAlerta("La longitud máxima permitida es de " + maxLength + " dígitos.");
+                            textField.clear(); // Opcional: borrar contenido si lo deseas
+                        });
+                        return null;
                     }
 
-                    return null; // Denegar el cambio
+
+                    return change;
                 };
 
                 textField.setTextFormatter(new TextFormatter<>(filter));
@@ -136,17 +94,15 @@ public class Util {
                 textField.setOnAction(event -> commitEdit(textField.getText()));
                 textField.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
                     if (!isNowFocused) {
-                        // Validar la longitud mínima al perder el foco
                         Platform.runLater(() -> {
-                            if (textField.getText().length() < minLength) {
-                                Alert alert = new Alert(Alert.AlertType.ERROR);
-                                alert.setTitle("Error de Validaci\u00f3n");
-                                alert.setHeaderText(null);
-                                alert.setContentText("La longitud m\u00ednima requerida es de " + minLength + " d\u00edgitos.");
-                                alert.showAndWait();
+                            String value = textField.getText();
+                            if (value.length() < minLength) {
+                                if (!value.isEmpty()) {
+                                    mostrarAlerta("La longitud mínima requerida es de " + minLength + " dígitos.");
+                                }
                                 cancelEdit();
                             } else {
-                                commitEdit(textField.getText());
+                                commitEdit(value);
                             }
                         });
                     }
@@ -215,24 +171,24 @@ public class Util {
                 UnaryOperator<TextFormatter.Change> filter = change -> {
                     String newText = change.getControlNewText();
 
-                    // Validar la longitud
-                    if (newText.length() > maxLength) {
+                    // Validar caracteres permitidos: hasta dos decimales
+                    if (!newText.matches("\\d*(\\.\\d{0,2})?")) {
                         Platform.runLater(() -> {
-                            Alert alert = new Alert(Alert.AlertType.WARNING);
-                            alert.setTitle("Advertencia de Longitud");
-                            alert.setHeaderText(null);
-                            alert.setContentText("La longitud máxima permitida es de " + maxLength + " d\u00edgitos.");
-                            alert.show();
+                            mostrarAlerta("La longitud máxima permitida es de " + maxLength + " dígitos.");
+                            textField.clear(); // Borrar contenido
                         });
                         return null;
                     }
 
-                    // Validar el formato numérico y decimal
-                    if (newText.matches("\\d*\\.?\\d{0,2}")) {
-                        return change;
+                    // Validar longitud máxima
+                    if (newText.length() > maxLength) {
+                        Platform.runLater(() -> {
+                            mostrarAlerta("Solo se permiten números con hasta dos decimales.");
+                            textField.clear(); // Opcional: borrar contenido si lo deseas
+                        });
+                        return null;
                     }
-
-                    return null;
+                    return change;
                 };
 
                 textField.setTextFormatter(new TextFormatter<>(filter));
@@ -240,17 +196,15 @@ public class Util {
                 textField.setOnAction(event -> commitEdit(formatDecimal(textField.getText())));
                 textField.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
                     if (!isNowFocused) {
-                        // Validar la longitud mínima al perder el foco
                         Platform.runLater(() -> {
-                            if (textField.getText().length() < minLength) {
-                                Alert alert = new Alert(Alert.AlertType.ERROR);
-                                alert.setTitle("Error de Validaci\u00f3n");
-                                alert.setHeaderText(null);
-                                alert.setContentText("La longitud m\u00ednima requerida es de " + minLength + " d\u00edgitos.");
-                                alert.showAndWait();
+                            String value = textField.getText();
+                            if (value.length() < minLength) {
+                                if (!value.isEmpty()) {
+                                    mostrarAlerta("La longitud mínima requerida es de " + minLength + " dígitos.");
+                                }
                                 cancelEdit();
                             } else {
-                                commitEdit(formatDecimal(formatDecimal(textField.getText())));
+                                commitEdit(formatDecimal(value));
                             }
                         });
                     }
@@ -260,23 +214,16 @@ public class Util {
             private String getString() {
                 return getItem() == null ? "" : getItem().toString();
             }
+
+            private String formatDecimal(String value) {
+                try {
+                    double number = Double.parseDouble(value);
+                    return String.format("%.2f", number);
+                } catch (NumberFormatException e) {
+                    return value;
+                }
+            }
         };
-    }
-
-    private static String formatDecimal(String value) {
-        if (value == null || value.trim().isEmpty()) {
-            return "0.00"; // o el valor por defecto que prefieras
-        }
-
-        try {
-            NumberFormat format = NumberFormat.getInstance();
-            Number number = format.parse(value);
-            DecimalFormat decimalFormat = new DecimalFormat("0.00");
-            return decimalFormat.format(number.doubleValue());
-        } catch (ParseException e) {
-            // Manejar la excepción, en caso de que el valor no sea un número válido
-            return "0.00";
-        }
     }
 
     public static <S> Callback<TableColumn<S, String>, TableCell<S, String>> createStringWithoutSymbolsCellFactory(int minLength, int maxLength) {
@@ -308,13 +255,14 @@ public class Util {
             @Override
             public void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty) {
+                if (empty || item == null || item.trim().isEmpty()) {
+                    setText(null);
+                    setGraphic(null);
                     if (!getStyleClass().contains("error-cell")) {
                         getStyleClass().add("error-cell");
                     }
-                    setText(null);
-                    setGraphic(null);
                 } else {
+                    getStyleClass().remove("error-cell");
                     if (isEditing()) {
                         if (textField != null) {
                             textField.setText(getString());
@@ -334,25 +282,25 @@ public class Util {
                 UnaryOperator<TextFormatter.Change> filter = change -> {
                     String newText = change.getControlNewText();
 
-                    // Validar la longitud
+                    // Validar longitud máxima
                     if (newText.length() > maxLength) {
-                        // Mostrar una alerta si se excede la longitud máxima
                         Platform.runLater(() -> {
-                            Alert alert = new Alert(Alert.AlertType.WARNING);
-                            alert.setTitle("Advertencia de Longitud");
-                            alert.setHeaderText(null);
-                            alert.setContentText("La longitud máxima permitida es de " + maxLength + " d\u00edgitos.");
-                            alert.show();
+                            mostrarAlerta("La longitud máxima permitida es de " + maxLength + " caracteres.");
+                            textField.clear();
                         });
-                        return null; // Denegar el cambio
+                        return null;
                     }
 
-                    // Validar el formato numérico y decimal
-                    if (newText.matches("[\\w\\sáéíóúÁÉÍÓÚñÑ]*") && newText.length() <= maxLength) {
-                        return change;
+                    // Validar solo letras, números y espacios (sin acentos ni Ñ)
+                    if (!newText.matches("[a-zA-Z0-9 ]*")) {
+                        Platform.runLater(() -> {
+                            mostrarAlerta("Solo se permiten letras sin acentos, números y espacios.");
+                            textField.clear();
+                        });
+                        return null;
                     }
 
-                    return null; // Denegar el cambio
+                    return change;
                 };
 
                 textField.setTextFormatter(new TextFormatter<>(filter));
@@ -360,17 +308,15 @@ public class Util {
                 textField.setOnAction(event -> commitEdit(textField.getText()));
                 textField.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
                     if (!isNowFocused) {
-                        // Validar la longitud mínima al perder el foco
                         Platform.runLater(() -> {
-                            if (textField.getText().length() < minLength) {
-                                Alert alert = new Alert(Alert.AlertType.ERROR);
-                                alert.setTitle("Error de Validaci\u00f3n");
-                                alert.setHeaderText(null);
-                                alert.setContentText("La longitud m\u00ednima requerida es de " + minLength + " d\u00edgitos.");
-                                alert.showAndWait();
+                            String value = textField.getText();
+                            if (value.length() < minLength) {
+                                if (!value.isEmpty()) {
+                                    mostrarAlerta("La longitud mínima requerida es de " + minLength + " caracteres.");
+                                }
                                 cancelEdit();
                             } else {
-                                commitEdit(textField.getText());
+                                commitEdit(value);
                             }
                         });
                     }
@@ -412,10 +358,14 @@ public class Util {
             @Override
             public void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty) {
+                if (empty || item == null || item.trim().isEmpty()) {
                     setText(null);
                     setGraphic(null);
+                    if (!getStyleClass().contains("error-cell")) {
+                        getStyleClass().add("error-cell");
+                    }
                 } else {
+                    getStyleClass().remove("error-cell");
                     if (isEditing()) {
                         if (textField != null) {
                             textField.setText(getString());
@@ -435,25 +385,25 @@ public class Util {
                 UnaryOperator<TextFormatter.Change> filter = change -> {
                     String newText = change.getControlNewText();
 
-                    // Validar la longitud
+                    // Validar longitud máxima
                     if (newText.length() > maxLength) {
-                        // Mostrar una alerta si se excede la longitud máxima
                         Platform.runLater(() -> {
-                            Alert alert = new Alert(Alert.AlertType.WARNING);
-                            alert.setTitle("Advertencia de Longitud");
-                            alert.setHeaderText(null);
-                            alert.setContentText("La longitud máxima permitida es de " + maxLength + " d\u00edgitos.");
-                            alert.show();
+                            mostrarAlerta("La longitud máxima permitida es de " + maxLength + " caracteres.");
+                            textField.clear();
                         });
-                        return null; // Denegar el cambio
+                        return null;
                     }
 
-                    // Validar el formato numérico y decimal
-                    if (newText.matches("^[\\w\\.@+-]*$") && newText.length() <= maxLength) {
-                        return change;
+                    // Validar caracteres permitidos en email
+                    if (!newText.matches("[a-zA-Z0-9@._+-]*")) {
+                        Platform.runLater(() -> {
+                            mostrarAlerta("Solo se permiten caracteres válidos en una dirección de correo electrónico.");
+                            textField.clear();
+                        });
+                        return null;
                     }
 
-                    return null; // Denegar el cambio
+                    return change;
                 };
 
                 textField.setTextFormatter(new TextFormatter<>(filter));
@@ -461,17 +411,15 @@ public class Util {
                 textField.setOnAction(event -> commitEdit(textField.getText()));
                 textField.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
                     if (!isNowFocused) {
-                        // Validar la longitud mínima al perder el foco
                         Platform.runLater(() -> {
-                            if (textField.getText().length() < minLength) {
-                                Alert alert = new Alert(Alert.AlertType.ERROR);
-                                alert.setTitle("Error de Validaci\u00f3n");
-                                alert.setHeaderText(null);
-                                alert.setContentText("La longitud m\u00ednima requerida es de " + minLength + " d\u00edgitos.");
-                                alert.showAndWait();
+                            String value = textField.getText();
+                            if (value.length() < minLength) {
+                                if (!value.isEmpty()) {
+                                    mostrarAlerta("La longitud mínima requerida es de " + minLength + " caracteres.");
+                                }
                                 cancelEdit();
                             } else {
-                                commitEdit(textField.getText());
+                                commitEdit(value);
                             }
                         });
                     }
@@ -484,10 +432,9 @@ public class Util {
         };
     }
 
-    public static <S> Callback<TableColumn<S, String>, TableCell<S, String>> createFormaPagoCellFactory() {
+    public static <S> Callback<TableColumn<S, String>, TableCell<S, String>> createPersonalizedCellFactory(List<String> allowedValues) {
         return column -> new TableCell<S, String>() {
             private TextField textField;
-            private final List<String> allowedValues = Arrays.asList("1", "2", "3", "4", "10");
 
             @Override
             public void startEdit() {
@@ -513,10 +460,14 @@ public class Util {
             @Override
             public void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty || item == null) {
+                if (empty || item == null || item.trim().isEmpty()) {
                     setText(null);
                     setGraphic(null);
+                    if (!getStyleClass().contains("error-cell")) {
+                        getStyleClass().add("error-cell");
+                    }
                 } else {
+                    getStyleClass().remove("error-cell");
                     setText(item);
                     setGraphic(null);
                 }
@@ -524,23 +475,25 @@ public class Util {
 
             private void createTextField() {
                 textField = new TextField(getString());
-                textField.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
-                    if (!isNowFocused) {
-                        if (validate(textField.getText())) {
-                            commitEdit(textField.getText());
-                        } else {
-                            Alert alert = new Alert(Alert.AlertType.ERROR);
-                            alert.setTitle("Error de Validaci\u00f3n");
-                            alert.setHeaderText(null);
-                            alert.setContentText("El valor para 'Forma de pago' solo puede ser 1, 2, 3, 4 o 10.");
-                            alert.showAndWait();
-                            cancelEdit();
-                        }
-                    }
-                });
+
                 textField.textProperty().addListener((observable, oldValue, newValue) -> {
                     if (newValue != null && !newValue.isEmpty() && !allowedValues.contains(newValue)) {
-                        textField.setText(oldValue);
+                        Platform.runLater(() -> {
+                            mostrarAlerta("El valor para 'Forma de pago' solo puede ser 1, 2, 3, 4 o 10.");
+                            textField.clear(); // Borrar contenido inválido
+                        });
+                    }
+                });
+
+                textField.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+                    if (!isNowFocused) {
+                        String value = textField.getText();
+                        if (validate(value)) {
+                            commitEdit(value);
+                        } else {
+                            mostrarAlerta("El valor para 'Forma de pago' solo puede ser 1, 2, 3, 4 o 10.");
+                            cancelEdit();
+                        }
                     }
                 });
             }
@@ -591,6 +544,14 @@ public class Util {
                 }
             }
         });
+    }
+
+    private static void mostrarAlerta(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Advertencia");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 
 }
