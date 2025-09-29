@@ -13,5 +13,8 @@ public final class Constants {
     public static final String TIPO_REGISTRO_DM = "DM";
     public static final String TIPO_REGISTRO_TB = "TB";
     public static final String TIPO_REGISTRO_TA = "TA";
+    public static final String TIPO_REGISTRO_DR = "DR";
     public static final String CLAVE_BANCO_EMISOR = "044";
+    public static final String DISPERSION_DE_FONDOS = "JDF";
+
 }

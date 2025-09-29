@@ -1,5 +1,6 @@
 package org.scotiabank.productosGTB.controllers;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -103,12 +104,17 @@ public class SistemaDispercionFondosController {
     private Label errorLabelFechaAplicacion;
     @FXML
     private Button btnCargar;
-    private final ObservableList<SistemaDispersionData> datos = FXCollections.observableArrayList();
 
+    private boolean campoEditado = false;
+    private final ObservableList<SistemaDispersionData> datos = FXCollections.observableArrayList();
+    private boolean cargarDesdeExcel = false;
 
 
     @FXML
     public void initialize() {
+        Platform.runLater(() -> {
+            tableViewDispersionFondos.getScene().getRoot().requestFocus();
+        });
 
         tableViewDispersionFondos.setOnKeyPressed(event -> {
             // Verifica si se presionó la combinación de teclas Ctrl + V
@@ -122,13 +128,23 @@ public class SistemaDispercionFondosController {
         fillAllComboBox();
         agregaTooltips();
 
-        dataList = FXCollections.observableArrayList(
-                new SistemaDispersionData(1, "", "", "", "", "", "", "", "", "", "", "", "", "", "", "")
-        );
-        tableViewDispersionFondos.setItems(dataList);
+        //tableViewDispersionFondos.setItems(datos);
+        Platform.runLater(() -> {
+            // Siempre agrega el registro vacío
+            dataList = FXCollections.observableArrayList(
+                    new SistemaDispersionData(1, "", "", "", "", "", "", "", "", "", "", "", "", "", "", "")
+            );
+            tableViewDispersionFondos.setItems(dataList);
 
-        tableViewDispersionFondos.setItems(datos);
-        btnCargar.setOnAction(e -> importarExcel());
+            // Configura el botón de carga
+            btnCargar.setOnAction(e -> importarExcel());
+
+            // Si se indicó que se debe cargar Excel, ejecuta el método
+            if (cargarDesdeExcel) {
+                importarExcel();
+            }
+        });
+
 
         fillTable();
     }
@@ -185,6 +201,7 @@ public class SistemaDispercionFondosController {
                 nuevoNumero, "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""
         );
         dataList.add(nuevaFila);
+        tableViewDispersionFondos.refresh();
     }
 
     @FXML
@@ -192,6 +209,7 @@ public class SistemaDispercionFondosController {
         // Solo elimina la fila si hay más de una
         if (dataList.size() > 1) {
             dataList.removeLast();
+            tableViewDispersionFondos.refresh();
         } else {
             // Opcional: mostrar una alerta o mensaje al usuario
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -602,9 +620,12 @@ public class SistemaDispercionFondosController {
             TextFieldValidator.validarNumerosYMaxLength(textFieldClientNumber, 12);
         });
 
-        // Validación al perder el foco: longitud mínima
+        // Validación al perder el foco: longitud mínima ESTE VA SIEMPRE EN
+        textFieldClientNumber.textProperty().addListener((obs, oldVal, newVal) -> {
+            campoEditado = true;
+        });
         textFieldClientNumber.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
-            if (!isNowFocused) {
+            if (!isNowFocused && campoEditado) {
                 TextFieldValidator.validarMinLength(textFieldClientNumber, 1);
             }
         });
@@ -645,6 +666,12 @@ public class SistemaDispercionFondosController {
             }
         });
     }
+
+    public void setCargarDesdeExcel(boolean cargarDesdeExcel) {
+        this.cargarDesdeExcel = cargarDesdeExcel;
+    }
+
+
     @FXML
     private void importarExcel() {
         FileChooser fileChooser = new FileChooser();
@@ -657,7 +684,7 @@ public class SistemaDispercionFondosController {
                  Workbook workbook = WorkbookFactory.create(fis)) {
 
                 Sheet hoja = workbook.getSheetAt(0);
-                datos.clear();
+                dataList.clear();
 
                 for (int i = 1; i <= hoja.getLastRowNum(); i++) { // omite la fila 0
                     Row fila = hoja.getRow(i);
@@ -677,9 +704,10 @@ public class SistemaDispercionFondosController {
                         String detalleMail = getCellValue(fila.getCell(12));
                         String referenciaAbonoBanxico = getCellValue(fila.getCell(13));
                         String tipoOperacion = getCellValue(fila.getCell(14));
-                        datos.add(new SistemaDispersionData(i, formaPago, tipoCuenta, bancoReceptor, cuenta, importePago, claveBeneficiario, rfcBeneficiario, nombreBeneficiario, referenciaPago, conceptoPago, diasVigencia, infoAgruparPagos, detalleMail, referenciaAbonoBanxico, tipoOperacion));
+                        dataList.add(new SistemaDispersionData(i, formaPago, tipoCuenta, bancoReceptor, cuenta, importePago, claveBeneficiario, rfcBeneficiario, nombreBeneficiario, referenciaPago, conceptoPago, diasVigencia, infoAgruparPagos, detalleMail, referenciaAbonoBanxico, tipoOperacion));
                     }
                 }
+                tableViewDispersionFondos.refresh();
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

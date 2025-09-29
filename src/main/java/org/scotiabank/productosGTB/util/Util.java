@@ -476,22 +476,13 @@ public class Util {
             private void createTextField() {
                 textField = new TextField(getString());
 
-                textField.textProperty().addListener((observable, oldValue, newValue) -> {
-                    if (newValue != null && !newValue.isEmpty() && !allowedValues.contains(newValue)) {
-                        Platform.runLater(() -> {
-                            mostrarAlerta("El valor para 'Forma de pago' solo puede ser 1, 2, 3, 4 o 10.");
-                            textField.clear(); // Borrar contenido inválido
-                        });
-                    }
-                });
-
                 textField.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
                     if (!isNowFocused) {
                         String value = textField.getText();
                         if (validate(value)) {
                             commitEdit(value);
                         } else {
-                            mostrarAlerta("El valor para 'Forma de pago' solo puede ser 1, 2, 3, 4 o 10.");
+                            mostrarAlerta("El valor para 'Forma de pago' solo puede ser: " + String.join(", ", allowedValues));
                             cancelEdit();
                         }
                     }
@@ -503,10 +494,20 @@ public class Util {
             }
 
             private String getString() {
-                return getItem() == null ? "" : getItem().toString();
+                return getItem() == null ? "" : getItem();
+            }
+
+            private void mostrarAlerta(String mensaje) {
+                javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.WARNING);
+                alert.setTitle("Valor inválido");
+                alert.setHeaderText(null);
+                alert.setContentText(mensaje);
+                alert.showAndWait();
             }
         };
     }
+
+
 
     public static String rellenarConCerosIzquierda(String cadena, int longitudTotal) {
         if (cadena.length() >= longitudTotal) {

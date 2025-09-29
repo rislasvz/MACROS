@@ -6,9 +6,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.KeyCode;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.scotiabank.productosGTB.data.TooltipMessages;
 import org.scotiabank.productosGTB.enums.FileTypesEnum;
+import org.scotiabank.productosGTB.enums.MaintOrConsultationEnum;
 import org.scotiabank.productosGTB.enums.PaymentConceptEnum;
 import org.scotiabank.productosGTB.enums.PaymentCurrencyEnum;
 import org.scotiabank.productosGTB.model.PreRegistroCuentasData;
@@ -20,8 +22,14 @@ import org.scotiabank.productosGTB.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.*;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.ParseException;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Locale;
+import java.util.Objects;
 
 public class PreRegistroCuentasController {
 
@@ -29,7 +37,7 @@ public class PreRegistroCuentasController {
     @FXML
     private TextField textFieldContractNumber;
     @FXML
-    private TextField textFieldMaintOrConsultation;
+    private ComboBox<MaintOrConsultationEnum> comboBoxMaintOrConsultation;
     @FXML
     private TextField textFieldFileNumberOfTheDay;
     @FXML
@@ -61,8 +69,6 @@ public class PreRegistroCuentasController {
     @FXML
     private Label errorLabelContractNumber;
     @FXML
-    private Label errorLabelMaintOrConsultation;
-    @FXML
     private Label errorLabelFechaDeSolicitud;
     @FXML
     private Label errorLabelFileNumberOfTheDay;
@@ -71,12 +77,17 @@ public class PreRegistroCuentasController {
     public void initialize() {
         agregaTooltips();
         restringeTextField();
-
+        fillAllComboBox();
         dataList = FXCollections.observableArrayList(
                 new PreRegistroCuentasData(1, "", "", "", "", "", "", "", "", "")
         );
         tableViewPreRegistroCuentas.setItems(dataList);
         fillTable();
+    }
+
+    public void fillAllComboBox(){
+        comboBoxMaintOrConsultation.setItems(FXCollections.observableArrayList(MaintOrConsultationEnum.values()));
+        comboBoxMaintOrConsultation.getSelectionModel().selectFirst();
     }
 
     public void fillTable(){
@@ -111,13 +122,15 @@ public class PreRegistroCuentasController {
                 nuevoNumero, "", "", "", "", "", "", "", "", ""
         );
         dataList.add(nuevaFila);
+        tableViewPreRegistroCuentas.refresh();
     }
 
     @FXML
     private void eliminarFila(ActionEvent event) {
         // Solo elimina la fila si hay más de una
         if (dataList.size() > 1) {
-            dataList.remove(dataList.size() - 1);
+            dataList.removeLast();
+            tableViewPreRegistroCuentas.refresh();
         } else {
             // Opcional: mostrar una alerta o mensaje al usuario
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -135,12 +148,10 @@ public class PreRegistroCuentasController {
         // Limpiar estilos y mensajes de error de todos los campos
         textFieldContractNumber.getStyleClass().remove("error-field");
         textFieldFileNumberOfTheDay.getStyleClass().remove("error-field");
-        textFieldMaintOrConsultation.getStyleClass().remove("error-field");
         datePicketFechaDeSolicitud.getStyleClass().remove("error-field");
 
         errorLabelContractNumber.setVisible(false);
         errorLabelFileNumberOfTheDay.setVisible(false);
-        errorLabelMaintOrConsultation.setVisible(false);
         errorLabelFechaDeSolicitud.setVisible(false);
 
         // Validar TextFields
@@ -154,12 +165,6 @@ public class PreRegistroCuentasController {
             textFieldFileNumberOfTheDay.getStyleClass().add("error-field");
             errorLabelFileNumberOfTheDay.setText("Este campo es requerido.");
             errorLabelFileNumberOfTheDay.setVisible(true);
-            allFieldsAreValid = false;
-        }
-        if (textFieldMaintOrConsultation.getText().trim().isEmpty()) {
-            textFieldMaintOrConsultation.getStyleClass().add("error-field");
-            errorLabelMaintOrConsultation.setText("Este campo es requerido.");
-            errorLabelMaintOrConsultation.setVisible(true);
             allFieldsAreValid = false;
         }
         if (datePicketFechaDeSolicitud.getValue() == null) {
@@ -247,11 +252,126 @@ public class PreRegistroCuentasController {
         return allFieldsAreValid;
     }
 
+    public void exportarDatosAArchivoOptimizada() {
+        tableViewPreRegistroCuentas.refresh();
+        //if (true) {
+        if (validateForm()) {
+            DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyyMMdd");
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Guardar Archivo de Datos");
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Archivos de texto (*.txt)", "*.txt");
+            fileChooser.getExtensionFilters().add(extFilter);
+            File file = fileChooser.showSaveDialog(new Stage());
+
+            if (file != null) {
+                try (
+                        FileWriter fw = new FileWriter(file);
+                        BufferedWriter bw = new BufferedWriter(fw);
+                        PrintWriter writer = new PrintWriter(bw)
+                ) {
+                    int contadorAltasOBajas = 0;
+                    double contadorImportes = 0.0;
+                    //Escribimos las dos primeras lineas del txt
+                    writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA
+                            + Constants.TIPO_REGISTRO_HA
+                            + Constants.DISPERSION_DE_FONDOS
+                            + Util.rellenarConCerosIzquierda(textFieldContractNumber.getText(), 7)
+                            + datePicketFechaDeSolicitud.getValue().format(formato)
+                            //VALIDAR SI ESTE ESTA CORRECTO
+                            + Util.rellenarConCerosIzquierda(textFieldFileNumberOfTheDay.getText(), 3)
+                            + comboBoxMaintOrConsultation.getValue().getId()
+                            + Util.rellenarConCerosIzquierda("", 8)
+                            + Util.rellenarConCerosIzquierda("", 6)
+                            + Util.rellenarConCerosIzquierda("", 3)
+                            + Util.rellenarConEspaciosDerecha("", 97));
+
+                    for (PreRegistroCuentasData data : dataList) {
+                        //Sumamos uno al contador de registors que se han hecho
+                        contadorAltasOBajas++;
+
+                        //Logica para los importes
+                        /*DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
+                        symbols.setDecimalSeparator('.');
+                        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00", symbols);
+                        decimalFormat.setParseBigDecimal(true);
+                        try {
+                            String cleanedString = data.getImportePago().replaceAll(",", "");
+                            Number parsedNumber = decimalFormat.parse(cleanedString);
+                            contadorImportes = contadorImportes + parsedNumber.doubleValue();
+                        } catch (ParseException e) {
+                            System.err.println("Error al parsear el importe");
+                        }*/
+
+                        //PRIMERA LINEA QUE SE REPITE POR CADA REGISTRO DE LA TABLA
+                        writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA
+                                + Constants.TIPO_REGISTRO_DR
+                                + "A"
+                                + Util.rellenarConCerosIzquierda(data.getTipoCuenta(), 2)
+                                + Util.rellenarConCerosIzquierda(data.getMonedaCuenta(), 2)
+                                + Util.rellenarConCerosIzquierda(data.getClaveBanco(), 3)
+                                + Util.rellenarConCerosIzquierda(data.getCuentaAbono(), 20)
+                                + Util.rellenarConCerosIzquierda(data.getFechaEliminacion(), 8)
+                                + Util.rellenarConEspaciosDerecha(data.getDescripcion(), 50)
+                                + Util.rellenarConCerosIzquierda(data.getLimiteTransaccion().replaceAll("\\.", ""), 8)
+                                + Util.rellenarConCerosIzquierda(data.getTipoCuenta(), 2));
+                    }
+                    /*if(Objects.equals(comboBoxFileType.getValue().getId(), "1")){
+                        writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA
+                                + Constants.TIPO_REGISTRO_TB
+                                + Util.rellenarConCerosIzquierda(Integer.toString(contadorAltasOBajas), 7)
+                                + Util.rellenarConCerosIzquierda(Double.toString(contadorImportes).replaceAll("\\.", ""), 17)
+                                + Util.rellenarConCerosIzquierda("", 7)
+                                + Util.rellenarConCerosIzquierda("", 17)
+                                + Util.rellenarConCerosIzquierda("", 195)
+                                + Util.rellenarConEspaciosDerecha("", 123));
+                        writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA + Constants.TIPO_REGISTRO_TA
+                                + Util.rellenarConCerosIzquierda(Integer.toString(contadorAltasOBajas), 7)
+                                + Util.rellenarConCerosIzquierda(Double.toString(contadorImportes).replaceAll("\\.", ""), 17)
+                                + Util.rellenarConCerosIzquierda("", 7)
+                                + Util.rellenarConCerosIzquierda("", 17)
+                                + Util.rellenarConCerosIzquierda("", 195)
+                                + Util.rellenarConEspaciosDerecha("", 123));
+                    }else{
+                        writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA + Constants.TIPO_REGISTRO_TB
+                                + Util.rellenarConCerosIzquierda("", 7)
+                                + Util.rellenarConCerosIzquierda("", 17)
+                                + Util.rellenarConCerosIzquierda(Integer.toString(contadorAltasOBajas), 7)
+                                + Util.rellenarConCerosIzquierda(Double.toString(contadorImportes).replaceAll("\\.", ""), 17)
+                                + Util.rellenarConCerosIzquierda("", 195)
+                                + Util.rellenarConEspaciosDerecha("", 123));
+                        writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA + Constants.TIPO_REGISTRO_TA
+                                + Util.rellenarConCerosIzquierda("", 7)
+                                + Util.rellenarConCerosIzquierda("", 17)
+                                + Util.rellenarConCerosIzquierda(Integer.toString(contadorAltasOBajas), 7)
+                                + Util.rellenarConCerosIzquierda(Double.toString(contadorImportes).replaceAll("\\.", ""), 17)
+                                + Util.rellenarConCerosIzquierda("", 195)
+                                + Util.rellenarConEspaciosDerecha("", 123));
+                    }*/
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Exportación Exitosa");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Los datos se han guardado en el archivo: " + file.getAbsolutePath());
+                    alert.showAndWait();
+                } catch (IOException e) {
+                    // 5. Manejar posibles errores
+                    e.printStackTrace();
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error de Exportación");
+                    alert.setHeaderText("No se pudo guardar el archivo.");
+                    alert.setContentText("Ocurrió un error al intentar escribir los datos. Por favor, inténtelo de nuevo.");
+                    alert.showAndWait();
+                }
+            }
+        }else{
+            System.out.println("Se omitió exportación por falta de información");
+        }
+    }
+
     public void restringeTextField(){
         //Validaciones de textfield
         //Validacion solo numeros y maximo de caracteres
         textFieldContractNumber.textProperty().addListener((obs, oldValue, newValue) -> {
-            TextFieldValidator.validarNumerosYMaxLength(textFieldContractNumber, 12);
+            TextFieldValidator.validarNumerosYMaxLength(textFieldContractNumber, 7);
         });
 
         // Validación al perder el foco: longitud mínima
@@ -272,18 +392,6 @@ public class PreRegistroCuentasController {
                 TextFieldValidator.validarMinLength(textFieldFileNumberOfTheDay, 1);
             }
         });
-
-        //Validacion solo numeros y maximo de caracteres
-        textFieldMaintOrConsultation.textProperty().addListener((obs, oldValue, newValue) -> {
-            TextFieldValidator.validarNumerosYMaxLength(textFieldMaintOrConsultation, 10);
-        });
-
-        // Validación al perder el foco: longitud mínima
-        textFieldMaintOrConsultation.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
-            if (!isNowFocused) {
-                TextFieldValidator.validarMinLength(textFieldMaintOrConsultation, 10);
-            }
-        });
     }
 
     public void imprimeValores() {
@@ -296,7 +404,6 @@ public class PreRegistroCuentasController {
 
     public void agregaTooltips(){
         TooltipManager.applyTooltip(textFieldContractNumber, TooltipMessages.CONTRACT_NUMBER_TOOLTIP);
-        TooltipManager.applyTooltip(textFieldMaintOrConsultation, TooltipMessages.MAIN_OR_CONSULTATION_TOOLTIP);
         TooltipManager.applyTooltip(textFieldFileNumberOfTheDay, TooltipMessages.FILE_NUMBRER_OF_THE_DAY_TOOLTIP);
     }
 }

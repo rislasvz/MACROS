@@ -3,7 +3,6 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
@@ -16,22 +15,22 @@
            <padding>
                <Insets left="60" top="150" />
            </padding>
-           <Button text="&gt; Captura Información Dispersion" onAction="#abrirCapturaInformacion" style="-fx-background-color: transparent;">
+           <Button onAction="#abrirCapturaInformacionSinExcel" style="-fx-background-color: transparent;" text="&gt; Captura Información Dispersion">
+            <font>
+               <Font size="24.0" />
+            </font></Button>
+         <Button layoutX="70.0" layoutY="235.0" onAction="#abrirCapturaInformacionConExcel" style="-fx-background-color: transparent;" text="&gt; Importar Archivo - Excel">
+            <font>
+               <Font size="24.0" />
+            </font>
+         </Button>
+           <Button onAction="#abrirCapturaInformacionPreRegistro" style="-fx-background-color: transparent;" text="&gt; Captura Información PreRegistro">
             <font>
                <Font size="24.0" />
             </font></Button>
            <cursor>
                <Cursor fx:constant="HAND" />
            </cursor>
-           <Button text="&gt; Captura Información PreRegistro" onAction="#abrirCapturaInformacionPreRegistro" style="-fx-background-color: transparent;">
-            <font>
-               <Font size="24.0" />
-            </font></Button>
-         <Button layoutX="70.0" layoutY="235.0" text="&gt; Lectura de Reportes" style="-fx-background-color: transparent;" onAction="#abrirResultados">
-            <font>
-               <Font size="24.0" />
-            </font>
-         </Button>
        </VBox>
    </center>
 </BorderPane>

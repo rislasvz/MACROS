@@ -22,7 +22,7 @@
                             </HBox.margin>
                         </Label>
                         <Pane prefHeight="35.0" prefWidth="468.0" />
-                        <Label prefHeight="35.0" prefWidth="380.0" text="Sistema de Dispersión de Fondos">
+                        <Label prefHeight="35.0" prefWidth="380.0" text="Pre-Registro De Cuentas">
                             <font>
                                 <Font size="24.0" />
                             </font>
@@ -67,8 +67,7 @@
                                         </Label>
                                         <TextField fx:id="textFieldContractNumber" layoutX="325.0" layoutY="98.0" prefHeight="35.0" prefWidth="307.0" />
                                         <Label fx:id="errorLabelContractNumber" layoutX="327.0" layoutY="136.0" prefHeight="17.0" prefWidth="305.0" textFill="RED" visible="true" />
-                                        <TextField fx:id="textFieldMaintOrConsultation" layoutX="667.0" layoutY="98.0" prefHeight="35.0" prefWidth="337.0" />
-                                        <Label fx:id="errorLabelMaintOrConsultation" layoutX="667.0" layoutY="136.0" prefHeight="17.0" prefWidth="336.0" textFill="RED" visible="true" />
+                                        <ComboBox fx:id="comboBoxMaintOrConsultation" layoutX="667.0" layoutY="98.0" prefHeight="35.0" prefWidth="337.0" />
                                         <TextField fx:id="textFieldFileNumberOfTheDay" layoutX="667.0" layoutY="184.0" prefHeight="35.0" prefWidth="338.0" />
                                         <Label fx:id="errorLabelFileNumberOfTheDay" layoutX="667.0" layoutY="224.0" prefHeight="17.0" prefWidth="335.0" textFill="RED" visible="true" />
                                         <DatePicker fx:id="datePicketFechaDeSolicitud" layoutX="325.0" layoutY="184.0" prefHeight="35.0" prefWidth="309.0" />
@@ -90,7 +89,7 @@
                                                 <Cursor fx:constant="HAND" />
                                             </cursor>
                                         </Button>
-                                        <Button layoutX="999.0" layoutY="330.0" mnemonicParsing="false" onAction="#validateForm" prefHeight="35.0" prefWidth="125.0" style="-fx-background-color: transparent; -fx-border-radius: 7px; -fx-border-color: #0049ff; -fx-border-width: 2px;" text="Archivo" textFill="#0049ff">
+                                        <Button layoutX="999.0" layoutY="330.0" mnemonicParsing="false" onAction="#exportarDatosAArchivoOptimizada" prefHeight="35.0" prefWidth="125.0" style="-fx-background-color: transparent; -fx-border-radius: 7px; -fx-border-color: #0049ff; -fx-border-width: 2px;" text="Archivo" textFill="#0049ff">
                                             <font>
                                                 <Font size="18.0" />
                                             </font>

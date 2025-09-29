@@ -27,10 +27,6 @@ public final class TooltipMessages  {
     public static final String CONTRACT_NUMBER_TOOLTIP = "REQUERIDO\n" +
             "Solo números\n" +
             "Minimo 1 dígito\n" +
-            "Maximo 12 dígitos";
-
-    public static final String MAIN_OR_CONSULTATION_TOOLTIP = "REQUERIDO\n" +
-            "Solo letras\n" +
-            "Valores permitidos: 'M' y 'C'";
+            "Maximo 7 dígitos";
 
 }
