@@ -603,8 +603,7 @@ public class Util {
         Row headerRow = sheet.createRow(0);
         headerRow.createCell(0).setCellValue("Fila Original");
         headerRow.createCell(1).setCellValue("Columna");
-        headerRow.createCell(2).setCellValue("Valor Ingresado");
-        headerRow.createCell(3).setCellValue("Mensaje de Error");
+        headerRow.createCell(2).setCellValue("Mensaje de Error");
 
         // 3. Llenar los datos de error
         int rowNum = 1;
@@ -612,8 +611,7 @@ public class Util {
             Row row = sheet.createRow(rowNum++);
             row.createCell(0).setCellValue(error.fila);
             row.createCell(1).setCellValue(error.columna);
-            row.createCell(2).setCellValue(error.valor);
-            row.createCell(3).setCellValue(error.mensaje);
+            row.createCell(2).setCellValue(error.mensaje);
         }
 
         // Autoajustar el ancho de las columnas (opcional pero recomendado)

@@ -10,12 +10,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.scotiabank.productosGTB.business.Service;
 import org.scotiabank.productosGTB.data.TooltipMessages;
-import org.scotiabank.productosGTB.enums.FileTypesEnum;
 import org.scotiabank.productosGTB.enums.MaintOrConsultationEnum;
-import org.scotiabank.productosGTB.enums.PaymentConceptEnum;
-import org.scotiabank.productosGTB.enums.PaymentCurrencyEnum;
 import org.scotiabank.productosGTB.model.PreRegistroCuentasData;
-import org.scotiabank.productosGTB.model.SistemaDispersionData;
 import org.scotiabank.productosGTB.util.Constants;
 import org.scotiabank.productosGTB.util.TextFieldValidator;
 import org.scotiabank.productosGTB.util.TooltipManager;
@@ -24,13 +20,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.ParseException;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.Locale;
-import java.util.Objects;
 
 public class PreRegistroCuentasController {
 
@@ -270,8 +261,10 @@ public class PreRegistroCuentasController {
                         BufferedWriter bw = new BufferedWriter(fw);
                         PrintWriter writer = new PrintWriter(bw)
                 ) {
-                    int contadorAltasOBajas = 0;
-                    double contadorImportes = 0.0;
+                    int contadorAltas = 0;
+                    int contadorBajas = 0;
+                    int contadorCambios = 0;
+                    int contadorConsultas = 0;
                     //Escribimos las dos primeras lineas del txt
                     writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA
                             + Constants.TIPO_REGISTRO_HA
@@ -288,24 +281,19 @@ public class PreRegistroCuentasController {
 
                     for (PreRegistroCuentasData data : dataList) {
                         //Sumamos uno al contador de registors que se han hecho
-                        contadorAltasOBajas++;
+                        if(data.getTipoRegistro().equals("DA")){
+                            contadorAltas++;
+                        } else if (data.getTipoRegistro().equals("DC")) {
+                            contadorCambios++;
+                        } else if (data.getTipoRegistro().equals("DB")) {
+                            contadorBajas++;
+                        } else if (data.getTipoRegistro().equals("DQ")) {
+                            contadorConsultas++;
+                        }
 
-                        //Logica para los importes
-                        /*DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
-                        symbols.setDecimalSeparator('.');
-                        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00", symbols);
-                        decimalFormat.setParseBigDecimal(true);
-                        try {
-                            String cleanedString = data.getImportePago().replaceAll(",", "");
-                            Number parsedNumber = decimalFormat.parse(cleanedString);
-                            contadorImportes = contadorImportes + parsedNumber.doubleValue();
-                        } catch (ParseException e) {
-                            System.err.println("Error al parsear el importe");
-                        }*/
-
-                        //PRIMERA LINEA QUE SE REPITE POR CADA REGISTRO DE LA TABLA
+                        //LINEA QUE SE REPITE POR CADA REGISTRO DE LA TABLA
                         writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA
-                                + Constants.TIPO_REGISTRO_DR
+                                + data.getTipoRegistro()
                                 + "A"
                                 + Util.rellenarConCerosIzquierda(data.getTipoCuenta(), 2)
                                 + Util.rellenarConCerosIzquierda(data.getMonedaCuenta(), 2)
@@ -316,38 +304,29 @@ public class PreRegistroCuentasController {
                                 + Util.rellenarConCerosIzquierda(data.getLimiteTransaccion().replaceAll("\\.", ""), 8)
                                 + Util.rellenarConCerosIzquierda(data.getTipoCuenta(), 2));
                     }
-                    /*if(Objects.equals(comboBoxFileType.getValue().getId(), "1")){
+
                         writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA
-                                + Constants.TIPO_REGISTRO_TB
-                                + Util.rellenarConCerosIzquierda(Integer.toString(contadorAltasOBajas), 7)
-                                + Util.rellenarConCerosIzquierda(Double.toString(contadorImportes).replaceAll("\\.", ""), 17)
-                                + Util.rellenarConCerosIzquierda("", 7)
-                                + Util.rellenarConCerosIzquierda("", 17)
-                                + Util.rellenarConCerosIzquierda("", 195)
-                                + Util.rellenarConEspaciosDerecha("", 123));
-                        writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA + Constants.TIPO_REGISTRO_TA
-                                + Util.rellenarConCerosIzquierda(Integer.toString(contadorAltasOBajas), 7)
-                                + Util.rellenarConCerosIzquierda(Double.toString(contadorImportes).replaceAll("\\.", ""), 17)
-                                + Util.rellenarConCerosIzquierda("", 7)
-                                + Util.rellenarConCerosIzquierda("", 17)
-                                + Util.rellenarConCerosIzquierda("", 195)
-                                + Util.rellenarConEspaciosDerecha("", 123));
-                    }else{
-                        writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA + Constants.TIPO_REGISTRO_TB
-                                + Util.rellenarConCerosIzquierda("", 7)
-                                + Util.rellenarConCerosIzquierda("", 17)
-                                + Util.rellenarConCerosIzquierda(Integer.toString(contadorAltasOBajas), 7)
-                                + Util.rellenarConCerosIzquierda(Double.toString(contadorImportes).replaceAll("\\.", ""), 17)
-                                + Util.rellenarConCerosIzquierda("", 195)
-                                + Util.rellenarConEspaciosDerecha("", 123));
-                        writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA + Constants.TIPO_REGISTRO_TA
-                                + Util.rellenarConCerosIzquierda("", 7)
-                                + Util.rellenarConCerosIzquierda("", 17)
-                                + Util.rellenarConCerosIzquierda(Integer.toString(contadorAltasOBajas), 7)
-                                + Util.rellenarConCerosIzquierda(Double.toString(contadorImportes).replaceAll("\\.", ""), 17)
-                                + Util.rellenarConCerosIzquierda("", 195)
-                                + Util.rellenarConEspaciosDerecha("", 123));
-                    }*/
+                                + Constants.TIPO_REGISTRO_TA
+                                + Util.rellenarConCerosIzquierda(Integer.toString(contadorAltas), 8)
+                                + Util.rellenarConCerosIzquierda(Integer.toString(contadorCambios), 8)
+                                + Util.rellenarConCerosIzquierda(Integer.toString(contadorBajas), 8)
+                                + Util.rellenarConCerosIzquierda(Integer.toString(contadorConsultas), 8)
+
+                                + Util.rellenarConCerosIzquierda("", 8)
+                                + Util.rellenarConCerosIzquierda("", 8)
+                                + Util.rellenarConCerosIzquierda("", 8)
+                                + Util.rellenarConCerosIzquierda("", 8)
+
+                                + Util.rellenarConCerosIzquierda("", 8)
+                                + Util.rellenarConCerosIzquierda("", 8)
+                                + Util.rellenarConCerosIzquierda("", 8)
+                                + Util.rellenarConCerosIzquierda("", 8)
+
+                                + Util.rellenarConCerosIzquierda("", 3)
+                                + Util.rellenarConCerosIzquierda("", 3)
+
+                                + Util.rellenarConEspaciosDerecha("", 34));
+
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Exportación Exitosa");
                     alert.setHeaderText(null);
