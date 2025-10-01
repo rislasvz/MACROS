@@ -17,15 +17,14 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
+import org.scotiabank.productosGTB.business.Service;
+import org.scotiabank.productosGTB.data.ErrorData;
 import org.scotiabank.productosGTB.data.TooltipMessages;
 import org.scotiabank.productosGTB.enums.FileTypesEnum;
 import org.scotiabank.productosGTB.enums.PaymentConceptEnum;
 import org.scotiabank.productosGTB.enums.PaymentCurrencyEnum;
 import org.scotiabank.productosGTB.model.SistemaDispersionData;
-import org.scotiabank.productosGTB.util.Constants;
-import org.scotiabank.productosGTB.util.TextFieldValidator;
-import org.scotiabank.productosGTB.util.TooltipManager;
-import org.scotiabank.productosGTB.util.Util;
+import org.scotiabank.productosGTB.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,9 +33,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.Objects;
+import java.util.*;
 
 public class SistemaDispercionFondosController {
 
@@ -432,6 +429,7 @@ public class SistemaDispercionFondosController {
             textFieldFileNumberOfTheDay.getStyleClass().add("error-field");
             errorLabelFileNumberOfTheDay.setText("Este campo es requerido.");
             errorLabelFileNumberOfTheDay.setVisible(true);
+
             allFieldsAreValid = false;
         }
         if (textFieldChargeAccount.getText().trim().isEmpty()) {
@@ -553,8 +551,27 @@ public class SistemaDispercionFondosController {
         if (hasTableErrors) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Error de Validaci\u00f3n");
-            alert.setHeaderText("Campos de la tabla incompletos.");
-            alert.setContentText(errorMessage.toString());
+            alert.setHeaderText("Campos de la tabla incompletos. Desplázate para ver todos los errores:");
+
+            // 1. Crea un TextArea y establece el contenido del error
+            TextArea textArea = new TextArea(errorMessage.toString());
+            textArea.setEditable(false);
+            textArea.setWrapText(true);
+
+            // 2. Establece un tamaño preferido para limitar la altura visible
+            // Esto asegura que el Alert tenga un tamaño fijo y manejable.
+            textArea.setMaxWidth(Double.MAX_VALUE);
+            textArea.setMaxHeight(Double.MAX_VALUE);
+            textArea.setPrefHeight(300); // <-- Altura máxima que quieres para la lista
+
+            // 3. Establece el TextArea como el contenido expandible del diálogo
+            alert.getDialogPane().setExpandableContent(textArea);
+            alert.getDialogPane().setExpanded(true); // Opcional, forzar que se muestre expandido por defecto.
+
+            // Nota: Para este caso simple, puedes establecer directamente el TextArea como Content:
+            // alert.getDialogPane().setContent(textArea);
+            // Pero usar setExpandableContent es una buena práctica para listas largas.
+
             alert.showAndWait();
         }
         return allFieldsAreValid;
@@ -672,6 +689,8 @@ public class SistemaDispercionFondosController {
     }
 
 
+    // Dentro de SistemaDispercionFondosController.java
+
     @FXML
     private void importarExcel() {
         FileChooser fileChooser = new FileChooser();
@@ -680,32 +699,69 @@ public class SistemaDispercionFondosController {
         File archivo = fileChooser.showOpenDialog(btnCargar.getScene().getWindow());
 
         if (archivo != null) {
+            List<ErrorData> erroresDeFormato = new ArrayList<>();
+
+            List<String> allowedFormasPago = Arrays.asList("1", "2", "3", "4", "10");
+
+            List<ColumnaConfig> configuracion = Arrays.asList(
+                    new ColumnaConfig("Forma Pago", 0, Util::isValidAllowedValue, "Contiene valores no permitidos", allowedFormasPago),
+                    new ColumnaConfig("Tipo de Cuenta", 1, (v, l) -> Util.isValidNumeric(v), "Debe contener solo números.", null),
+                    new ColumnaConfig("Banco Receptor", 2, (v, l) -> Util.isValidNumeric(v), "Debe contener solo números.", null),
+                    new ColumnaConfig("Cuenta", 3, (v, l) -> Util.isValidNumeric(v), "Debe contener solo números.", null),
+                    new ColumnaConfig("Importe Pago", 4, (v, l) -> Util.isValidDecimal(v), "Formato incorrecto (solo números y 2 decimales).", null),
+                    new ColumnaConfig("Clave Beneficiario", 5, (v, l) -> Util.isValidStringWithoutSymbols(v), "Contiene símbolos, mayúsculas o acentos no permitidos.", null),
+                    new ColumnaConfig("RFC Beneficiario", 6, (v, l) -> Util.isValidStringWithoutSymbols(v), "Contiene símbolos, mayúsculas o acentos no permitidos.", null),
+                    new ColumnaConfig("Nombre Beneficiario", 7, (v, l) -> Util.isValidStringWithoutSymbols(v), "Contiene símbolos, mayúsculas o acentos no permitidos.", null),
+                    new ColumnaConfig("Referencia Pago", 8, (v, l) -> Util.isValidNumeric(v), "Debe contener solo números.", null),
+                    new ColumnaConfig("Concepto Pago", 9, (v, l) -> Util.isValidStringWithoutSymbols(v), "Contiene símbolos, mayúsculas o acentos no permitidos.", null),
+                    new ColumnaConfig("Dias Vigencia", 10, (v, l) -> Util.isValidNumeric(v), "Debe contener solo números.", null),
+                    new ColumnaConfig("Info Agrupar Pagos", 11, (v, l) -> Util.isValidStringWithoutSymbols(v), "Contiene símbolos, mayúsculas o acentos no permitidos.", null),
+                    new ColumnaConfig("Detalle Mail", 12, (v, l) -> Util.isValidEmail(v), "Contiene símbolos o acentos no permitidos.", null),
+                    new ColumnaConfig("Referencia Abono Banxico", 13, (v, l) -> Util.isValidNumeric(v), "Debe contener solo números.", null),
+                    new ColumnaConfig("Tipo Operacion", 14, (v, l) -> Util.isValidNumeric(v), "Debe contener solo números.", null)
+            );
+
             try (FileInputStream fis = new FileInputStream(archivo);
                  Workbook workbook = WorkbookFactory.create(fis)) {
 
                 Sheet hoja = workbook.getSheetAt(0);
                 dataList.clear();
 
-                for (int i = 1; i <= hoja.getLastRowNum(); i++) { // omite la fila 0
+                for (int i = 1; i <= hoja.getLastRowNum(); i++) {
                     Row fila = hoja.getRow(i);
                     if (fila != null) {
-                        String formaPago = getCellValue(fila.getCell(0));
-                        String tipoCuenta = getCellValue(fila.getCell(1));
-                        String bancoReceptor = getCellValue(fila.getCell(2));
-                        String cuenta = getCellValue(fila.getCell(3));
-                        String importePago = getCellValue(fila.getCell(4));
-                        String claveBeneficiario = getCellValue(fila.getCell(5));
-                        String rfcBeneficiario = getCellValue(fila.getCell(6));
-                        String nombreBeneficiario = getCellValue(fila.getCell(7));
-                        String referenciaPago = getCellValue(fila.getCell(8));
-                        String conceptoPago = getCellValue(fila.getCell(9));
-                        String diasVigencia = getCellValue(fila.getCell(10));
-                        String infoAgruparPagos = getCellValue(fila.getCell(11));
-                        String detalleMail = getCellValue(fila.getCell(12));
-                        String referenciaAbonoBanxico = getCellValue(fila.getCell(13));
-                        String tipoOperacion = getCellValue(fila.getCell(14));
-                        dataList.add(new SistemaDispersionData(i, formaPago, tipoCuenta, bancoReceptor, cuenta, importePago, claveBeneficiario, rfcBeneficiario, nombreBeneficiario, referenciaPago, conceptoPago, diasVigencia, infoAgruparPagos, detalleMail, referenciaAbonoBanxico, tipoOperacion));
+
+                        boolean filaTieneErrores = false;
+
+                        String[] valoresCelda = new String[configuracion.size()];
+
+                        for (ColumnaConfig config : configuracion) {
+                            String valor = getCellValue(fila.getCell(config.indice));
+
+                            boolean esValido = config.validador.apply(valor, config.valoresPermitidos);
+
+                            if (!esValido) {
+                                erroresDeFormato.add(new ErrorData(i + 1, config.nombre, valor, config.mensajeError));
+                                filaTieneErrores = true;
+                                valoresCelda[config.indice] = "";
+                            } else {
+                                valoresCelda[config.indice] = valor;
+                            }
+                        }
+                        if (!filaTieneErrores) {
+                            dataList.add(new SistemaDispersionData(
+                                    i,
+                                    valoresCelda[0], valoresCelda[1], valoresCelda[2], valoresCelda[3], valoresCelda[4],
+                                    valoresCelda[5], valoresCelda[6], valoresCelda[7], valoresCelda[8], valoresCelda[9],
+                                    valoresCelda[10], valoresCelda[11], valoresCelda[12], valoresCelda[13], valoresCelda[14]
+                            ));
+                        }
                     }
+                }
+
+                if (!erroresDeFormato.isEmpty()) {
+                    Util.mostrarAlerta("El excel cargado contiene errores, se descargará un excel con los errores");
+                    Util.exportarErroresAExcel(erroresDeFormato);
                 }
                 tableViewDispersionFondos.refresh();
             } catch (Exception ex) {
@@ -722,6 +778,13 @@ public class SistemaDispercionFondosController {
             case BOOLEAN -> String.valueOf(cell.getBooleanCellValue());
             default -> "";
         };
+    }
+
+    @FXML
+    private void regresar(ActionEvent event){
+        String ruta = "/fxml/DispersionDeFondos/Main/DispersionFondos.fxml";
+        String title = "dispersionFondos";
+        Service.navegacion(ruta, title, event);
     }
 
 

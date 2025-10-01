@@ -8,6 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.scotiabank.productosGTB.business.Service;
 import org.scotiabank.productosGTB.data.TooltipMessages;
 import org.scotiabank.productosGTB.enums.FileTypesEnum;
 import org.scotiabank.productosGTB.enums.MaintOrConsultationEnum;
@@ -405,5 +406,12 @@ public class PreRegistroCuentasController {
     public void agregaTooltips(){
         TooltipManager.applyTooltip(textFieldContractNumber, TooltipMessages.CONTRACT_NUMBER_TOOLTIP);
         TooltipManager.applyTooltip(textFieldFileNumberOfTheDay, TooltipMessages.FILE_NUMBRER_OF_THE_DAY_TOOLTIP);
+    }
+
+    @FXML
+    private void regresar(ActionEvent event){
+        String ruta = "/fxml/DispersionDeFondos/Main/DispersionFondos.fxml";
+        String title = "dispersionFondos";
+        Service.navegacion(ruta, title, event);
     }
 }

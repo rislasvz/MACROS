@@ -2,8 +2,18 @@ package org.scotiabank.productosGTB.util;
 
 import javafx.application.Platform;
 import javafx.scene.control.*;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Callback;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.scotiabank.productosGTB.data.ErrorData;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -547,12 +557,99 @@ public class Util {
         });
     }
 
-    private static void mostrarAlerta(String mensaje) {
+    public static boolean isValidNumeric(String value) {
+        if (value == null || value.trim().isEmpty()) return true;
+        return value.matches("\\d*\\.?\\d*");
+    }
+
+    public static boolean isValidDecimal(String value) {
+        if (value == null || value.trim().isEmpty()) return true;
+        return value.matches("\\d*\\.?\\d{0,2}");
+    }
+
+    public static boolean isValidStringWithoutSymbols(String value) {
+        if (value == null || value.trim().isEmpty()) return true;
+        return value.matches("[a-zA-Z0-9 ]*");
+    }
+
+    public static boolean isValidEmail(String value) {
+        if (value == null || value.trim().isEmpty()) return true;
+        return value.matches("[a-zA-Z0-9@._+-]*");
+    }
+
+    public static boolean isValidAllowedValue(String value, List<String> allowedValues) {
+        if (value == null || value.trim().isEmpty()) {
+            return true;
+        }
+        return allowedValues.contains(value);
+    }
+
+    public static void mostrarAlerta(String mensaje) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Advertencia");
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
+    }
+
+    // Dentro de SistemaDispercionFondosController.java
+
+    public static void exportarErroresAExcel(List<ErrorData> errores) {
+        // 1. Crear el libro de trabajo (Workbook)
+        Workbook workbook = new XSSFWorkbook(); // O HSSFWorkbook para .xls
+        Sheet sheet = workbook.createSheet("Reporte de Errores");
+
+        // 2. Crear la fila de encabezados
+        Row headerRow = sheet.createRow(0);
+        headerRow.createCell(0).setCellValue("Fila Original");
+        headerRow.createCell(1).setCellValue("Columna");
+        headerRow.createCell(2).setCellValue("Valor Ingresado");
+        headerRow.createCell(3).setCellValue("Mensaje de Error");
+
+        // 3. Llenar los datos de error
+        int rowNum = 1;
+        for (ErrorData error : errores) {
+            Row row = sheet.createRow(rowNum++);
+            row.createCell(0).setCellValue(error.fila);
+            row.createCell(1).setCellValue(error.columna);
+            row.createCell(2).setCellValue(error.valor);
+            row.createCell(3).setCellValue(error.mensaje);
+        }
+
+        // Autoajustar el ancho de las columnas (opcional pero recomendado)
+        for(int i = 0; i < 4; i++) {
+            sheet.autoSizeColumn(i);
+        }
+
+        // 4. Mostrar el diálogo para guardar el archivo
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Guardar Reporte de Errores");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files (*.xlsx)", "*.xlsx"));
+        fileChooser.setInitialFileName("Reporte_Errores_Importacion_" + System.currentTimeMillis() + ".xlsx");
+
+
+        File file = fileChooser.showSaveDialog(new Stage()); // Usar una Stage si no tienes acceso a la principal
+
+        // 5. Escribir el archivo
+        if (file != null) {
+            try (FileOutputStream fileOut = new FileOutputStream(file)) {
+                workbook.write(fileOut);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Reporte Generado");
+                alert.setHeaderText(null);
+                alert.setContentText("El archivo de errores se ha generado exitosamente en:\n" + file.getAbsolutePath());
+                alert.showAndWait();
+            } catch (IOException e) {
+                e.printStackTrace();
+                // Manejar error de escritura
+            }
+        }
+
+        try {
+            workbook.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
