@@ -1,0 +1,33 @@
+<svg width="650" height="120" viewBox="0 0 650 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fondo del recuadro azul redondeado -->
+  <rect x="10" y="10" width="630" height="100" rx="10" ry="10" fill="#E6F2F7" stroke="#3D8FCB" stroke-width="2"/>
+
+  <!-- Círculo del icono de información -->
+  <circle cx="50" cy="60" r="18" fill="#3D8FCB"/>
+  
+  <!-- Letra 'i' dentro del círculo -->
+  <text x="50" y="68" font-family="Arial, sans-serif" font-size="32" fill="white" text-anchor="middle" font-weight="bold">i</text>
+
+  <!-- Texto de la operación en dos líneas, con mayor tamaño y más cerca del icono -->
+  <!-- Vamos a mover el punto de anclaje X del texto más a la izquierda para acercarlo al icono,
+       y ajustar el font-size. -->
+  <text x="350" y="50" font-family="Arial, sans-serif" font-size="18" fill="#333333" text-anchor="middle">
+    <tspan x="350" dy="0">Si no reconoces esta operación, llama a nuestro <tspan font-weight="bold">Centro de</tspan></tspan>
+    <tspan x="350" dy="25"><tspan font-weight="bold">Atención Telefónica</tspan> (55)5728 1205 | (55)5728 1262</tspan>
+  </text>
+</svg>
+
+
+
+
+
+
+<svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100%" height="100%" fill="#F5F5F5"/>
+
+  <circle cx="200" cy="150" r="100" fill="#4CAF50"/>
+
+  <polyline points="150,150 180,180 250,110" stroke="#FFFFFF" stroke-width="25" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <text x="200" y="300" font-family="Arial, sans-serif" font-size="30" font-weight="bold" fill="#000000" text-anchor="middle">Se depositó a la cuenta</text>
+</svg>
