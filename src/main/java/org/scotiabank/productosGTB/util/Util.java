@@ -557,24 +557,40 @@ public class Util {
         });
     }
 
-    public static boolean isValidNumeric(String value) {
-        if (value == null || value.trim().isEmpty()) return true;
-        return value.matches("\\d*\\.?\\d*");
+    public static boolean isValidNumeric(String value, int minLength, int maxLength) {
+        if (value == null || value.trim().isEmpty()) {
+            return isLengthValid(value, minLength, maxLength);
+        }
+        boolean formatValid = value.matches("\\d*\\.?\\d*");
+        boolean lengthValid = isLengthValid(value, minLength, maxLength);
+        return formatValid && lengthValid;
     }
 
-    public static boolean isValidDecimal(String value) {
-        if (value == null || value.trim().isEmpty()) return true;
-        return value.matches("\\d*\\.?\\d{0,2}");
+    public static boolean isValidDecimal(String value, int minLength, int maxLength) {
+        if (value == null || value.trim().isEmpty()) {
+            return isLengthValid(value, minLength, maxLength);
+        }
+        boolean formatValid = value.matches("\\d*\\.?\\d{0,2}");
+        boolean lengthValid = isLengthValid(value, minLength, maxLength);
+        return formatValid && lengthValid;
     }
 
-    public static boolean isValidStringWithoutSymbols(String value) {
-        if (value == null || value.trim().isEmpty()) return true;
-        return value.matches("[a-zA-Z0-9 ]*");
+    public static boolean isValidStringWithoutSymbols(String value, int minLength, int maxLength) {
+        if (value == null || value.trim().isEmpty()) {
+            return isLengthValid(value, minLength, maxLength);
+        }
+        boolean formatValid = value.matches("[a-zA-Z0-9 ]*");
+        boolean lengthValid = isLengthValid(value, minLength, maxLength);
+        return formatValid && lengthValid;
     }
 
-    public static boolean isValidEmail(String value) {
-        if (value == null || value.trim().isEmpty()) return true;
-        return value.matches("[a-zA-Z0-9@._+-]*");
+    public static boolean isValidEmail(String value, int minLength, int maxLength) {
+        if (value == null || value.trim().isEmpty()) {
+            return isLengthValid(value, minLength, maxLength);
+        }
+        boolean formatValid = value.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$"); // Usando una regex estándar para email
+        boolean lengthValid = isLengthValid(value, minLength, maxLength);
+        return formatValid && lengthValid;
     }
 
     public static boolean isValidAllowedValue(String value, List<String> allowedValues) {
@@ -582,6 +598,14 @@ public class Util {
             return true;
         }
         return allowedValues.contains(value);
+    }
+
+    private static boolean isLengthValid(String value, int minLength, int maxLength) {
+        if (value == null || value.trim().isEmpty()) {
+            return minLength == 0;
+        }
+        int length = value.length();
+        return length >= minLength && length <= maxLength;
     }
 
     public static void mostrarAlerta(String mensaje) {

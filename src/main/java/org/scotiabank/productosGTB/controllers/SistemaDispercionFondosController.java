@@ -101,6 +101,10 @@ public class SistemaDispercionFondosController {
     private Label errorLabelFechaAplicacion;
     @FXML
     private Button btnCargar;
+    @FXML
+    private Button btnAgregarFila;
+    @FXML
+    private Button btnEliminarFila;
 
     private boolean campoEditado = false;
     private final ObservableList<SistemaDispersionData> datos = FXCollections.observableArrayList();
@@ -138,12 +142,28 @@ public class SistemaDispercionFondosController {
 
             // Si se indicó que se debe cargar Excel, ejecuta el método
             if (cargarDesdeExcel) {
-                importarExcel();
+                habilitaTabla(true);
             }
         });
 
 
         fillTable();
+    }
+
+    @FXML
+    private void habilitaTabla(boolean editable) {
+        tableViewDispersionFondos.setEditable(!editable);
+        if(!editable){
+            tableViewDispersionFondos.getStyleClass().add("disabled-overlay");
+        }else{
+            tableViewDispersionFondos.getStyleClass().remove("disabled-overlay");
+        }
+        if (btnAgregarFila != null) {
+            btnAgregarFila.setDisable(editable);
+        }
+        if (btnEliminarFila != null) {
+            btnEliminarFila.setDisable(editable);
+        }
     }
 
     public void fillAllComboBox(){
@@ -179,7 +199,7 @@ public class SistemaDispercionFondosController {
         cuenta.setCellFactory(Util.createNumericCellFactory(11, 20));
         importePago.setCellFactory(Util.createDecimalCellFactory(1, 13));
         claveBeneficiario.setCellFactory(Util.createStringWithoutSymbolsCellFactory(1, 20));
-        rfcBeneficiario.setCellFactory(Util.createStringWithoutSymbolsCellFactory(13, 13));
+        rfcBeneficiario.setCellFactory(Util.createStringWithoutSymbolsCellFactory(12, 13));
         nombreBeneficiario.setCellFactory(Util.createStringWithoutSymbolsCellFactory(1, 40));
         referenciaPago.setCellFactory(Util.createNumericCellFactory(1, 16));
         conceptoPago.setCellFactory(Util.createStringWithoutSymbolsCellFactory(1, 40));
@@ -366,39 +386,6 @@ public class SistemaDispercionFondosController {
             }
         }else{
             System.out.println("Se omitió exportación por falta de información");
-        }
-    }
-
-    public void imprimeValores() {
-        ObservableList<SistemaDispersionData> dataList = tableViewDispersionFondos.getItems();
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyyMMdd");
-        for (SistemaDispersionData data : dataList) {
-            System.out.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA);
-            System.out.println(Constants.TIPO_REGISTRO_DA);
-            System.out.println(data.getFormaPago());
-            System.out.println("------------------------>" + Util.rellenarConCerosIzquierda(comboBoxPaymentCurrency.getValue().getId(), 2));
-            System.out.println(Util.rellenarConCerosIzquierda(data.getImportePago().replaceAll("\\.", ""), 15));
-            System.out.println(datePicketFechaAplicacion.getValue().format(formato));
-            System.out.println("2------------------------>" +Util.rellenarConCerosIzquierda(comboBoxPaymentConcept.getValue().getId(), 2));
-            System.out.println(Util.rellenarConEspaciosDerecha(data.getClaveBeneficiario(), 20));
-            //Este se debe de validar
-            System.out.println(data.getRfcBeneficiario());
-            System.out.println(Util.rellenarConEspaciosDerecha(data.getNombreBeneficiario(), 40));
-            System.out.println(Util.rellenarConCerosIzquierda(data.getReferenciaPago(), 16));
-            System.out.println(Util.rellenarConCerosIzquierda("", 10));
-            System.out.println(Util.rellenarConCerosIzquierda(data.getCuenta(), 20));
-            System.out.println(Util.rellenarConCerosIzquierda("", 5));
-            System.out.println(Util.rellenarConEspaciosDerecha("", 40));
-            System.out.println(data.getTipoCuenta());
-            System.out.println(Util.rellenarConEspaciosDerecha("", 1));
-            System.out.println(Util.rellenarConCerosIzquierda("", 5));
-            System.out.println(Constants.CLAVE_BANCO_EMISOR);
-            System.out.println(Util.rellenarConCerosIzquierda(data.getBancoReceptor(), 5));
-            System.out.println(Util.rellenarConCerosIzquierda(data.getDiasVigencia(), 3));
-            System.out.println(Util.rellenarConEspaciosDerecha(data.getConceptoPago(), 50));
-            System.out.println(Util.rellenarConEspaciosDerecha(data.getInfoAgruparPagos(), 60));
-            System.out.println(Util.rellenarConCerosIzquierda("", 25));
-            System.out.println(Util.rellenarConEspaciosDerecha(data.getInfoAgruparPagos(), 16));
         }
     }
 
@@ -693,79 +680,83 @@ public class SistemaDispercionFondosController {
 
     @FXML
     private void importarExcel() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Selecciona archivo Excel");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
-        File archivo = fileChooser.showOpenDialog(btnCargar.getScene().getWindow());
+        if(validateForm()){
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Selecciona archivo Excel");
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
+            File archivo = fileChooser.showOpenDialog(btnCargar.getScene().getWindow());
 
-        if (archivo != null) {
-            List<ErrorData> erroresDeFormato = new ArrayList<>();
+            if (archivo != null) {
+                List<ErrorData> erroresDeFormato = new ArrayList<>();
 
-            List<String> allowedFormasPago = Arrays.asList("1", "2", "3", "4", "10");
+                List<String> allowedFormasPago = Arrays.asList("1", "2", "3", "4", "10");
 
-            List<ColumnaConfig> configuracion = Arrays.asList(
-                    new ColumnaConfig("Forma Pago", 0, Util::isValidAllowedValue, "Contiene valores no permitidos", allowedFormasPago),
-                    new ColumnaConfig("Tipo de Cuenta", 1, (v, l) -> Util.isValidNumeric(v), "Debe contener solo números.", null),
-                    new ColumnaConfig("Banco Receptor", 2, (v, l) -> Util.isValidNumeric(v), "Debe contener solo números.", null),
-                    new ColumnaConfig("Cuenta", 3, (v, l) -> Util.isValidNumeric(v), "Debe contener solo números.", null),
-                    new ColumnaConfig("Importe Pago", 4, (v, l) -> Util.isValidDecimal(v), "Formato incorrecto (solo números y 2 decimales).", null),
-                    new ColumnaConfig("Clave Beneficiario", 5, (v, l) -> Util.isValidStringWithoutSymbols(v), "Contiene símbolos, mayúsculas o acentos no permitidos.", null),
-                    new ColumnaConfig("RFC Beneficiario", 6, (v, l) -> Util.isValidStringWithoutSymbols(v), "Contiene símbolos, mayúsculas o acentos no permitidos.", null),
-                    new ColumnaConfig("Nombre Beneficiario", 7, (v, l) -> Util.isValidStringWithoutSymbols(v), "Contiene símbolos, mayúsculas o acentos no permitidos.", null),
-                    new ColumnaConfig("Referencia Pago", 8, (v, l) -> Util.isValidNumeric(v), "Debe contener solo números.", null),
-                    new ColumnaConfig("Concepto Pago", 9, (v, l) -> Util.isValidStringWithoutSymbols(v), "Contiene símbolos, mayúsculas o acentos no permitidos.", null),
-                    new ColumnaConfig("Dias Vigencia", 10, (v, l) -> Util.isValidNumeric(v), "Debe contener solo números.", null),
-                    new ColumnaConfig("Info Agrupar Pagos", 11, (v, l) -> Util.isValidStringWithoutSymbols(v), "Contiene símbolos, mayúsculas o acentos no permitidos.", null),
-                    new ColumnaConfig("Detalle Mail", 12, (v, l) -> Util.isValidEmail(v), "Contiene símbolos o acentos no permitidos.", null),
-                    new ColumnaConfig("Referencia Abono Banxico", 13, (v, l) -> Util.isValidNumeric(v), "Debe contener solo números.", null),
-                    new ColumnaConfig("Tipo Operacion", 14, (v, l) -> Util.isValidNumeric(v), "Debe contener solo números.", null)
-            );
+                List<ColumnaConfig> configuracion = Arrays.asList(
+                        new ColumnaConfig("Forma Pago", 0, Util::isValidAllowedValue, "Contiene valores no permitidos", allowedFormasPago),
+                        new ColumnaConfig("Tipo de Cuenta", 1, (v, l) -> Util.isValidNumeric(v, 1, 1), "Debe contener solo números o la longitud no es la correcta.", null),
+                        new ColumnaConfig("Banco Receptor", 2, (v, l) -> Util.isValidNumeric(v, 3, 3), "Debe contener solo números o la longitud no es la correcta.", null),
+                        new ColumnaConfig("Cuenta", 3, (v, l) -> Util.isValidNumeric(v, 11, 20), "Debe contener solo números o la longitud no es la correcta.", null),
+                        new ColumnaConfig("Importe Pago", 4, (v, l) -> Util.isValidDecimal(v, 1, 13), "Formato incorrecto (solo números y 2 decimales).", null),
+                        new ColumnaConfig("Clave Beneficiario", 5, (v, l) -> Util.isValidStringWithoutSymbols(v, 1, 20), "Contiene símbolos, mayúsculas o acentos no permitidos o la longitud no es la correcta.", null),
+                        new ColumnaConfig("RFC Beneficiario", 6, (v, l) -> Util.isValidStringWithoutSymbols(v,12, 13), "Contiene símbolos, mayúsculas o acentos no permitidos o la longitud no es la correcta.", null),
+                        new ColumnaConfig("Nombre Beneficiario", 7, (v, l) -> Util.isValidStringWithoutSymbols(v, 1, 40), "Contiene símbolos, mayúsculas o acentos no permitidos o la longitud no es la correcta.", null),
+                        new ColumnaConfig("Referencia Pago", 8, (v, l) -> Util.isValidNumeric(v, 1, 16), "Debe contener solo números o la longitud no es la correcta.", null),
+                        new ColumnaConfig("Concepto Pago", 9, (v, l) -> Util.isValidStringWithoutSymbols(v, 1, 40), "Contiene símbolos, mayúsculas o acentos no permitidos o la longitud no es la correcta.", null),
+                        new ColumnaConfig("Dias Vigencia", 10, (v, l) -> Util.isValidNumeric(v, 1, 2), "Debe contener solo números o la longitud no es la correcta.", null),
+                        new ColumnaConfig("Info Agrupar Pagos", 11, (v, l) -> Util.isValidStringWithoutSymbols(v, 0, 60), "Contiene símbolos, mayúsculas o acentos no permitidos o la longitud no es la correcta.", null),
+                        new ColumnaConfig("Detalle Mail", 12, (v, l) -> Util.isValidEmail(v, 1, 60), "Contiene símbolos o acentos no permitidos o la longitud no es la correcta.", null),
+                        new ColumnaConfig("Referencia Abono Banxico", 13, (v, l) -> Util.isValidNumeric(v, 0, 20), "Debe contener solo números o la longitud no es la correcta.", null),
+                        new ColumnaConfig("Tipo Operacion", 14, (v, l) -> Util.isValidNumeric(v, 0, 2), "Debe contener solo números o la longitud no es la correcta.", null)
+                );
 
-            try (FileInputStream fis = new FileInputStream(archivo);
-                 Workbook workbook = WorkbookFactory.create(fis)) {
+                try (FileInputStream fis = new FileInputStream(archivo);
+                     Workbook workbook = WorkbookFactory.create(fis)) {
 
-                Sheet hoja = workbook.getSheetAt(0);
-                dataList.clear();
+                    Sheet hoja = workbook.getSheetAt(0);
+                    dataList.clear();
 
-                for (int i = 1; i <= hoja.getLastRowNum(); i++) {
-                    Row fila = hoja.getRow(i);
-                    if (fila != null) {
+                    for (int i = 1; i <= hoja.getLastRowNum(); i++) {
+                        Row fila = hoja.getRow(i);
+                        if (fila != null) {
 
-                        boolean filaTieneErrores = false;
+                            boolean filaTieneErrores = false;
 
-                        String[] valoresCelda = new String[configuracion.size()];
+                            String[] valoresCelda = new String[configuracion.size()];
 
-                        for (ColumnaConfig config : configuracion) {
-                            String valor = getCellValue(fila.getCell(config.indice));
+                            for (ColumnaConfig config : configuracion) {
+                                String valor = getCellValue(fila.getCell(config.indice));
 
-                            boolean esValido = config.validador.apply(valor, config.valoresPermitidos);
+                                boolean esValido = config.validador.apply(valor, config.valoresPermitidos);
 
-                            if (!esValido) {
-                                erroresDeFormato.add(new ErrorData(i + 1, config.nombre, valor, config.mensajeError));
-                                filaTieneErrores = true;
-                                valoresCelda[config.indice] = "";
-                            } else {
-                                valoresCelda[config.indice] = valor;
+                                if (!esValido) {
+                                    erroresDeFormato.add(new ErrorData(i + 1, config.nombre, valor, config.mensajeError));
+                                    filaTieneErrores = true;
+                                    valoresCelda[config.indice] = "";
+                                } else {
+                                    valoresCelda[config.indice] = valor;
+                                }
+                            }
+                            if (!filaTieneErrores) {
+                                dataList.add(new SistemaDispersionData(
+                                        i,
+                                        valoresCelda[0], valoresCelda[1], valoresCelda[2], valoresCelda[3], valoresCelda[4],
+                                        valoresCelda[5], valoresCelda[6], valoresCelda[7], valoresCelda[8], valoresCelda[9],
+                                        valoresCelda[10], valoresCelda[11], valoresCelda[12], valoresCelda[13], valoresCelda[14]
+                                ));
                             }
                         }
-                        if (!filaTieneErrores) {
-                            dataList.add(new SistemaDispersionData(
-                                    i,
-                                    valoresCelda[0], valoresCelda[1], valoresCelda[2], valoresCelda[3], valoresCelda[4],
-                                    valoresCelda[5], valoresCelda[6], valoresCelda[7], valoresCelda[8], valoresCelda[9],
-                                    valoresCelda[10], valoresCelda[11], valoresCelda[12], valoresCelda[13], valoresCelda[14]
-                            ));
-                        }
                     }
-                }
 
-                if (!erroresDeFormato.isEmpty()) {
-                    Util.mostrarAlerta("El excel cargado contiene errores, se descargará un excel con los errores");
-                    Util.exportarErroresAExcel(erroresDeFormato);
+                    if (!erroresDeFormato.isEmpty()) {
+                        Util.mostrarAlerta("El excel cargado contiene errores, se descargará un excel con los errores");
+                        Util.exportarErroresAExcel(erroresDeFormato);
+                    }
+                    habilitaTabla(false);
+                    tableViewDispersionFondos.refresh();
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
-                tableViewDispersionFondos.refresh();
-            } catch (Exception ex) {
-                ex.printStackTrace();
             }
         }
     }

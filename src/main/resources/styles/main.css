@@ -21,3 +21,21 @@
 .error-cell .text {
     -fx-fill: red;
 }
+
+.disabled-overlay {
+    /* Fondo ligeramente gris/oscuro para crear el sombreado */
+    -fx-background-color: #F0F0F0;
+
+    /* Reducir ligeramente la opacidad del contenido de la tabla */
+    -fx-opacity: 0.7;
+
+    /* Borde para diferenciar */
+    -fx-border-color: #CCCCCC;
+    -fx-border-width: 1px;
+}
+
+/* Opcional: Esto aplica el estilo a la celda específica de la tabla, no solo al fondo */
+.disabled-overlay .table-cell {
+    -fx-opacity: 0.7;
+    -fx-background-color: #F5F5F5;
+}

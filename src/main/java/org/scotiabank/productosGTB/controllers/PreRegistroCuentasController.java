@@ -1,5 +1,6 @@
 package org.scotiabank.productosGTB.controllers;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -67,6 +68,9 @@ public class PreRegistroCuentasController {
 
     @FXML
     public void initialize() {
+        Platform.runLater(() -> {
+            tableViewPreRegistroCuentas.getScene().getRoot().requestFocus();
+        });
         agregaTooltips();
         restringeTextField();
         fillAllComboBox();
@@ -265,6 +269,16 @@ public class PreRegistroCuentasController {
                     int contadorBajas = 0;
                     int contadorCambios = 0;
                     int contadorConsultas = 0;
+                    String numContratoCompleto;
+                    String fillerLinea1;
+
+                    if(textFieldContractNumber.getText().length() >= 6 ){
+                        numContratoCompleto = Util.rellenarConCerosIzquierda(textFieldContractNumber.getText(), 12);
+                        fillerLinea1 = Util.rellenarConCerosIzquierda("", 97);
+                    }else{
+                        numContratoCompleto = Util.rellenarConCerosIzquierda(textFieldContractNumber.getText(), 7);
+                        fillerLinea1 = Util.rellenarConCerosIzquierda("", 94);
+                    }
                     //Escribimos las dos primeras lineas del txt
                     writer.println(Constants.ARCHIVO_MOVIMIENTOS_ENTRADA
                             + Constants.TIPO_REGISTRO_HA
@@ -277,7 +291,8 @@ public class PreRegistroCuentasController {
                             + Util.rellenarConCerosIzquierda("", 8)
                             + Util.rellenarConCerosIzquierda("", 6)
                             + Util.rellenarConCerosIzquierda("", 3)
-                            + Util.rellenarConEspaciosDerecha("", 97));
+                            + Util.rellenarConEspaciosDerecha("", 97)
+                            + fillerLinea1);
 
                     for (PreRegistroCuentasData data : dataList) {
                         //Sumamos uno al contador de registors que se han hecho
@@ -351,7 +366,7 @@ public class PreRegistroCuentasController {
         //Validaciones de textfield
         //Validacion solo numeros y maximo de caracteres
         textFieldContractNumber.textProperty().addListener((obs, oldValue, newValue) -> {
-            TextFieldValidator.validarNumerosYMaxLength(textFieldContractNumber, 7);
+            TextFieldValidator.validarNumerosYMaxLength(textFieldContractNumber, 12);
         });
 
         // Validación al perder el foco: longitud mínima
