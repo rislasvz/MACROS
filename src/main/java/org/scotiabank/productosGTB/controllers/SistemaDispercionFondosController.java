@@ -129,7 +129,6 @@ public class SistemaDispercionFondosController {
         fillAllComboBox();
         agregaTooltips();
 
-        //tableViewDispersionFondos.setItems(datos);
         Platform.runLater(() -> {
             // Siempre agrega el registro vacío
             dataList = FXCollections.observableArrayList(
@@ -137,33 +136,16 @@ public class SistemaDispercionFondosController {
             );
             tableViewDispersionFondos.setItems(dataList);
 
-            // Configura el botón de carga
             btnCargar.setOnAction(e -> importarExcel());
 
             // Si se indicó que se debe cargar Excel, ejecuta el método
             if (cargarDesdeExcel) {
-                habilitaTabla(true);
+                Util.setTablaEditable(tableViewDispersionFondos, btnAgregarFila, btnEliminarFila, true);
             }
         });
 
 
         fillTable();
-    }
-
-    @FXML
-    private void habilitaTabla(boolean editable) {
-        tableViewDispersionFondos.setEditable(!editable);
-        if(!editable){
-            tableViewDispersionFondos.getStyleClass().add("disabled-overlay");
-        }else{
-            tableViewDispersionFondos.getStyleClass().remove("disabled-overlay");
-        }
-        if (btnAgregarFila != null) {
-            btnAgregarFila.setDisable(editable);
-        }
-        if (btnEliminarFila != null) {
-            btnEliminarFila.setDisable(editable);
-        }
     }
 
     public void fillAllComboBox(){
@@ -436,6 +418,10 @@ public class SistemaDispercionFondosController {
             errorLabelFechaAplicacion.setText("Este campo es requerido.");
             errorLabelFechaAplicacion.setVisible(true);
             allFieldsAreValid = false;
+        }
+
+        if(!allFieldsAreValid && cargarDesdeExcel){
+            return false;
         }
 
         // Validar la tabla (sin mostrar la alerta aquí)
@@ -751,7 +737,7 @@ public class SistemaDispercionFondosController {
                         Util.mostrarAlerta("El excel cargado contiene errores, se descargará un excel con los errores");
                         Util.exportarErroresAExcel(erroresDeFormato);
                     }
-                    habilitaTabla(false);
+                    Util.setTablaEditable(tableViewDispersionFondos, btnAgregarFila, btnEliminarFila, false);
                     tableViewDispersionFondos.refresh();
 
                 } catch (Exception ex) {

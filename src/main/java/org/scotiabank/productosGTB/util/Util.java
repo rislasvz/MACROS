@@ -674,4 +674,20 @@ public class Util {
         }
     }
 
+    public static void setTablaEditable(TableView<?> tableView, Button btnAgregar, Button btnEliminar, boolean editable) {
+        boolean isEditable = !editable;
+        tableView.setEditable(isEditable);
+        if (!isEditable) {
+            tableView.getStyleClass().add("disabled-overlay");
+        } else {
+            tableView.getStyleClass().remove("disabled-overlay");
+        }
+        if (btnAgregar != null) {
+            btnAgregar.setDisable(!isEditable);
+        }
+        if (btnEliminar != null) {
+            btnEliminar.setDisable(!isEditable);
+        }
+    }
+
 }

@@ -24,10 +24,17 @@
                <Font size="24.0" />
             </font>
          </Button>
-           <Button onAction="#abrirCapturaInformacionPreRegistro" style="-fx-background-color: transparent;" text="&gt; Captura Información PreRegistro">
+           <Button onAction="#abrirCapturaInformacionPreRegistroSinExcel" style="-fx-background-color: transparent;" text="&gt; Captura Información PreRegistro">
             <font>
                <Font size="24.0" />
             </font></Button>
+           <cursor>
+               <Cursor fx:constant="HAND" />
+           </cursor>
+           <Button onAction="#abrirCapturaInformacionPreRegistroConExcel" style="-fx-background-color: transparent;" text="&gt; Importar Archivo - Excel">
+               <font>
+                   <Font size="24.0" />
+               </font></Button>
            <cursor>
                <Cursor fx:constant="HAND" />
            </cursor>

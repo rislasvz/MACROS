@@ -56,11 +56,45 @@ public class CapturaInformacion {
     }
 
     @FXML
-    private void abrirCapturaInformacionPreRegistro(ActionEvent event) {
-        String url = "/fxml/PreRegistroDeCuentas/PreRegistroCuentas.fxml";
-        String title = "Pre-Registro Cuentas";
-        Service service = new Service();
-        service.navegacion(url,title, event);
+    private void abrirCapturaInformacionPreRegistroSinExcel(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(Service.class.getResource("/fxml/PreRegistroDeCuentas/PreRegistroCuentas.fxml"));
+            Parent root = fxmlLoader.load();
+            PreRegistroCuentasController controlador = fxmlLoader.getController();
+            controlador.setCargarDesdeExcel(false);
+
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setTitle("Pre-Registro Cuentas");
+            stage.setScene(scene);
+            ((Node) event.getSource()).getScene().getWindow().hide();
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error al cargar la nueva ventana.");
+        }
+    }
+
+    @FXML
+    private void abrirCapturaInformacionPreRegistroConExcel(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(Service.class.getResource("/fxml/PreRegistroDeCuentas/PreRegistroCuentas.fxml"));
+            Parent root = fxmlLoader.load();
+            PreRegistroCuentasController controlador = fxmlLoader.getController();
+            controlador.setCargarDesdeExcel(true);
+
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setTitle("Pre-Registro Cuentas");
+            stage.setScene(scene);
+            ((Node) event.getSource()).getScene().getWindow().hide();
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error al cargar la nueva ventana.");
+        }
     }
 
 

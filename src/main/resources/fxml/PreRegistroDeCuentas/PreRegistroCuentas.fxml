@@ -81,7 +81,7 @@
                                                 <Cursor fx:constant="HAND" />
                                             </cursor>
                                         </Button>
-                                        <Button layoutX="575.0" layoutY="332.0" mnemonicParsing="false" onAction="#imprimeValores" style="-fx-background-color: transparent;" text="Imprimir" textFill="#40d3ff">
+                                        <Button fx:id="btnCargar" layoutX="575.0" layoutY="332.0" mnemonicParsing="false" onAction="#importarExcel" style="-fx-background-color: transparent;" text="Importar" textFill="#40d3ff">
                                             <font>
                                                 <Font size="18.0" />
                                             </font>
@@ -119,12 +119,12 @@
                 </ScrollPane>
                 <HBox alignment="CENTER_LEFT" spacing="10">
                     <children>
-                        <Button onAction="#agregarFila" prefHeight="35.0" prefWidth="125.0" style="-fx-background-color: #008000; -fx-border-radius: 7px;" text="Agregar Fila" textFill="WHITE">
+                        <Button fx:id="btnAgregarFila" onAction="#agregarFila" prefHeight="35.0" prefWidth="125.0" style="-fx-background-color: #008000; -fx-border-radius: 7px;" text="Agregar Fila" textFill="WHITE">
                             <font>
                                 <Font size="14.0" />
                             </font>
                         </Button>
-                        <Button onAction="#eliminarFila" prefHeight="35.0" prefWidth="125.0" style="-fx-background-color: #ff0000; -fx-border-radius: 7px;" text="Eliminar Fila" textFill="WHITE">
+                        <Button fx:id="btnEliminarFila" onAction="#eliminarFila" prefHeight="35.0" prefWidth="125.0" style="-fx-background-color: #ff0000; -fx-border-radius: 7px;" text="Eliminar Fila" textFill="WHITE">
                             <font>
                                 <Font size="14.0" />
                             </font>

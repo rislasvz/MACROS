@@ -9,20 +9,26 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.scotiabank.productosGTB.business.Service;
+import org.scotiabank.productosGTB.data.ErrorData;
 import org.scotiabank.productosGTB.data.TooltipMessages;
 import org.scotiabank.productosGTB.enums.MaintOrConsultationEnum;
 import org.scotiabank.productosGTB.model.PreRegistroCuentasData;
-import org.scotiabank.productosGTB.util.Constants;
-import org.scotiabank.productosGTB.util.TextFieldValidator;
-import org.scotiabank.productosGTB.util.TooltipManager;
-import org.scotiabank.productosGTB.util.Util;
+import org.scotiabank.productosGTB.model.SistemaDispersionData;
+import org.scotiabank.productosGTB.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class PreRegistroCuentasController {
 
@@ -65,6 +71,15 @@ public class PreRegistroCuentasController {
     private Label errorLabelFechaDeSolicitud;
     @FXML
     private Label errorLabelFileNumberOfTheDay;
+    @FXML
+    private Button btnCargar;
+    @FXML
+    private Button btnAgregarFila;
+    @FXML
+    private Button btnEliminarFila;
+
+    private boolean cargarDesdeExcel = false;
+    private boolean campoEditado = false;
 
     @FXML
     public void initialize() {
@@ -74,10 +89,18 @@ public class PreRegistroCuentasController {
         agregaTooltips();
         restringeTextField();
         fillAllComboBox();
-        dataList = FXCollections.observableArrayList(
-                new PreRegistroCuentasData(1, "", "", "", "", "", "", "", "", "")
-        );
-        tableViewPreRegistroCuentas.setItems(dataList);
+        Platform.runLater(() -> {
+            // Siempre agrega el registro vacío
+            dataList = FXCollections.observableArrayList(
+                    new PreRegistroCuentasData(1, "", "", "", "", "", "", "", "", "")
+            );
+            tableViewPreRegistroCuentas.setItems(dataList);
+            btnCargar.setOnAction(e -> importarExcel());
+
+            if (cargarDesdeExcel) {
+                Util.setTablaEditable(tableViewPreRegistroCuentas, btnAgregarFila, btnEliminarFila, true);
+            }
+        });
         fillTable();
     }
 
@@ -168,6 +191,9 @@ public class PreRegistroCuentasController {
             errorLabelFechaDeSolicitud.setText("Este campo es requerido.");
             errorLabelFechaDeSolicitud.setVisible(true);
             allFieldsAreValid = false;
+        }
+        if(!allFieldsAreValid && cargarDesdeExcel){
+            return false;
         }
 
         // Validar la tabla (sin mostrar la alerta aquí)
@@ -369,9 +395,13 @@ public class PreRegistroCuentasController {
             TextFieldValidator.validarNumerosYMaxLength(textFieldContractNumber, 12);
         });
 
+        textFieldContractNumber.textProperty().addListener((obs, oldVal, newVal) -> {
+            campoEditado = true;
+        });
+
         // Validación al perder el foco: longitud mínima
         textFieldContractNumber.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
-            if (!isNowFocused) {
+            if (!isNowFocused && campoEditado) {
                 TextFieldValidator.validarMinLength(textFieldContractNumber, 1);
             }
         });
@@ -389,17 +419,119 @@ public class PreRegistroCuentasController {
         });
     }
 
-    public void imprimeValores() {
-        ObservableList<PreRegistroCuentasData> dataList = tableViewPreRegistroCuentas.getItems();
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyyMMdd");
-        for (PreRegistroCuentasData data : dataList) {
+    @FXML
+    private void importarExcel() {
+        if(validateForm()){
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Selecciona archivo Excel");
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
+            File archivo = fileChooser.showOpenDialog(btnCargar.getScene().getWindow());
 
+            if (archivo != null) {
+                List<ErrorData> erroresDeFormato = new ArrayList<>();
+
+                List<String> allowedTipoRegistro = Arrays.asList("DA", "DC", "DB", "DQ");
+                List<String> allowedTipoPago = Arrays.asList("01", "02", "03", "04");
+                List<String> allowedTipoCuenta = Arrays.asList("01", "02", "03", "04", "09");
+                List<String> allowedMonedaCuenta = Arrays.asList("00", "01");
+
+                List<ColumnaConfig> configuracion = Arrays.asList(
+                        new ColumnaConfig("Tipo Registro", 0, Util::isValidAllowedValue, "Contiene valores no permitidos", allowedTipoRegistro),
+                        new ColumnaConfig("Tipo Pago", 1, Util::isValidAllowedValue, "Contiene valores no permitidos", allowedTipoPago),
+                        new ColumnaConfig("Tipo Cuenta", 2, Util::isValidAllowedValue, "Contiene valores no permitidos", allowedTipoCuenta),
+                        new ColumnaConfig("Moneda Cuenta", 3, Util::isValidAllowedValue, "Contiene valores no permitidos", allowedMonedaCuenta),
+                        new ColumnaConfig("Clave Banco", 4, (v, l) -> Util.isValidNumeric(v, 1, 3), "Debe contener solo números o la longitud no es la correcta.", null),
+                        new ColumnaConfig("Cuenta Abono", 5, (v, l) -> Util.isValidNumeric(v, 11, 18), "Debe contener solo números o la longitud no es la correcta.", null),
+                        new ColumnaConfig("Limite Transaccion", 6, (v, l) -> Util.isValidDecimal(v, 1, 3), "Formato incorrecto (solo números y 2 decimales).", null),
+                        new ColumnaConfig("Fecha Eliminacion", 7, (v, l) -> Util.isValidNumeric(v, 8, 8), "Debe contener solo números o la longitud no es la correcta.", null),
+                        new ColumnaConfig("Descripcion", 8, (v, l) -> Util.isValidStringWithoutSymbols(v, 0, 50), "Contiene símbolos, mayúsculas o acentos no permitidos o la longitud no es la correcta.", null)
+                );
+                descripcion.setCellFactory(Util.createStringWithoutSymbolsCellFactory(1, 50));
+
+                try (FileInputStream fis = new FileInputStream(archivo);
+                     Workbook workbook = WorkbookFactory.create(fis)) {
+
+                    Sheet hoja = workbook.getSheetAt(0);
+                    dataList.clear();
+
+                    for (int i = 1; i <= hoja.getLastRowNum(); i++) {
+                        Row fila = hoja.getRow(i);
+                        if (fila != null) {
+
+                            boolean filaTieneErrores = false;
+
+                            String[] valoresCelda = new String[configuracion.size()];
+
+                            for (ColumnaConfig config : configuracion) {
+                                String valor = getCellValue(fila.getCell(config.indice));
+
+                                boolean esValido = config.validador.apply(valor, config.valoresPermitidos);
+
+                                if (!esValido) {
+                                    erroresDeFormato.add(new ErrorData(i + 1, config.nombre, valor, config.mensajeError));
+                                    filaTieneErrores = true;
+                                    valoresCelda[config.indice] = "";
+                                } else {
+                                    valoresCelda[config.indice] = valor;
+                                }
+                            }
+                            if (!filaTieneErrores) {
+                                dataList.add(new PreRegistroCuentasData(
+                                        i,
+                                        valoresCelda[0], valoresCelda[1], valoresCelda[2], valoresCelda[3], valoresCelda[4],
+                                        valoresCelda[5], valoresCelda[6], valoresCelda[7], valoresCelda[8]
+                                ));
+                            }
+                        }
+                    }
+
+                    if (!erroresDeFormato.isEmpty()) {
+                        Util.mostrarAlerta("El excel cargado contiene errores, se descargará un excel con los errores");
+                        Util.exportarErroresAExcel(erroresDeFormato);
+                    }
+                    habilitaTabla(false);
+                    tableViewPreRegistroCuentas.refresh();
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
         }
+    }
+
+    @FXML
+    private void habilitaTabla(boolean editable) {
+        tableViewPreRegistroCuentas.setEditable(!editable);
+        if(!editable){
+            tableViewPreRegistroCuentas.getStyleClass().add("disabled-overlay");
+        }else{
+            tableViewPreRegistroCuentas.getStyleClass().remove("disabled-overlay");
+        }
+        if (btnAgregarFila != null) {
+            btnAgregarFila.setDisable(editable);
+        }
+        if (btnEliminarFila != null) {
+            btnEliminarFila.setDisable(editable);
+        }
+    }
+
+    private String getCellValue(Cell cell) {
+        if (cell == null) return "";
+        return switch (cell.getCellType()) {
+            case STRING -> cell.getStringCellValue();
+            case NUMERIC -> String.valueOf((int) cell.getNumericCellValue());
+            case BOOLEAN -> String.valueOf(cell.getBooleanCellValue());
+            default -> "";
+        };
     }
 
     public void agregaTooltips(){
         TooltipManager.applyTooltip(textFieldContractNumber, TooltipMessages.CONTRACT_NUMBER_TOOLTIP);
         TooltipManager.applyTooltip(textFieldFileNumberOfTheDay, TooltipMessages.FILE_NUMBRER_OF_THE_DAY_TOOLTIP);
+    }
+
+    public void setCargarDesdeExcel(boolean cargarDesdeExcel) {
+        this.cargarDesdeExcel = cargarDesdeExcel;
     }
 
     @FXML
