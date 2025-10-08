@@ -161,7 +161,7 @@ public class PreRegistroCuentasController {
     }
 
     @FXML
-    private boolean validateForm() {
+    private boolean validateForm(boolean validateAll) {
         boolean allFieldsAreValid = true;
 
         // Limpiar estilos y mensajes de error de todos los campos
@@ -194,6 +194,8 @@ public class PreRegistroCuentasController {
         }
         if(!allFieldsAreValid && cargarDesdeExcel){
             return false;
+        }else if(!validateAll){
+            return true;
         }
 
         // Validar la tabla (sin mostrar la alerta aquí)
@@ -277,7 +279,7 @@ public class PreRegistroCuentasController {
     public void exportarDatosAArchivoOptimizada() {
         tableViewPreRegistroCuentas.refresh();
         //if (true) {
-        if (validateForm()) {
+        if (validateForm(true)) {
             DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyyMMdd");
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Guardar Archivo de Datos");
@@ -421,7 +423,7 @@ public class PreRegistroCuentasController {
 
     @FXML
     private void importarExcel() {
-        if(validateForm()){
+        if(validateForm(false)){
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Selecciona archivo Excel");
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
