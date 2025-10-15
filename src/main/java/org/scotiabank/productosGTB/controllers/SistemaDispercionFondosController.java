@@ -11,6 +11,7 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.KeyCode;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.scene.control.Hyperlink;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -100,7 +101,7 @@ public class SistemaDispercionFondosController {
     @FXML
     private Label errorLabelFechaAplicacion;
     @FXML
-    private Button btnCargar;
+    private Hyperlink btnCargar;
     @FXML
     private Button btnAgregarFila;
     @FXML

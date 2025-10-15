@@ -7,28 +7,35 @@
 <?import javafx.scene.text.*?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="671.0" prefWidth="1325.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.scotiabank.productosGTB.controllers.SistemaDispercionFondosController">
-
+   <top>
+      <HBox alignment="CENTER_LEFT" prefHeight="70.0" spacing="10.0" BorderPane.alignment="CENTER_LEFT">
+         <children>
+            <Button layoutX="1075.0" layoutY="3.0" mnemonicParsing="false" onAction="#regresar" prefHeight="25.0" prefWidth="134.0" style="-fx-background-color: transparent; -fx-border-color: #6c757d; -fx-border-radius: 5px;" text="Regresar">
+               <HBox.margin>
+                  <Insets left="30.0" />
+               </HBox.margin>
+            </Button>
+            <Pane HBox.hgrow="ALWAYS" />
+            <VBox alignment="CENTER" prefHeight="70.0" prefWidth="275.0">
+               <children>
+                  <Label text="Capturar Información">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label text="Dispersión de fondos">
+                     <font>
+                        <Font size="14.0" />
+                     </font></Label>
+               </children>
+            </VBox>
+            <Pane HBox.hgrow="ALWAYS" />
+         </children>
+      </HBox>
+   </top>
    <center>
       <VBox>
          <children>
-            <HBox alignment="CENTER_LEFT" prefHeight="70.0" spacing="10.0">
-               <children>
-                  <Label prefHeight="35.0" prefWidth="171.0" text="Productos GTB" HBox.hgrow="NEVER">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets left="30.0" />
-                     </HBox.margin>
-                  </Label>
-                  <Pane prefHeight="35.0" prefWidth="468.0" />
-                  <Label prefHeight="35.0" prefWidth="380.0" text="Sistema de Dispersión de Fondos">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-               </children>
-            </HBox>
             <Separator prefHeight="3.0" style="-fx-background-color: black;">
                <VBox.margin>
                   <Insets left="30.0" right="30.0" />
@@ -38,69 +45,137 @@
                <content>
                   <AnchorPane prefHeight="953.0" prefWidth="948.0">
                      <children>
-                        <AnchorPane layoutX="30.0" layoutY="14.0" prefHeight="403.0" prefWidth="989.0" style="-fx-border-color: D6D6D6; -fx-border-radius: 10px;" AnchorPane.bottomAnchor="536.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="14.0">
+                        <AnchorPane layoutX="30.0" layoutY="14.0" prefHeight="250.0" prefWidth="1265.0" style="-fx-border-color: D6D6D6; -fx-border-radius: 10px;" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="14.0">
                            <children>
-                              <Label layoutX="77.0" layoutY="14.0" text="Captura de Información">
-                                 <font>
-                                    <Font name="System Bold" size="24.0" />
-                                 </font>
-                              </Label>
-                              <Label layoutX="89.0" layoutY="81.0" text="NÚMERO DE CLIENTE: *">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                              </Label>
-                              <Label layoutX="449.0" layoutY="81.0" text="TIPO DE ARCHIVO: *">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                              </Label>
-                              <Label layoutX="796.0" layoutY="78.0" text="NO.ARCHIVO DEL DÍA: *">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                              </Label>
-                              <Label layoutX="89.0" layoutY="160.0" text="CUENTA DE CARGO: *">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                              </Label>
-                              <Label layoutX="449.0" layoutY="160.0" text="REFERENCIA EMPRESA: *">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                              </Label>
-                              <Label layoutX="796.0" layoutY="157.0" text="FECHA DE APLICACIÓN: *">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                              </Label>
-                              <Label layoutX="89.0" layoutY="233.0" text="CONCEPTO DE PAGO: *">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                              </Label>
-                              <Label layoutX="449.0" layoutY="233.0" text="CVE MONEDA DE PAGO: *">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                              </Label>
-                              <TextField fx:id="textFieldClientNumber" layoutX="88.0" layoutY="101.0" prefHeight="35.0" prefWidth="307.0" />
-                              <Label fx:id="errorLabelClientNumber" layoutX="88.0" layoutY="136.0" textFill="RED" visible="false" />
-                              <TextField fx:id="textFieldChargeAccount" layoutX="88.0" layoutY="180.0" prefHeight="35.0" prefWidth="310.0" />
-                              <Label fx:id="errorLabelChargeAccount" layoutX="88.0" layoutY="215.0" textFill="RED" visible="false" />
-                              <TextField fx:id="textFieldFileNumberOfTheDay" layoutX="796.0" layoutY="98.0" prefHeight="35.0" prefWidth="338.0" />
-                              <Label fx:id="errorLabelFileNumberOfTheDay" layoutX="800.0" layoutY="136.0" textFill="RED" visible="false" />
-                              <TextField fx:id="textFieldCompanyReference" layoutX="449.0" layoutY="180.0" prefHeight="35.0" prefWidth="306.0" />
-                              <Label fx:id="errorLabelCompanyReference" layoutX="450.0" layoutY="215.0" textFill="RED" visible="false" />
-                              <ComboBox fx:id="comboBoxFileType" layoutX="444.0" layoutY="101.0" prefHeight="35.0" prefWidth="309.0" />
-                              <ComboBox fx:id="comboBoxPaymentConcept" layoutX="88.0" layoutY="253.0" prefHeight="35.0" prefWidth="313.0" />
-                              <ComboBox fx:id="comboBoxPaymentCurrency" layoutX="446.0" layoutY="253.0" prefHeight="35.0" prefWidth="311.0" />
-                              <DatePicker fx:id="datePicketFechaAplicacion" layoutX="796.0" layoutY="177.0" prefHeight="35.0" prefWidth="340.0" />
-                              <Label fx:id="errorLabelFechaAplicacion" layoutX="800.0" layoutY="215.0" textFill="RED" visible="false" />
+                              <VBox layoutX="50.0" layoutY="30.0" prefHeight="234.0" prefWidth="340.0" spacing="5.0">
+                                 <children>
+                                    <Label text="Número de cliente:">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="textFieldClientNumber" prefHeight="35.0" prefWidth="307.0" />
+                                    <Label fx:id="errorLabelClientNumber" textFill="RED" visible="false" />
+                                    <Label text="Cuenta de cargo:">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="textFieldChargeAccount" prefHeight="35.0" prefWidth="310.0" />
+                                    <Label fx:id="errorLabelChargeAccount" textFill="RED" visible="false" />
+                                    <Label text="Concepto de pago:">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <ComboBox fx:id="comboBoxPaymentConcept" prefHeight="35.0" prefWidth="341.0" />
+                                 </children>
+                              </VBox>
+                              <VBox layoutX="470.0" layoutY="30.0" prefHeight="234.0" prefWidth="340.0" spacing="5.0">
+                                 <children>
+                                    <Label text="Tipo de archivo:">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <ComboBox fx:id="comboBoxFileType" prefHeight="35.0" prefWidth="339.0" />
+                                    <Label fx:id="label123" textFill="RED" visible="false" />
+                                    <Label text="Referencia de la empresa:">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="textFieldCompanyReference" prefHeight="35.0" prefWidth="306.0" />
+                                    <Label fx:id="errorLabelCompanyReference" textFill="RED" visible="false" />
+                                    <Label text="Clave de moneda:">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <ComboBox fx:id="comboBoxPaymentCurrency" prefHeight="35.0" prefWidth="344.0" />
+                                 </children>
+                              </VBox>
+                              <VBox layoutX="890.0" layoutY="30.0" prefHeight="234.0" prefWidth="340.0" spacing="5.0">
+                                 <children>
+                                    <Label text="Número de archivo del día:">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="textFieldFileNumberOfTheDay" prefHeight="35.0" prefWidth="338.0" />
+                                    <Label fx:id="errorLabelFileNumberOfTheDay" textFill="RED" visible="false" />
+                                    <Label text="Fecha de aplicación:">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <DatePicker fx:id="datePicketFechaAplicacion" prefHeight="35.0" prefWidth="340.0" />
+                                    <Label fx:id="errorLabelFechaAplicacion" textFill="RED" visible="false" />
+                                 </children>
+                              </VBox>
                               <Label fx:id="dummyFocus" visible="false" />
-                              <Separator layoutX="32.0" layoutY="308.0" prefHeight="1.0" prefWidth="1195.0" style="-fx-background-color: black;" />
-                              <Button layoutX="153.0" layoutY="330.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="125.0" style="-fx-background-color: transparent; -fx-border-radius: 7px; -fx-border-color: ff0000; -fx-border-width: 2px;" text="Eliminar" textFill="RED">
+                           </children>
+                        </AnchorPane>
+                        <TableView fx:id="tableViewDispersionFondos" editable="true" layoutX="30.0" layoutY="338.0" prefHeight="513.0" prefWidth="1250.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0">
+                           <columns>
+                              <TableColumn fx:id="num" prefWidth="80.0" style="-fx-alignment: center;" text="Num." />
+                              <TableColumn fx:id="formaPago" prefWidth="80.0" style="-fx-alignment: center;" text="Forma Pago" />
+                              <TableColumn fx:id="tipoCuenta" prefWidth="80.0" style="-fx-alignment: center;" text="Tipo Cuenta" />
+                              <TableColumn fx:id="bancoReceptor" prefWidth="95.0" style="-fx-alignment: center;" text="Banco Receptor" />
+                              <TableColumn fx:id="cuenta" prefWidth="125.0" style="-fx-alignment: center;" text="Cuenta" />
+                              <TableColumn fx:id="importePago" prefWidth="135.0" style="-fx-alignment: center;" text="Importe Pago" />
+                              <TableColumn fx:id="claveBeneficiario" prefWidth="110.0" style="-fx-alignment: center;" text="Clave Beneficiario" />
+                              <TableColumn fx:id="rfcBeneficiario" prefWidth="105.0" style="-fx-alignment: center;" text="RFC Beneficiario" />
+                              <TableColumn fx:id="nombreBeneficiario" prefWidth="125.0" style="-fx-alignment: center;" text="Nombre Beneficiario" />
+                              <TableColumn fx:id="referenciaPago" prefWidth="105.0" style="-fx-alignment: center;" text="Referencia Pago" />
+                              <TableColumn fx:id="conceptoPago" prefWidth="170.0" style="-fx-alignment: center;" text="Concepto de Pago (Opcional)" />
+                              <TableColumn fx:id="diasVigencia" prefWidth="90.0" style="-fx-alignment: center;" text="Dias Vigencia" />
+                              <TableColumn fx:id="infoAgruparPagos" prefWidth="140.0" style="-fx-alignment: center;" text="Info Agrupar Pagos (Opcional)" />
+                              <TableColumn fx:id="detalleMail" prefWidth="140.0" style="-fx-alignment: center;" text="Detalle Mail (Obligatorio)" />
+                              <TableColumn text="SOLO SPID">
+                                 <columns>
+                                    <TableColumn fx:id="referenciaAbonoBanxico" prefWidth="140.0" style="-fx-alignment: center;" text="Referencia Abono Banxico" />
+                                    <TableColumn fx:id="tipoOperacion" prefWidth="120.0" style="-fx-alignment: center;" text="Tipo de Operación" />
+                                 </columns>
+                              </TableColumn>
+                           </columns>
+                        </TableView>
+                        <HBox alignment="CENTER_RIGHT" layoutX="30.0" layoutY="879.0" prefWidth="1265.0" spacing="20.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0">
+                           <children>
+                              <Button fx:id="btnAgregarFila" onAction="#agregarFila" style="-fx-background-color: transparent; -fx-border-color: #008000; -fx-border-radius: 5px;" text="⊕ Agregar una fila" textFill="#008000">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
+                              <Button fx:id="btnEliminarFila" onAction="#eliminarFila" style="-fx-background-color: transparent; -fx-border-color: #ff0000; -fx-border-radius: 5px;" text="⊖ Eliminar una fila" textFill="#ff0000">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <Hyperlink fx:id="btnCargar" layoutX="77.0" layoutY="289.0" onAction="#importarExcel">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Hyperlink>
+                        <HBox alignment="CENTER" layoutX="44.0" layoutY="295.0" spacing="5.0">
+                           <children>
+                              <Label style="-fx-text-fill: #68BDE4;" text="↓">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label style="-fx-text-fill: #68BDE4;" text="Importar un archivo de Excel">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutY="930.0" prefHeight="50.0" spacing="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                           <children>
+                              <Button mnemonicParsing="false" prefHeight="43.0" prefWidth="214.0" style="-fx-background-color: transparent; -fx-border-radius: 7px; -fx-border-color: #e83e8c; -fx-border-width: 2px;" text="Eliminar información" textFill="#e83e8c">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -108,15 +183,7 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </Button>
-                              <Button fx:id="btnCargar" layoutX="575.0" layoutY="332.0" mnemonicParsing="false" onAction="#importarExcel" style="-fx-background-color: transparent;" text="Importar" textFill="#40d3ff">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </Button>
-                              <Button layoutX="999.0" layoutY="330.0" mnemonicParsing="false" onAction="#exportarDatosAArchivoOptimizada" prefHeight="35.0" prefWidth="125.0" style="-fx-background-color: transparent; -fx-border-radius: 7px; -fx-border-color: #0049ff; -fx-border-width: 2px;" text="Archivo" textFill="#0049ff">
+                              <Button fx:id="btnGenerarArchivo1" mnemonicParsing="false" onAction="#exportarDatosAArchivoOptimizada" prefHeight="35.0" prefWidth="221.0" style="-fx-background-color: #e83e8c; -fx-border-radius: 7px;" text="Generar archivo TXT" textFill="WHITE">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -125,62 +192,14 @@
                                  </cursor>
                               </Button>
                            </children>
-                        </AnchorPane>
-                        <TableView fx:id="tableViewDispersionFondos" editable="true" layoutX="42.0" layoutY="427.0" prefHeight="450.0" prefWidth="1242.0">
-                           <columns>
-                              <TableColumn fx:id="num" prefWidth="80.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Num." />
-                              <TableColumn fx:id="formaPago" prefWidth="80.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Forma Pago" />
-                              <TableColumn fx:id="tipoCuenta" prefWidth="80.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Tipo Cuenta" />
-                              <TableColumn fx:id="bancoReceptor" prefWidth="95.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Banco Receptor" />
-                              <TableColumn fx:id="cuenta" prefWidth="125.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Cuenta" />
-                              <TableColumn fx:id="importePago" prefWidth="135.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Importe Pago" />
-                              <TableColumn fx:id="claveBeneficiario" prefWidth="110.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Clave Beneficiario" />
-                              <TableColumn fx:id="rfcBeneficiario" prefWidth="105.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="RFC Beneficiario" />
-                              <TableColumn fx:id="nombreBeneficiario" prefWidth="125.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Nombre Beneficiario" />
-                              <TableColumn fx:id="referenciaPago" prefWidth="105.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Referencia Pago" />
-                              <TableColumn fx:id="conceptoPago" prefWidth="170.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Concepto de Pago (Opcional)" />
-                              <TableColumn fx:id="diasVigencia" prefWidth="90.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Dias Vigencia" />
-                              <TableColumn fx:id="infoAgruparPagos" prefWidth="200.0">
-                                 <graphic>
-                                    <Label style="-fx-text-alignment: center; -fx-alignment: center;" text="Campo de Información&#10;para Agrupar Pagos&#10;(Opcional)" wrapText="true" />
-                                 </graphic>
-                              </TableColumn>
-                              <TableColumn fx:id="detalleMail" prefWidth="200.0">
-                                 <graphic>
-                                    <Label style="-fx-text-alignment: center; -fx-alignment: center;" text="Detalle Mail&#10;(Obligatorio)" wrapText="true" />
-                                 </graphic>
-                              </TableColumn>
-                              <TableColumn text="SOLO SPID">
-                                 <columns>
-                                    <TableColumn fx:id="referenciaAbonoBanxico" prefWidth="200.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Referencia Abono Banxico" />
-                                    <TableColumn fx:id="tipoOperacion" prefWidth="120.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Tipo de Operación" />
-                                 </columns>
-                              </TableColumn>
-                           </columns>
-                        </TableView>
+                           <padding>
+                              <Insets bottom="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
                      </children>
                   </AnchorPane>
                </content>
             </ScrollPane>
-            <HBox alignment="CENTER_LEFT" spacing="10">
-               <children>
-                  <Button fx:id="btnAgregarFila" onAction="#agregarFila" prefHeight="35.0" prefWidth="125.0" style="-fx-background-color: #008000; -fx-border-radius: 7px;" text="Agregar Fila" textFill="WHITE">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="btnEliminarFila" onAction="#eliminarFila" prefHeight="35.0" prefWidth="125.0" style="-fx-background-color: #ff0000; -fx-border-radius: 7px;" text="Eliminar Fila" textFill="WHITE">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Button>
-                  <Pane prefHeight="30.0" prefWidth="1054.0">
-                     <children>
-                        <Button layoutX="875.0" layoutY="2.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="134.0" text="Regresar" onAction="#regresar"/>
-                     </children>
-                  </Pane>
-               </children>
-            </HBox>
          </children>
       </VBox>
    </center>

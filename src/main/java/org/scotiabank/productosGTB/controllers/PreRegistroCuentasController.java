@@ -538,8 +538,8 @@ public class PreRegistroCuentasController {
 
     @FXML
     private void regresar(ActionEvent event){
-        String ruta = "/fxml/DispersionDeFondos/Main/DispersionFondos.fxml";
-        String title = "dispersionFondos";
+        String ruta = "/fxml/PreRegistroDeCuentas/Main/PreRegistroDeCuentas.fxml";
+        String title = "Pre";
         Service.navegacion(ruta, title, event);
     }
 }
