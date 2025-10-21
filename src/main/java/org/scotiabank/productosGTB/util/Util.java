@@ -2,6 +2,8 @@ package org.scotiabank.productosGTB.util;
 
 import javafx.application.Platform;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.KeyCode; // Asegúrate de tener esta también
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -18,6 +20,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.UnaryOperator;
+
 
 public class Util {
 
@@ -115,6 +118,49 @@ public class Util {
                                 commitEdit(value);
                             }
                         });
+                    }
+                });
+                textField.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                    if (event.getCode() == KeyCode.TAB) {
+                        // 1. Guarda el valor actual de la celda
+                        commitEdit(textField.getText());
+
+                        // 2. Obtiene la tabla y las columnas para calcular la siguiente celda
+                        TableView<S> tableView = getTableView();
+                        List<TableColumn<S, ?>> visibleColumns = tableView.getVisibleLeafColumns();
+                        int currentColumnIndex = visibleColumns.indexOf(getTableColumn());
+
+                        int nextColumnIndex;
+                        int nextRowIndex = getIndex();
+
+                        if (event.isShiftDown()) { // Maneja Shift + TAB para ir hacia atrás
+                            nextColumnIndex = currentColumnIndex - 1;
+                            if (nextColumnIndex < 0) {
+                                nextColumnIndex = visibleColumns.size() - 1;
+                                nextRowIndex--;
+                            }
+                        } else { // Maneja TAB para ir hacia adelante
+                            nextColumnIndex = currentColumnIndex + 1;
+                            if (nextColumnIndex >= visibleColumns.size()) {
+                                // Pasa a la primera columna de la siguiente fila
+                                nextColumnIndex = 0;
+                                nextRowIndex++;
+                            }
+                        }
+
+                        // 3. Mueve el foco y empieza a editar la nueva celda
+                        if (nextRowIndex >= 0 && nextRowIndex < tableView.getItems().size()) {
+                            TableColumn<S, ?> nextColumn = visibleColumns.get(nextColumnIndex);
+                            tableView.edit(nextRowIndex, nextColumn);
+                        }
+
+                        // 4. Consume el evento para evitar que el foco salga de la tabla
+                        event.consume();
+
+                    } else if (event.getCode() == KeyCode.ESCAPE) {
+                        // Maneja la tecla ESCAPE para cancelar la edición
+                        cancelEdit();
+                        event.consume();
                     }
                 });
             }
@@ -217,6 +263,49 @@ public class Util {
                                 commitEdit(formatDecimal(value));
                             }
                         });
+                    }
+                });
+                textField.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                    if (event.getCode() == KeyCode.TAB) {
+                        // 1. Guarda el valor actual de la celda
+                        commitEdit(textField.getText());
+
+                        // 2. Obtiene la tabla y las columnas para calcular la siguiente celda
+                        TableView<S> tableView = getTableView();
+                        List<TableColumn<S, ?>> visibleColumns = tableView.getVisibleLeafColumns();
+                        int currentColumnIndex = visibleColumns.indexOf(getTableColumn());
+
+                        int nextColumnIndex;
+                        int nextRowIndex = getIndex();
+
+                        if (event.isShiftDown()) { // Maneja Shift + TAB para ir hacia atrás
+                            nextColumnIndex = currentColumnIndex - 1;
+                            if (nextColumnIndex < 0) {
+                                nextColumnIndex = visibleColumns.size() - 1;
+                                nextRowIndex--;
+                            }
+                        } else { // Maneja TAB para ir hacia adelante
+                            nextColumnIndex = currentColumnIndex + 1;
+                            if (nextColumnIndex >= visibleColumns.size()) {
+                                // Pasa a la primera columna de la siguiente fila
+                                nextColumnIndex = 0;
+                                nextRowIndex++;
+                            }
+                        }
+
+                        // 3. Mueve el foco y empieza a editar la nueva celda
+                        if (nextRowIndex >= 0 && nextRowIndex < tableView.getItems().size()) {
+                            TableColumn<S, ?> nextColumn = visibleColumns.get(nextColumnIndex);
+                            tableView.edit(nextRowIndex, nextColumn);
+                        }
+
+                        // 4. Consume el evento para evitar que el foco salga de la tabla
+                        event.consume();
+
+                    } else if (event.getCode() == KeyCode.ESCAPE) {
+                        // Maneja la tecla ESCAPE para cancelar la edición
+                        cancelEdit();
+                        event.consume();
                     }
                 });
             }
@@ -331,6 +420,49 @@ public class Util {
                         });
                     }
                 });
+                textField.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                    if (event.getCode() == KeyCode.TAB) {
+                        // 1. Guarda el valor actual de la celda
+                        commitEdit(textField.getText());
+
+                        // 2. Obtiene la tabla y las columnas para calcular la siguiente celda
+                        TableView<S> tableView = getTableView();
+                        List<TableColumn<S, ?>> visibleColumns = tableView.getVisibleLeafColumns();
+                        int currentColumnIndex = visibleColumns.indexOf(getTableColumn());
+
+                        int nextColumnIndex;
+                        int nextRowIndex = getIndex();
+
+                        if (event.isShiftDown()) { // Maneja Shift + TAB para ir hacia atrás
+                            nextColumnIndex = currentColumnIndex - 1;
+                            if (nextColumnIndex < 0) {
+                                nextColumnIndex = visibleColumns.size() - 1;
+                                nextRowIndex--;
+                            }
+                        } else { // Maneja TAB para ir hacia adelante
+                            nextColumnIndex = currentColumnIndex + 1;
+                            if (nextColumnIndex >= visibleColumns.size()) {
+                                // Pasa a la primera columna de la siguiente fila
+                                nextColumnIndex = 0;
+                                nextRowIndex++;
+                            }
+                        }
+
+                        // 3. Mueve el foco y empieza a editar la nueva celda
+                        if (nextRowIndex >= 0 && nextRowIndex < tableView.getItems().size()) {
+                            TableColumn<S, ?> nextColumn = visibleColumns.get(nextColumnIndex);
+                            tableView.edit(nextRowIndex, nextColumn);
+                        }
+
+                        // 4. Consume el evento para evitar que el foco salga de la tabla
+                        event.consume();
+
+                    } else if (event.getCode() == KeyCode.ESCAPE) {
+                        // Maneja la tecla ESCAPE para cancelar la edición
+                        cancelEdit();
+                        event.consume();
+                    }
+                });
             }
 
             private String getString() {
@@ -434,6 +566,49 @@ public class Util {
                         });
                     }
                 });
+                textField.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                    if (event.getCode() == KeyCode.TAB) {
+                        // 1. Guarda el valor actual de la celda
+                        commitEdit(textField.getText());
+
+                        // 2. Obtiene la tabla y las columnas para calcular la siguiente celda
+                        TableView<S> tableView = getTableView();
+                        List<TableColumn<S, ?>> visibleColumns = tableView.getVisibleLeafColumns();
+                        int currentColumnIndex = visibleColumns.indexOf(getTableColumn());
+
+                        int nextColumnIndex;
+                        int nextRowIndex = getIndex();
+
+                        if (event.isShiftDown()) { // Maneja Shift + TAB para ir hacia atrás
+                            nextColumnIndex = currentColumnIndex - 1;
+                            if (nextColumnIndex < 0) {
+                                nextColumnIndex = visibleColumns.size() - 1;
+                                nextRowIndex--;
+                            }
+                        } else { // Maneja TAB para ir hacia adelante
+                            nextColumnIndex = currentColumnIndex + 1;
+                            if (nextColumnIndex >= visibleColumns.size()) {
+                                // Pasa a la primera columna de la siguiente fila
+                                nextColumnIndex = 0;
+                                nextRowIndex++;
+                            }
+                        }
+
+                        // 3. Mueve el foco y empieza a editar la nueva celda
+                        if (nextRowIndex >= 0 && nextRowIndex < tableView.getItems().size()) {
+                            TableColumn<S, ?> nextColumn = visibleColumns.get(nextColumnIndex);
+                            tableView.edit(nextRowIndex, nextColumn);
+                        }
+
+                        // 4. Consume el evento para evitar que el foco salga de la tabla
+                        event.consume();
+
+                    } else if (event.getCode() == KeyCode.ESCAPE) {
+                        // Maneja la tecla ESCAPE para cancelar la edición
+                        cancelEdit();
+                        event.consume();
+                    }
+                });
             }
 
             private String getString() {
@@ -495,6 +670,49 @@ public class Util {
                             mostrarAlerta("El valor para 'Forma de pago' solo puede ser: " + String.join(", ", allowedValues));
                             cancelEdit();
                         }
+                    }
+                });
+                textField.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                    if (event.getCode() == KeyCode.TAB) {
+                        // 1. Guarda el valor actual de la celda
+                        commitEdit(textField.getText());
+
+                        // 2. Obtiene la tabla y las columnas para calcular la siguiente celda
+                        TableView<S> tableView = getTableView();
+                        List<TableColumn<S, ?>> visibleColumns = tableView.getVisibleLeafColumns();
+                        int currentColumnIndex = visibleColumns.indexOf(getTableColumn());
+
+                        int nextColumnIndex;
+                        int nextRowIndex = getIndex();
+
+                        if (event.isShiftDown()) { // Maneja Shift + TAB para ir hacia atrás
+                            nextColumnIndex = currentColumnIndex - 1;
+                            if (nextColumnIndex < 0) {
+                                nextColumnIndex = visibleColumns.size() - 1;
+                                nextRowIndex--;
+                            }
+                        } else { // Maneja TAB para ir hacia adelante
+                            nextColumnIndex = currentColumnIndex + 1;
+                            if (nextColumnIndex >= visibleColumns.size()) {
+                                // Pasa a la primera columna de la siguiente fila
+                                nextColumnIndex = 0;
+                                nextRowIndex++;
+                            }
+                        }
+
+                        // 3. Mueve el foco y empieza a editar la nueva celda
+                        if (nextRowIndex >= 0 && nextRowIndex < tableView.getItems().size()) {
+                            TableColumn<S, ?> nextColumn = visibleColumns.get(nextColumnIndex);
+                            tableView.edit(nextRowIndex, nextColumn);
+                        }
+
+                        // 4. Consume el evento para evitar que el foco salga de la tabla
+                        event.consume();
+
+                    } else if (event.getCode() == KeyCode.ESCAPE) {
+                        // Maneja la tecla ESCAPE para cancelar la edición
+                        cancelEdit();
+                        event.consume();
                     }
                 });
             }
