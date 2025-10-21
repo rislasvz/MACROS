@@ -3,6 +3,7 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
@@ -51,21 +52,21 @@
                                  <children>
                                     <Label text="Número de cliente:">
                                        <font>
-                                          <Font size="14.0" />
+                                          <Font name="System Bold" size="14.0" />
                                        </font>
                                     </Label>
                                     <TextField fx:id="textFieldClientNumber" prefHeight="35.0" prefWidth="307.0" />
-                                    <Label fx:id="errorLabelClientNumber" textFill="RED" visible="false" />
+                                    <Label fx:id="errorLabelClientNumber" prefHeight="17.0" prefWidth="224.0" textFill="RED" visible="false" />
                                     <Label text="Cuenta de cargo:">
                                        <font>
-                                          <Font size="14.0" />
+                                          <Font name="System Bold" size="14.0" />
                                        </font>
                                     </Label>
                                     <TextField fx:id="textFieldChargeAccount" prefHeight="35.0" prefWidth="310.0" />
-                                    <Label fx:id="errorLabelChargeAccount" textFill="RED" visible="false" />
+                                    <Label fx:id="errorLabelChargeAccount" prefHeight="17.0" prefWidth="234.0" textFill="RED" visible="false" />
                                     <Label text="Concepto de pago:">
                                        <font>
-                                          <Font size="14.0" />
+                                          <Font name="System Bold" size="14.0" />
                                        </font>
                                     </Label>
                                     <ComboBox fx:id="comboBoxPaymentConcept" prefHeight="35.0" prefWidth="341.0" />
@@ -75,21 +76,21 @@
                                  <children>
                                     <Label text="Tipo de archivo:">
                                        <font>
-                                          <Font size="14.0" />
+                                          <Font name="System Bold" size="14.0" />
                                        </font>
                                     </Label>
                                     <ComboBox fx:id="comboBoxFileType" prefHeight="35.0" prefWidth="339.0" />
-                                    <Label fx:id="label123" textFill="RED" visible="false" />
+                                    <Label fx:id="label123" prefHeight="17.0" prefWidth="316.0" textFill="RED" visible="false" />
                                     <Label text="Referencia de la empresa:">
                                        <font>
-                                          <Font size="14.0" />
+                                          <Font name="System Bold" size="14.0" />
                                        </font>
                                     </Label>
                                     <TextField fx:id="textFieldCompanyReference" prefHeight="35.0" prefWidth="306.0" />
-                                    <Label fx:id="errorLabelCompanyReference" textFill="RED" visible="false" />
+                                    <Label fx:id="errorLabelCompanyReference" prefHeight="17.0" prefWidth="324.0" textFill="RED" visible="false" />
                                     <Label text="Clave de moneda:">
                                        <font>
-                                          <Font size="14.0" />
+                                          <Font name="System Bold" size="14.0" />
                                        </font>
                                     </Label>
                                     <ComboBox fx:id="comboBoxPaymentCurrency" prefHeight="35.0" prefWidth="344.0" />
@@ -99,14 +100,14 @@
                                  <children>
                                     <Label text="Número de archivo del día:">
                                        <font>
-                                          <Font size="14.0" />
+                                          <Font name="System Bold" size="14.0" />
                                        </font>
                                     </Label>
                                     <TextField fx:id="textFieldFileNumberOfTheDay" prefHeight="35.0" prefWidth="338.0" />
-                                    <Label fx:id="errorLabelFileNumberOfTheDay" textFill="RED" visible="false" />
+                                    <Label fx:id="errorLabelFileNumberOfTheDay" prefHeight="17.0" prefWidth="293.0" textFill="RED" visible="false" />
                                     <Label text="Fecha de aplicación:">
                                        <font>
-                                          <Font size="14.0" />
+                                          <Font name="System Bold" size="14.0" />
                                        </font>
                                     </Label>
                                     <DatePicker fx:id="datePicketFechaAplicacion" prefHeight="35.0" prefWidth="340.0" />
@@ -142,26 +143,46 @@
                         </TableView>
                         <HBox alignment="CENTER_RIGHT" layoutX="30.0" layoutY="879.0" prefWidth="1265.0" spacing="20.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0">
                            <children>
-                              <Button fx:id="btnAgregarFila" onAction="#agregarFila" style="-fx-background-color: transparent; -fx-border-color: #008000; -fx-border-radius: 5px;" text="⊕ Agregar una fila" textFill="#008000">
+                              <Button fx:id="btnAgregarFila" onAction="#agregarFila" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-border-radius: 5px;" text="Agregar una fila" textFill="#2738F5">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView fitHeight="20.0" fitWidth="20.0">
+                                       <image>
+                                          <Image url="@../assets/agregar1.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
                               </Button>
-                              <Button fx:id="btnEliminarFila" onAction="#eliminarFila" style="-fx-background-color: transparent; -fx-border-color: #ff0000; -fx-border-radius: 5px;" text="⊖ Eliminar una fila" textFill="#ff0000">
+                              <Button fx:id="btnEliminarFila" onAction="#eliminarFila" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-border-radius: 5px;" text="Eliminar una fila" textFill="#000000">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView fitHeight="20.0" fitWidth="20.0">
+                                       <image>
+                                          <Image url="@../assets/quitar.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
                               </Button>
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" layoutX="44.0" layoutY="295.0" spacing="5.0">
                            <children>
-                              <Label style="-fx-text-fill: #68BDE4;" text="↓">
-                                 <font>
-                                    <Font name="System Bold" size="18.0" />
-                                 </font>
-                              </Label>
-                              <Label style="-fx-text-fill: #68BDE4;" text="Importar un archivo de Excel">
+                              <ImageView fitHeight="20" fitWidth="20">
+                                 <image>
+                                    <Image url="@../assets/upload-file-image2.png" />
+                                 </image>
+                              </ImageView>
+                              <Label style="-fx-text-fill: #2738F5;" text="Importar un archivo de Excel">
                                  <font>
                                     <Font name="System Bold" size="18.0" />
                                  </font>
@@ -178,7 +199,7 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </Button>
-                              <Button fx:id="btnGenerarArchivo1" mnemonicParsing="false" onAction="#exportarDatosAArchivoOptimizada" prefHeight="35.0" prefWidth="221.0" style="-fx-background-color: #e83e8c; -fx-border-radius: 7px;" text="Generar archivo TXT" textFill="WHITE">
+                              <Button fx:id="btnGenerarArchivo" mnemonicParsing="false" onAction="#exportarDatosAArchivoOptimizada" prefHeight="35.0" prefWidth="221.0" style="-fx-background-color: #e83e8c; -fx-border-radius: 7px;" text="Generar archivo TXT" textFill="WHITE">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -191,7 +212,7 @@
                               <Insets bottom="10.0" top="10.0" />
                            </padding>
                         </HBox>
-                        <Hyperlink fx:id="btnCargar" layoutX="40.0" layoutY="289.0" onAction="#importarExcel" prefHeight="33.0" prefWidth="266.0">
+                        <Hyperlink fx:id="btnCargar" layoutX="219.0" layoutY="289.0" onAction="#importarExcel" prefHeight="33.0" prefWidth="87.0">
                            <font>
                               <Font size="16.0" />
                            </font>
