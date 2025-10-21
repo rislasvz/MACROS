@@ -1,0 +1,84 @@
+import com.itextpdf.kernel.colors.ColorConstants;
+import com.itextpdf.kernel.pdf.*;
+import com.itextpdf.layout.*;
+import com.itextpdf.layout.element.*;
+import com.itextpdf.layout.property.*;
+
+public class FormularioLadoALado {
+    public static void main(String[] args) throws Exception {
+        String destino = "movimientos_lado_a_lado.pdf";
+        PdfWriter writer = new PdfWriter(destino);
+        PdfDocument pdf = new PdfDocument(writer);
+        Document doc = new Document(pdf);
+
+        // Título general
+        doc.add(new Paragraph("Reporte de Movimientos")
+                .setFontSize(16)
+                .setBold()
+                .setTextAlignment(TextAlignment.CENTER)
+                .setMarginBottom(20));
+
+        // Ancho de las columnas internas
+        float[] anchoInterno = {120F, 100F};
+
+        // Tabla para "Movimiento acepta..."
+        Table tablaAcepta = new Table(anchoInterno);
+        tablaAcepta.setWidth(UnitValue.createPercentValue(48)); // Mitad del ancho
+        tablaAcepta.addHeaderCell(celdaTitulo("Movimiento acepta..."));
+        tablaAcepta.addCell(celdaEtiqueta("Número de altas:"));
+        tablaAcepta.addCell(celdaDato("0"));
+        tablaAcepta.addCell(celdaEtiqueta("Importe de altas:"));
+        tablaAcepta.addCell(celdaDato("$0.00"));
+        tablaAcepta.addCell(celdaEtiqueta("Número de bajas:"));
+        tablaAcepta.addCell(celdaDato("0"));
+        tablaAcepta.addCell(celdaEtiqueta("Importe de bajas:"));
+        tablaAcepta.addCell(celdaDato("$0.00"));
+
+        // Tabla para "Movimientos rechazados..."
+        Table tablaRechazados = new Table(anchoInterno);
+        tablaRechazados.setWidth(UnitValue.createPercentValue(48)); // Otra mitad
+        tablaRechazados.addHeaderCell(celdaTitulo("Movimientos rechazados en validación"));
+        tablaRechazados.addCell(celdaEtiqueta("Número de altas:"));
+        tablaRechazados.addCell(celdaDato("0"));
+        tablaRechazados.addCell(celdaEtiqueta("Importe de altas:"));
+        tablaRechazados.addCell(celdaDato("$0.00"));
+        tablaRechazados.addCell(celdaEtiqueta("Número de bajas:"));
+        tablaRechazados.addCell(celdaDato("0"));
+        tablaRechazados.addCell(celdaEtiqueta("Importe de bajas:"));
+        tablaRechazados.addCell(celdaDato("$0.00"));
+
+        // Tabla contenedora para poner ambas tablas lado a lado
+        Table tablaPrincipal = new Table(new float[]{1, 1});
+        tablaPrincipal.setWidth(UnitValue.createPercentValue(100));
+        tablaPrincipal.addCell(new Cell().add(tablaAcepta).setBorder(Border.NO_BORDER));
+        tablaPrincipal.addCell(new Cell().add(tablaRechazados).setBorder(Border.NO_BORDER));
+
+        // Agregar al documento
+        doc.add(tablaPrincipal);
+
+        doc.close();
+        System.out.println("PDF generado correctamente: " + destino);
+    }
+
+    private static Cell celdaTitulo(String texto) {
+        return new Cell(1, 2)
+                .add(new Paragraph(texto))
+                .setBackgroundColor(ColorConstants.LIGHT_GRAY)
+                .setBold()
+                .setTextAlignment(TextAlignment.CENTER);
+    }
+
+    private static Cell celdaEtiqueta(String texto) {
+        return new Cell()
+                .add(new Paragraph(texto))
+                .setBold()
+                .setBackgroundColor(ColorConstants.LIGHT_GRAY)
+                .setTextAlignment(TextAlignment.LEFT);
+    }
+
+    private static Cell celdaDato(String texto) {
+        return new Cell()
+                .add(new Paragraph(texto))
+                .setTextAlignment(TextAlignment.LEFT);
+    }
+}
