@@ -212,7 +212,7 @@
                               <Insets bottom="10.0" top="10.0" />
                            </padding>
                         </HBox>
-                        <Hyperlink fx:id="btnCargar" layoutX="219.0" layoutY="289.0" onAction="#importarExcel" prefHeight="33.0" prefWidth="87.0">
+                        <Hyperlink fx:id="btnCargar" layoutX="45.0" layoutY="289.0" onAction="#importarExcel" prefHeight="33.0" prefWidth="272.0">
                            <font>
                               <Font size="16.0" />
                            </font>

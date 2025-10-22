@@ -3,32 +3,41 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="671.0" prefWidth="1325.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.scotiabank.productosGTB.controllers.PreRegistroCuentasController">
-
-    <center>
-        <VBox>
+    <top>
+        <HBox alignment="CENTER_LEFT" prefHeight="70.0" spacing="10.0" BorderPane.alignment="CENTER_LEFT">
             <children>
-                <HBox alignment="CENTER_LEFT" prefHeight="70.0" spacing="10.0">
+                <Button mnemonicParsing="false" onAction="#regresar" prefHeight="25.0" prefWidth="134.0" style="-fx-background-color: transparent; -fx-border-color: #6c757d; -fx-border-radius: 5px;" text="Regresar">
+                    <HBox.margin>
+                        <Insets left="30.0" />
+                    </HBox.margin>
+                </Button>
+                <Pane HBox.hgrow="ALWAYS" />
+                <VBox alignment="CENTER" prefHeight="70.0" prefWidth="275.0">
                     <children>
-                        <Label prefHeight="35.0" prefWidth="171.0" text="Productos GTB" HBox.hgrow="NEVER">
+                        <Label text="Capturar información">
                             <font>
-                                <Font size="24.0" />
+                                <Font name="System Bold" size="24.0" />
                             </font>
-                            <HBox.margin>
-                                <Insets left="30.0" />
-                            </HBox.margin>
                         </Label>
-                        <Pane prefHeight="35.0" prefWidth="468.0" />
-                        <Label prefHeight="35.0" prefWidth="380.0" text="Pre-Registro De Cuentas">
+                        <Label text="Preregistro De Cuentas">
                             <font>
-                                <Font size="24.0" />
+                                <Font size="14.0" />
                             </font>
                         </Label>
                     </children>
-                </HBox>
+                </VBox>
+                <Pane HBox.hgrow="ALWAYS" />
+            </children>
+        </HBox>
+    </top>
+    <center>
+        <VBox>
+            <children>
                 <Separator prefHeight="3.0" style="-fx-background-color: black;">
                     <VBox.margin>
                         <Insets left="30.0" right="30.0" />
@@ -38,42 +47,125 @@
                     <content>
                         <AnchorPane prefHeight="953.0" prefWidth="948.0">
                             <children>
-                                <AnchorPane layoutX="30.0" layoutY="14.0" prefHeight="403.0" prefWidth="989.0" style="-fx-border-color: D6D6D6; -fx-border-radius: 10px;" AnchorPane.bottomAnchor="536.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="14.0">
+                                <AnchorPane layoutX="30.0" layoutY="14.0" prefHeight="250.0" prefWidth="1250.0" style="-fx-border-color: D6D6D6; -fx-border-radius: 10px;" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="14.0">
                                     <children>
-                                        <Label layoutX="77.0" layoutY="14.0" text="Captura de Información">
+
+                                        <VBox layoutX="208.0" layoutY="42.0" prefHeight="191.0" prefWidth="340.0" spacing="5.0">
+                                            <children>
+                                                <Label text="NÚMERO DE CONTRATO: *">
+                                                    <font>
+                                                        <Font name="System Bold" size="14.0" />
+                                                    </font>
+                                                </Label>
+                                                <TextField fx:id="textFieldContractNumber" prefHeight="35.0" prefWidth="307.0" />
+                                                <Label fx:id="errorLabelContractNumber" prefHeight="17.0" prefWidth="305.0" textFill="RED" visible="true" />
+
+                                                <Label text="FECHA DE SOLICITUD: *">
+                                                    <font>
+                                                        <Font name="System Bold" size="14.0" />
+                                                    </font>
+                                                </Label>
+                                                <DatePicker fx:id="datePicketFechaDeSolicitud" prefHeight="35.0" prefWidth="341.0" />
+                                                <Label fx:id="errorLabelFechaDeSolicitud" prefHeight="17.0" prefWidth="307.0" textFill="RED" visible="true" />
+                                            </children>
+                                        </VBox>
+
+                                        <VBox layoutX="628.0" layoutY="44.0" prefHeight="207.0" prefWidth="340.0" spacing="5.0">
+                                            <children>
+                                                <Label text="MANTENIMIENTO O CONSULTA: *">
+                                                    <font>
+                                                        <Font name="System Bold" size="14.0" />
+                                                    </font>
+                                                </Label>
+                                                <ComboBox fx:id="comboBoxMaintOrConsultation" prefHeight="35.0" prefWidth="339.0" />
+                                                <Label prefHeight="17.0" prefWidth="316.0" textFill="RED" visible="false" />
+
+                                                <Label text="NO. ARCHIVO DE DÍA: *">
+                                                    <font>
+                                                        <Font name="System Bold" size="14.0" />
+                                                    </font>
+                                                </Label>
+                                                <TextField fx:id="textFieldFileNumberOfTheDay" prefHeight="35.0" prefWidth="338.0" />
+                                                <Label fx:id="errorLabelFileNumberOfTheDay" prefHeight="17.0" prefWidth="335.0" textFill="RED" visible="true" />
+                                            </children>
+                                        </VBox>
+
+                                    </children>
+                                </AnchorPane>
+
+                                <HBox alignment="CENTER_LEFT" layoutX="76.0" layoutY="264.0" prefHeight="73.0" prefWidth="290.0" spacing="5.0">
+                                    <children>
+                                        <ImageView fitHeight="20" fitWidth="20">
+                                            <image>
+                                                <Image url="@../../assets/upload-file-image2.png" />
+                                            </image>
+                                        </ImageView>
+                                        <Label style="-fx-text-fill: #2738F5;" text="Importar un archivo de Excel">
                                             <font>
-                                                <Font name="System Bold" size="24.0" />
+                                                <Font name="System Bold" size="18.0" />
                                             </font>
                                         </Label>
-                                        <Label layoutX="325.0" layoutY="78.0" text="NÚMERO DE CONTRATO: *">
+                                      <Hyperlink fx:id="btnCargar" onAction="#importarExcel" prefHeight="16.0" prefWidth="3.0">
+                                          <font>
+                                              <Font size="16.0" />
+                                          </font>
+                                      </Hyperlink>
+                                    </children>
+                                </HBox>
+
+                                <TableView fx:id="tableViewPreRegistroCuentas" editable="true" layoutX="30.0" layoutY="338.0" prefHeight="513.0" prefWidth="1265.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0">
+                                    <columns>
+                                        <TableColumn fx:id="num" prefWidth="80.0" style="-fx-alignment: center;" text="Num." />
+                                        <TableColumn fx:id="tipoRegistro" prefWidth="80.0" style="-fx-alignment: center;" text="Tipo Registro" />
+                                        <TableColumn fx:id="tipoPago" prefWidth="80.0" style="-fx-alignment: center;" text="Tipo Pago" />
+                                        <TableColumn fx:id="tipoCuenta" prefWidth="95.0" style="-fx-alignment: center;" text="Tipo Cuenta" />
+                                        <TableColumn fx:id="monedaCuenta" prefWidth="125.0" style="-fx-alignment: center;" text="Moneda Cuenta" />
+                                        <TableColumn fx:id="claveBanco" prefWidth="135.0" style="-fx-alignment: center;" text="Clave Banco" />
+                                        <TableColumn fx:id="cuentaAbono" prefWidth="161.0" style="-fx-alignment: center;" text="Cuenta Abono" />
+                                        <TableColumn fx:id="limiteTransaccion" prefWidth="136.0" style="-fx-alignment: center;" text="Límite Transacción" />
+                                        <TableColumn fx:id="fechaEliminacion" prefWidth="137.0" style="-fx-alignment: center;" text="Fecha Eliminación" />
+                                        <TableColumn fx:id="descripcion" prefWidth="212.0" style="-fx-alignment: center;" text="Descripción (Opcional)" />
+                                    </columns>
+                                </TableView>
+
+                                <HBox alignment="CENTER_RIGHT" layoutX="30.0" layoutY="879.0" prefWidth="1265.0" spacing="20.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0">
+                                    <children>
+                                        <Button fx:id="btnAgregarFila" onAction="#agregarFila" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-border-radius: 5px;" text="Agregar una fila" textFill="#2738F5">
+                                            <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                            </cursor>
                                             <font>
-                                                <Font size="14.0" />
+                                                <Font name="System Bold" size="14.0" />
                                             </font>
-                                        </Label>
-                                        <Label layoutX="667.0" layoutY="78.0" text="MANTENIMIENTO O CONSULTA: *">
+                                            <graphic>
+                                                <ImageView fitHeight="20.0" fitWidth="20.0">
+                                                    <image>
+                                                        <Image url="@../../assets/agregar1.png" />
+                                                    </image>
+                                                </ImageView>
+                                            </graphic>
+                                        </Button>
+                                        <Button fx:id="btnEliminarFila" onAction="#eliminarFila" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-border-radius: 5px;" text="Eliminar una fila" textFill="#000000">
+                                            <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                            </cursor>
                                             <font>
-                                                <Font size="14.0" />
+                                                <Font name="System Bold" size="14.0" />
                                             </font>
-                                        </Label>
-                                        <Label layoutX="325.0" layoutY="157.0" text="FECHA DE SOLICITUD: *">
-                                            <font>
-                                                <Font size="14.0" />
-                                            </font>
-                                        </Label>
-                                        <Label layoutX="667.0" layoutY="157.0" text="NO. ARCHIVO DE DÍA: *">
-                                            <font>
-                                                <Font size="14.0" />
-                                            </font>
-                                        </Label>
-                                        <TextField fx:id="textFieldContractNumber" layoutX="325.0" layoutY="98.0" prefHeight="35.0" prefWidth="307.0" />
-                                        <Label fx:id="errorLabelContractNumber" layoutX="327.0" layoutY="136.0" prefHeight="17.0" prefWidth="305.0" textFill="RED" visible="true" />
-                                        <ComboBox fx:id="comboBoxMaintOrConsultation" layoutX="667.0" layoutY="98.0" prefHeight="35.0" prefWidth="337.0" />
-                                        <TextField fx:id="textFieldFileNumberOfTheDay" layoutX="667.0" layoutY="184.0" prefHeight="35.0" prefWidth="338.0" />
-                                        <Label fx:id="errorLabelFileNumberOfTheDay" layoutX="667.0" layoutY="224.0" prefHeight="17.0" prefWidth="335.0" textFill="RED" visible="true" />
-                                        <DatePicker fx:id="datePicketFechaDeSolicitud" layoutX="325.0" layoutY="184.0" prefHeight="35.0" prefWidth="309.0" />
-                                        <Label fx:id="errorLabelFechaDeSolicitud" layoutX="327.0" layoutY="224.0" prefHeight="17.0" prefWidth="307.0" textFill="RED" visible="true" />
-                                        <Separator layoutX="32.0" layoutY="308.0" prefHeight="1.0" prefWidth="1195.0" style="-fx-background-color: black;" />
-                                        <Button layoutX="153.0" layoutY="330.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="125.0" style="-fx-background-color: transparent; -fx-border-radius: 7px; -fx-border-color: ff0000; -fx-border-width: 2px;" text="Eliminar" textFill="RED">
+                                            <graphic>
+                                                <ImageView fitHeight="20.0" fitWidth="20.0">
+                                                    <image>
+                                                        <Image url="@../../assets/quitar.png" />
+                                                    </image>
+                                                </ImageView>
+                                            </graphic>
+                                        </Button>
+                                    </children>
+                                </HBox>
+
+                                <HBox alignment="CENTER" layoutY="930.0" prefHeight="50.0" spacing="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                    <children>
+                                        <Button mnemonicParsing="false" prefHeight="43.0" prefWidth="214.0" style="-fx-background-color: transparent; -fx-border-radius: 7px; -fx-border-color: #e83e8c; -fx-border-width: 2px;" text="Eliminar" textFill="#e83e8c">
                                             <font>
                                                 <Font size="18.0" />
                                             </font>
@@ -81,15 +173,7 @@
                                                 <Cursor fx:constant="HAND" />
                                             </cursor>
                                         </Button>
-                                        <Button fx:id="btnCargar" layoutX="575.0" layoutY="332.0" mnemonicParsing="false" onAction="#importarExcel" style="-fx-background-color: transparent;" text="Importar" textFill="#40d3ff">
-                                            <font>
-                                                <Font size="18.0" />
-                                            </font>
-                                            <cursor>
-                                                <Cursor fx:constant="HAND" />
-                                            </cursor>
-                                        </Button>
-                                        <Button layoutX="999.0" layoutY="330.0" mnemonicParsing="false" onAction="#exportarDatosAArchivoOptimizada" prefHeight="35.0" prefWidth="125.0" style="-fx-background-color: transparent; -fx-border-radius: 7px; -fx-border-color: #0049ff; -fx-border-width: 2px;" text="Archivo" textFill="#0049ff">
+                                        <Button fx:id="btnGenerarArchivo" mnemonicParsing="false" onAction="#exportarDatosAArchivoOptimizada" prefHeight="35.0" prefWidth="221.0" style="-fx-background-color: #e83e8c; -fx-border-radius: 7px;" text="Generar archivo" textFill="WHITE">
                                             <font>
                                                 <Font size="18.0" />
                                             </font>
@@ -98,44 +182,14 @@
                                             </cursor>
                                         </Button>
                                     </children>
-                                </AnchorPane>
-                                <TableView fx:id="tableViewPreRegistroCuentas" editable="true" layoutX="42.0" layoutY="427.0" prefHeight="450.0" prefWidth="1242.0">
-                                    <columns>
-                                        <TableColumn fx:id="num" prefWidth="80.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Num." />
-                                        <TableColumn fx:id="tipoRegistro" prefWidth="80.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Tipo Registro" />
-                                        <TableColumn fx:id="tipoPago" prefWidth="80.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Tipo Pago" />
-                                        <TableColumn fx:id="tipoCuenta" prefWidth="95.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Tipo Cuenta" />
-                                        <TableColumn fx:id="monedaCuenta" prefWidth="125.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Moneda Cuenta" />
-                                        <TableColumn fx:id="claveBanco" prefWidth="135.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Clave Banco" />
-                                        <TableColumn fx:id="cuentaAbono" prefWidth="161.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Cuenta Abono" />
-                                        <TableColumn fx:id="limiteTransaccion" prefWidth="136.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Límite Transacción" />
-                                        <TableColumn fx:id="fechaEliminacion" prefWidth="137.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Fecha Eliminación" />
-                                        <TableColumn fx:id="descripcion" prefWidth="212.0" style="-fx-text-alignment: center; -fx-alignment: center;" text="Descripción (Opcional)" />
-                                    </columns>
-                                </TableView>
+                                    <padding>
+                                        <Insets bottom="10.0" top="10.0" />
+                                    </padding>
+                                </HBox>
                             </children>
                         </AnchorPane>
                     </content>
                 </ScrollPane>
-                <HBox alignment="CENTER_LEFT" spacing="10">
-                    <children>
-                        <Button fx:id="btnAgregarFila" onAction="#agregarFila" prefHeight="35.0" prefWidth="125.0" style="-fx-background-color: #008000; -fx-border-radius: 7px;" text="Agregar Fila" textFill="WHITE">
-                            <font>
-                                <Font size="14.0" />
-                            </font>
-                        </Button>
-                        <Button fx:id="btnEliminarFila" onAction="#eliminarFila" prefHeight="35.0" prefWidth="125.0" style="-fx-background-color: #ff0000; -fx-border-radius: 7px;" text="Eliminar Fila" textFill="WHITE">
-                            <font>
-                                <Font size="14.0" />
-                            </font>
-                        </Button>
-                        <Pane prefHeight="30.0" prefWidth="1054.0">
-                            <children>
-                                <Button layoutX="875.0" layoutY="2.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="134.0" text="Regresar" onAction="#regresar"/>
-                            </children>
-                        </Pane>
-                    </children>
-                </HBox>
             </children>
         </VBox>
     </center>

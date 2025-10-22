@@ -72,7 +72,7 @@ public class PreRegistroCuentasController {
     @FXML
     private Label errorLabelFileNumberOfTheDay;
     @FXML
-    private Button btnCargar;
+    private Hyperlink btnCargar;
     @FXML
     private Button btnAgregarFila;
     @FXML
