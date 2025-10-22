@@ -93,7 +93,7 @@
                                     </children>
                                 </AnchorPane>
 
-                                <HBox alignment="CENTER_LEFT" layoutX="76.0" layoutY="264.0" prefHeight="73.0" prefWidth="290.0" spacing="5.0">
+                                <HBox alignment="CENTER" layoutX="44.0" layoutY="295.0" spacing="5.0">
                                     <children>
                                         <ImageView fitHeight="20" fitWidth="20">
                                             <image>
@@ -105,11 +105,6 @@
                                                 <Font name="System Bold" size="18.0" />
                                             </font>
                                         </Label>
-                                      <Hyperlink fx:id="btnCargar" onAction="#importarExcel" prefHeight="16.0" prefWidth="3.0">
-                                          <font>
-                                              <Font size="16.0" />
-                                          </font>
-                                      </Hyperlink>
                                     </children>
                                 </HBox>
 
@@ -186,6 +181,11 @@
                                         <Insets bottom="10.0" top="10.0" />
                                     </padding>
                                 </HBox>
+                                <Hyperlink fx:id="btnCargar" layoutX="45.0" layoutY="289.0" onAction="#importarExcel" prefHeight="33.0" prefWidth="272.0">
+                                    <font>
+                                        <Font size="16.0" />
+                                    </font>
+                                </Hyperlink>
                             </children>
                         </AnchorPane>
                     </content>
