@@ -1,11 +1,20 @@
-@echo off
+keytool -importcert -alias <nombre> -file <certificado.crt> -keystore <truststore.jks
 
-SET BATCH_DIR=%~dp0
 
-REM "productosGTB.jar"
-SET JAR_FILE=productosGTB-1.0.jar
+Ejemplo práctico:
+keytool -importcert -alias micert -file certificado.crt -keystore $JAVA_HOME/lib/security/cacerts -storepass changeit
+La contraseña por defecto del cacerts de Java es changeit.
 
-START "productos" javaw -jar "%BATCH_DIR%%JAR_FILE%"
 
-EXIT
-boolean formatValid = value.matches("[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚüÜ.]*");
+
+# Listar certificados en el truststore
+keytool -list -keystore $JAVA_HOME/lib/security/cacerts -storepass changeit
+
+# Listar con detalles
+keytool -list -v -keystore $JAVA_HOME/lib/security/cacerts -storepass changeit
+
+# Eliminar un certificado
+keytool -delete -alias <nombre> -keystore $JAVA_HOME/lib/security/cacerts -storepass changeit
+
+# Ver detalles de un certificado .crt
+keytool -printcert -file certificado.crt
